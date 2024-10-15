@@ -13,7 +13,7 @@ public class Tabla<T> {
 
     // Metodos
     public void agregarColumna(List<T> nueva_col ) {
-    
+        
     }
 
     public void visualizar() {
