@@ -10,7 +10,9 @@ public abstract class Columna<T, U> {
 
     }
 
-    public void imputarValores() {
+    public void modificarValor() {
         
     }
+
+    
 }

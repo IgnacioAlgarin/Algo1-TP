@@ -1,8 +1,6 @@
 package Columna;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Columna_num<T extends Number> extends Columna{
     // Constructores
