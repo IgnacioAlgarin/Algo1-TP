@@ -9,4 +9,8 @@ public class NA {
     public void completarNA(){
         
     }
+    @Override
+    public String toString(){
+        return "Na";
+    }
 }

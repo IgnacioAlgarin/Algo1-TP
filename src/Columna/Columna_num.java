@@ -1,17 +1,10 @@
 package Columna;
+import NA.NA;
 
-import java.util.ArrayList;
-
-public class Columna_num<T extends Number> extends Columna{
+public class Columna_num<T, U> extends Columna <T, U> {
     // Constructores
-    public <U> Columna_num(ArrayList<T> datos, U etiqueta ) {
-        super.datos = datos;
-        super.etiqueta = etiqueta;
-    }
-
-    public <U> Columna_num(ArrayList<T> datos) {
-        super.datos = datos;
-        //Tabla tiene que asignarle una etiqueta numerica entera
+    public Columna_num(U etiqueta ) {
+        super(etiqueta);
     }
 
     //generamos toString para visualizar mientras probamos.
@@ -19,4 +12,15 @@ public class Columna_num<T extends Number> extends Columna{
     public String toString() {
         return "Columna_num [columna=" + datos.toString() + "] " + etiqueta.toString();
     }
+    
+    public void agregarDato(T dato) {
+        if (dato == null){
+            datos.add((T) new NA());
+        }else {
+            datos.add(dato);
+        }
+
+    }
+
+
 }

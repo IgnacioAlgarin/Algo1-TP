@@ -1,22 +1,23 @@
 package Columna;
+import NA.NA;
 
-import java.util.ArrayList;
-
-public class Columna_bool<Boolean> extends Columna {
-   // Constructores
-    public <U> Columna_bool(ArrayList<Boolean> datos, U etiqueta ) {
-        super.datos = datos;
-        super.etiqueta = etiqueta;
-    }
-
-    public <U> Columna_bool(ArrayList<Boolean> datos) {
-        super.datos = datos;
-        //Tabla tiene que asignarle una etiqueta numerica entera
+public class Columna_bool<T, U> extends Columna <T, U> {
+    // Constructores
+    public Columna_bool(U etiqueta ) {
+        super(etiqueta);
     }
 
     //generamos toString para visualizar mientras probamos.
     @Override
     public String toString() {
-        return "Columna_num [columna=" + datos.toString() + "] " + etiqueta.toString();
+        return "Columna_bool [columna=" + datos.toString() + "] " + etiqueta.toString();
+    }
+
+    public void agregarDato(T dato) {
+        if (dato == null){
+            datos.add((T) new NA());
+        }else {
+            datos.add(dato);
+        }
     }
 }

@@ -1,24 +1,27 @@
 package Columna;
+import NA.NA;
 
-import java.util.ArrayList;
-
-public class Columna_string <T extends CharSequence> extends Columna {
+public class Columna_string <T, U> extends Columna <T, U> {
 
         // Constructores
-    public <U> Columna_string(ArrayList<T> datos, U etiqueta ) {
-        super.datos = datos;
-        super.etiqueta = etiqueta;
-    }
-
-    public <U> Columna_string(ArrayList<T> datos) {
-        super.datos = datos;
-        //Tabla tiene que asignarle una etiqueta numerica entera
+    public Columna_string(U etiqueta ) {
+        super(etiqueta);
     }
 
     //generamos toString para visualizar mientras probamos.
     @Override
     public String toString() {
-        return "Columna_string [columna=" + datos + "] ";
+        return "Columna_string [columna=" + datos + "] "+ etiqueta.toString();
+    }
+
+    
+    public void agregarDato(T dato) {
+        if (dato == null){
+            datos.add((T) new NA());
+        }else {
+            datos.add(dato);
+        }
+
     }
 }
 

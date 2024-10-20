@@ -4,7 +4,12 @@ import java.util.List;
 
 public abstract class Columna<T, U> {
     protected U etiqueta;
-    protected ArrayList<T> datos;
+    protected List<T> datos;
+
+    public Columna(U etiqueta) {
+        this.etiqueta = etiqueta;
+        this.datos = new ArrayList<>();
+    }    
 
     public void validarTipo(){
 
@@ -14,5 +19,7 @@ public abstract class Columna<T, U> {
         
     }
 
-    
+    public void agregarDato(T dato){
+
+    }
 }
