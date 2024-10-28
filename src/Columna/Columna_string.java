@@ -23,6 +23,19 @@ public class Columna_string <T, U> extends Columna <T, U> {
         }
 
     }
+
+    public Class<String> getTipoClase() {
+        return String.class;
+    }
+
+
+    public void cambiarDato(T dato, int i) {
+        if (dato == null){
+            datos.set(i,(T) new NA());
+        }else {
+            datos.set(i,dato);
+        }
+    }
 }
 
 

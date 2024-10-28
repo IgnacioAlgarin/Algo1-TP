@@ -9,11 +9,13 @@ public abstract class Columna<T, U> {
     public Columna(U etiqueta) {
         this.etiqueta = etiqueta;
         this.datos = new ArrayList<>();
-    }    
+    }  
 
-    public void validarTipo(){
-
+    public Class<?> getTipoClase() {
+        return Object.class;
     }
+
+
 
     public void modificarValor() {
         
@@ -22,4 +24,5 @@ public abstract class Columna<T, U> {
     public void agregarDato(T dato){
 
     }
+
 }

@@ -22,5 +22,16 @@ public class Columna_num<T, U> extends Columna <T, U> {
 
     }
 
+    public void cambiarDato(T dato, int i) {
+        if (dato == null){
+            datos.set(i,(T) new NA());
+        }else {
+            datos.set(i,dato);
+        }
+    }
+
+    public Class<Number> getTipoClase() {
+        return Number.class;
+    }
 
 }
