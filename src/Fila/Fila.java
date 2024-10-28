@@ -16,7 +16,7 @@ public class Fila {
         if (etiqueta == null){
             return "Fila " + posicion + ", sin etiqueta.";
         } else {
-        return "Fila " + posicion + ", etiqueta: " + etiqueta;
+        return "Fila " + posicion + ", etiqueta: " + etiqueta + ".";
         }
     }
 }
