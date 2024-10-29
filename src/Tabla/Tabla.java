@@ -316,7 +316,7 @@ public class Tabla {
 
 
 
-    public void visualizar(String i) {
+    public void visualizar() {
         StringBuilder filastring = new StringBuilder();
         filastring.append(String.format("%-8s %-8s", "", ""));
     
