@@ -314,15 +314,29 @@ public class Tabla {
         etiquetasUsadasf.add(i);    
     }
 
-    public void visualizar() {
-        for (Columna<?,?> columna: tabla){
-            System.out.println(columna);
-        }
-        for (Fila fila : filas){
-            System.out.println(fila);
-        }
 
+
+    public void visualizar(String i) {
+        StringBuilder filastring = new StringBuilder();
+        filastring.append(String.format("%-8s %-8s", "", ""));
+    
+        for (Columna<?, ?> columna : tabla) {
+            filastring.append(String.format("%-8s", columna.getetiqueta()));
+        }
+        filastring.append("\n");
+    
+        for (int f = 0; f < filas.size(); f++) {
+            filastring.append(String.format("%-8s %8-s", filas.get(f).getposicion(), filas.get(f).getetiqueta()));
+            for (Columna<?, ?> columna : tabla) {
+                filastring.append(String.format("%-8s", columna.getdato(f)));
+            }
+            filastring.append("\n");
+        }
+        
+        System.out.println(filastring.toString());
     }
+
+
 
 
     public Tabla copia_p(String nombre) {

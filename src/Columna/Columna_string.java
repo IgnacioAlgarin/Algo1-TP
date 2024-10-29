@@ -36,6 +36,13 @@ public class Columna_string <T, U> extends Columna <T, U> {
             datos.set(i,dato);
         }
     }
+    
+    public U getetiqueta(){
+        return etiqueta;
+    }
+    public T getdato(int i){
+        return datos.get(i);
+    }
 }
 
 

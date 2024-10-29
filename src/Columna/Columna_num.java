@@ -33,5 +33,12 @@ public class Columna_num<T, U> extends Columna <T, U> {
     public Class<Number> getTipoClase() {
         return Number.class;
     }
+    
+    public U getetiqueta(){
+        return etiqueta;
+    }
+    public T getdato(int i){
+        return datos.get(i);
+    }
 
 }

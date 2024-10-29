@@ -47,6 +47,6 @@ public class App {
         datofila.add(null);
         tabla.agregarfila(5, datofila );
         tabla.agregarfila("nuevo", 6);
-        tabla.visualizar();
+        tabla.visualizar("s");
     }
 }

@@ -19,4 +19,10 @@ public class Fila {
         return "Fila " + posicion + ", etiqueta: " + etiqueta + ".";
         }
     }
+    public int getposicion(){
+        return posicion;
+    }
+    public String getetiqueta(){
+        return etiqueta;
+    }
 }

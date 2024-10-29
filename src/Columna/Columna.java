@@ -14,8 +14,9 @@ public abstract class Columna<T, U> {
     public Class<?> getTipoClase() {
         return Object.class;
     }
-
-
+    public U getetiqueta(){
+        return etiqueta;
+    }
 
     public void modificarValor() {
         
@@ -23,6 +24,9 @@ public abstract class Columna<T, U> {
 
     public void agregarDato(T dato){
 
+    }
+    public T getdato(int i){
+        return datos.get(i);
     }
 
 }

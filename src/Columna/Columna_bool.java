@@ -33,4 +33,11 @@ public class Columna_bool<T, U> extends Columna <T, U> {
     public Class<Boolean> getTipoClase() {
         return Boolean.class;
     }
+    
+    public U getetiqueta(){
+        return etiqueta;
+    }
+    public T getdato(int i){
+        return datos.get(i);
+    }
 }
