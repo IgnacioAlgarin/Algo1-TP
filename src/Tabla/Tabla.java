@@ -40,35 +40,13 @@ public class Tabla {
         etiquetasUsadasf.add(nuevaetiqueta);
         return nuevaetiqueta;
     }
-
     
-    private void iniciarfilasS(int tamaño, List<String> etiquetaf) {
-        if (filas.isEmpty()){
-            if (tamaño == etiquetaf.size()){
-                for (String etiq : etiquetaf){
-                    Fila nuevafila = new Fila(etiq, generarEtiquetaf());
-                    filas.add(nuevafila); 
-                    etiquetasUsadasf.add(etiq);
-                }
-            } else {
-                throw new EtiquetasfilaException("El tamaño de lista de etiquetas de la fila no coincide con el tamaño de la columna");
-            }
-        } else {
-            Set <?> set1 = new HashSet<>(filas);
-            Set <?> set2 = new HashSet<>(etiquetaf);
-            if (tamaño != filas.size() || !(set1.equals(set2))){
-                throw new EtiquetasfilaException("El tamaño de columna no coincide con la cantidad de filas o la lista de filas proporcionada no coincide con la presente en la tabla");
-            }
-        }
-    }
-
-
-    private void iniciarfilasI(int tamaño, List<Integer> etiquetaf) {
+    private void iniciarfilasI(int tamaño, List<String> etiquetaf) {
 
         if (filas.isEmpty()&& !(etiquetaf.isEmpty()) ){
             if (tamaño == etiquetaf.size()){
-                for (Integer etiq : etiquetaf){
-                    Fila nuevafila = new Fila(etiq);
+                for (String etiq : etiquetaf){
+                    Fila nuevafila = new Fila(etiq, generarEtiquetaf());
                     filas.add(nuevafila);
                     etiquetasUsadasf.add(etiq);
                 }
@@ -113,7 +91,7 @@ public class Tabla {
 
     // Metodos publicos
 
-    public <E> void agregarColumna(List<?> columna, E etiqueta, List<?> etiquetaf) {
+    public <E> void agregarColumna(List<?> columna, E etiqueta, List<String> etiquetaf) {
         if (columna.isEmpty()){
             throw new ListaDatosVaciaException("No se puede agregar una columna sin elementos");
         } 
@@ -155,18 +133,12 @@ public class Tabla {
             }
         }
         
-        if (comprobarenteros(etiquetaf) || etiquetaf.isEmpty() ){
-            List<Integer> listaEnteros = new ArrayList<>();
-            for (Object elemento : etiquetaf){
-                listaEnteros.add((Integer) elemento);
-            }
-            iniciarfilasI(columna.size(), listaEnteros);
-        } else if (comprobarstring(etiquetaf)){
+        if (comprobarstring(etiquetaf) || etiquetaf.isEmpty()){
             List<String> listaString = new ArrayList<>();
             for (Object elemento : etiquetaf){
                 listaString.add((String) elemento);
             }
-            iniciarfilasS(columna.size(), listaString);
+            iniciarfilasI(columna.size(), listaString);
 
         } else {
             throw new TipoinconsistenteException ("Hay elementos de distinto tipos en la lista de etiquetas de fila ");
@@ -196,27 +168,28 @@ public class Tabla {
     }
 
     public void agregarColumna(List<?> columna, int etiquetaColumna) {
-        List <Integer> listaf= new ArrayList<>();
+        List <String> listaf= new ArrayList<>();
         agregarColumna(columna, etiquetaColumna, listaf);                
     }
     
     public void agregarColumna(List<?> columna, String etiqueta) {
-        List <Integer> listaf= new ArrayList<>();
+        List <String> listaf= new ArrayList<>();
         agregarColumna(columna, etiqueta, listaf);                
     }
 
     public void agregarColumna(List<?> columna) {
-        List <Integer> listaf= new ArrayList<>();
+        List <String> listaf= new ArrayList<>();
         agregarColumna(columna, generarEtiquetac(), listaf);                
     }
 
-    public void agregarfila (String etiqueta, int i){
-        if (etiquetasUsadasf.contains(etiqueta) || etiquetasUsadasf.contains(i)){
+    public void agregarfila (String etiqueta){
+        if (etiquetasUsadasf.contains(etiqueta)){
             throw new EtiquetaEnUsoException("Etiquetas en uso");
         }
-        for (Columna columna: tabla){
+        for (Columna<?,?> columna: tabla){
             columna.agregarDato(null);
         }        
+        int i = generarEtiquetaf();
         Fila nuevafila = new Fila(etiqueta, i);
         filas.add(nuevafila); 
         etiquetasUsadasf.add(etiqueta);
@@ -224,20 +197,13 @@ public class Tabla {
 
     }
 
-    public void agregarfila(Integer i){
-        if ( etiquetasUsadasf.contains(i)){
-            throw new EtiquetaEnUsoException("Etiquetas en uso");
-        }
-        for (Columna columna: tabla){
-            columna.agregarDato(null);
-        }        
-        Fila nuevafila = new Fila(i);
-        filas.add(nuevafila);  
-        etiquetasUsadasf.add(i);      
+    public void agregarfila(){
+        String etiqueta = null;
+        agregarfila(etiqueta);   
     }
 
-     public void agregarfila (String etiqueta,int i,List<?> datos){
-        if (etiquetasUsadasf.contains(etiqueta) || etiquetasUsadasf.contains(i)){
+     public void agregarfila (String etiqueta,List<?> datos){
+        if (etiquetasUsadasf.contains(etiqueta) ){
             throw new EtiquetaEnUsoException("Etiquetas en uso");
         }
         if ( datos.size() != tabla.size()){
@@ -250,7 +216,7 @@ public class Tabla {
                 continue;
             }
 
-            if (!columna.getClass().isInstance(dato)){
+            if (!columna.getTipoClase().isInstance(dato)){
                 throw new TipoinconsistenteException ("No coinciden los tipos de datos con los ya establecidos en las columnas.");
             }
         }
@@ -269,49 +235,17 @@ public class Tabla {
                 }      
             }
         }
+        int i = generarEtiquetaf();
         Fila nuevafila = new Fila(etiqueta, i);
         filas.add(nuevafila);    
         etiquetasUsadasf.add(etiqueta);
         etiquetasUsadasf.add(i);
-     }
+    }
 
-    public void agregarfila(int i, List<?> datos){
-        if (etiquetasUsadasf.contains(i)){
-            throw new EtiquetaEnUsoException("Etiquetas en uso");
-        }
-        if ( datos.size() != tabla.size()){
-            throw new DiferentetamañoException ("La cantidad de datos a insertar no coincide con la cantidad de columnas");
-        }
-        for (int f = 0; f < tabla.size(); f++){
-            Columna<?, ?> columna = tabla.get(f);
-            Object dato = datos.get(f);
-
-            if (dato == null){
-                continue;
-            }
-
-            if (!(columna.getTipoClase().isInstance(dato))){
-                throw new TipoinconsistenteException ("No coinciden los tipos de datos con los ya establecidos en las columnas.");
-            }
-        }
-        for (int f = 0; f < tabla.size(); f++){
-            Columna<?, ?> columna = tabla.get(f);
-            Object dato = datos.get(f);  
-            if (dato == null){
-                columna.agregarDato(null);
-            } else {
-                if (columna instanceof Columna_string){
-                    ((Columna_string<String, ?>) columna).agregarDato((String)dato);
-                } else if (columna instanceof Columna_num){
-                    ((Columna_num<Number, ?>) columna).agregarDato((Number)dato);
-                } else if (columna instanceof Columna_bool){
-                    ((Columna_bool<Boolean, ?>) columna).agregarDato((Boolean)dato);
-                }      
-            }
-        }
-        Fila nuevafila = new Fila(i);
-        filas.add(nuevafila); 
-        etiquetasUsadasf.add(i);    
+    public void agregarfila(List<?> datos){
+        String etiqueta = null;
+        agregarfila(etiqueta, datos);
+        
     }
 
 
@@ -326,7 +260,7 @@ public class Tabla {
         filastring.append("\n");
     
         for (int f = 0; f < filas.size(); f++) {
-            filastring.append(String.format("%-8s %8-s", filas.get(f).getposicion(), filas.get(f).getetiqueta()));
+            filastring.append(String.format("%-8s %-8s", filas.get(f).getposicion(), filas.get(f).getetiqueta()));
             for (Columna<?, ?> columna : tabla) {
                 filastring.append(String.format("%-8s", columna.getdato(f)));
             }

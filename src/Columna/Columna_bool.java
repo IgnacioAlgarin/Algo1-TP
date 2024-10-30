@@ -16,7 +16,7 @@ public class Columna_bool<T, U> extends Columna <T, U> {
     @SuppressWarnings("unchecked")
     public void agregarDato(T dato) {
         if (dato == null){
-            datos.add((T) new NA());
+            datos.add(null);
         }else {
             datos.add(dato);
         }

@@ -19,7 +19,7 @@ public class App {
         List<String> etiqueta = Arrays.asList ("hola","mi","pequeño","mundo");
         tabla.agregarColumna(datos1, 1, etiqueta);
         //TEST COLUMNA STRING
-        List<String> datos2 = Arrays.asList ("Hola","mundo",null,"NA");
+        List<String> datos2 = Arrays.asList ("Hola","mundo",null,"NAaa");
         tabla.agregarColumna(datos2);
         //TEST COLUMNA BOOL CON ETIQUETA
         List<Boolean> datos3 = Arrays.asList(true,false,false,null);
@@ -41,12 +41,12 @@ public class App {
         List<Object> datos5 = Arrays.asList (null,null,null,null);
         tabla.agregarColumna(datos5);
         List<Object> datofila = new ArrayList<>();
-        datofila.add(2);
-        datofila.add("funciona");
+        datofila.add(1);
+        datofila.add("hola");
         datofila.add(true);
-        datofila.add(null);
-        tabla.agregarfila(5, datofila );
-        tabla.agregarfila("nuevo", 6);
-        tabla.visualizar("s");
+        datofila.add("hola");
+        tabla.agregarfila( datofila);
+        tabla.agregarfila("nuevo");
+        tabla.visualizar();
     }
 }

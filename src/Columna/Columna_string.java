@@ -17,7 +17,7 @@ public class Columna_string <T, U> extends Columna <T, U> {
     
     public void agregarDato(T dato) {
         if (dato == null){
-            datos.add((T) new NA());
+            datos.add(null);
         }else {
             datos.add(dato);
         }

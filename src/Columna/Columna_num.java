@@ -15,20 +15,20 @@ public class Columna_num<T, U> extends Columna <T, U> {
     
     public void agregarDato(T dato) {
         if (dato == null){
-            datos.add((T) new NA());
+            datos.add(null);
         }else {
             datos.add(dato);
         }
 
     }
 
-    public void cambiarDato(T dato, int i) {
-        if (dato == null){
-            datos.set(i,(T) new NA());
-        }else {
-            datos.set(i,dato);
-        }
-    }
+    // public void cambiarDato(T dato, int i) {
+    //     if (dato == null){
+    //         datos.set(i,(T) new NA());
+    //     }else {
+    //         datos.set(i,dato);
+    //     }
+    // }
 
     public Class<Number> getTipoClase() {
         return Number.class;
