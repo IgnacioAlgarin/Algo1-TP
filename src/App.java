@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import Archivo.Archivo;
 import Tabla.Tabla;
 import excepciones.*;
 
@@ -48,5 +50,15 @@ public class App {
         tabla.agregarfila( datofila);
         tabla.agregarfila("nuevo");
         tabla.visualizar();
+
+        // Test lectura archivo
+        Archivo archivo = new Archivo("datos_prueba.csv", "src\\");
+        List<Object[]> datos = archivo.parseCSV(",", false);
+
+        System.out.println("Contenido del archivo CSV:");
+        for (Object[] fila : datos) {
+            System.out.println(Arrays.toString(fila));
+            System.out.println(fila[2].getClass());
+        }
     }
 }
