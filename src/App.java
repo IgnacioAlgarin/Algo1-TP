@@ -58,7 +58,9 @@ public class App {
         System.out.println("Contenido del archivo CSV:");
         for (Object[] fila : datos) {
             System.out.println(Arrays.toString(fila));
-            System.out.println(fila[2].getClass());
         }
+
+        Tabla tablaArchivo = new Tabla();
+        tablaArchivo = archivo.importar(",", false);
     }
 }

@@ -30,7 +30,8 @@ public class Archivo {
 
     public Tabla importar(String sep, Boolean header) {
         Tabla tablaImportada = new Tabla();
-        
+        List<Object[]> datos = parseCSV(sep, header);
+        tablaImportada.agregarfila(datos);
         return tablaImportada;
     }
 
