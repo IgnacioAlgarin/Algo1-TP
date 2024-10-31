@@ -47,11 +47,15 @@ public class Archivo {
     
             // Leer el resto de las líneas
             while ((linea = bufferedReader.readLine()) != null) {
-                String[] valores = linea.split(sep);
+                String[] valores = linea.split(sep,-1);
                 Object[] valoresConvertidos = new Object[valores.length];
     
                 for (int i = 0; i < valores.length; i++) {
-                    valoresConvertidos[i] = detectarTipo(valores[i]);
+                    if (valores[i].isEmpty()) {
+                        valoresConvertidos[i] = null;
+                    } else {
+                        valoresConvertidos[i] = detectarTipo(valores[i]);
+                    }
                 }
     
                 datos.add(valoresConvertidos);
