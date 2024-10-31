@@ -64,5 +64,13 @@ public class App {
         tablaArchivo = archivo.importar(",", false);
         System.out.println("tabla importada");
         tablaArchivo.visualizar();
+
+        // Test buscar dato
+
+       tablaArchivo.buscarDato("hola"); 
+       tablaArchivo.buscarDato(0.1); 
+       tablaArchivo.buscarDato(true);   
+       tablaArchivo.buscarDato("otra cosa");    
+        
     }
 }

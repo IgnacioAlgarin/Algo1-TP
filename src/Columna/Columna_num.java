@@ -41,4 +41,8 @@ public class Columna_num<T, U> extends Columna <T, U> {
         return datos.get(i);
     }
 
+    public boolean contieneDato(Number dato) {
+        return datos.contains(dato);
+    }
+
 }

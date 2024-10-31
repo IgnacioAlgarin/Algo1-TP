@@ -310,4 +310,29 @@ public class Tabla {
         Tabla limitada = new Tabla();
         return limitada;
     } 
+
+    //Buscar Datos
+
+    public boolean buscarDato(Object dato) {
+        for (Columna<?, ?> columna : tabla) {
+            if (dato instanceof String && columna instanceof Columna_string) {
+                if (((Columna_string) columna).contieneDato((String) dato)) {
+                    System.out.println("Dato encontrado: " + dato);
+                    return true;
+                }
+            } else if (dato instanceof Number && columna instanceof Columna_num) {
+                if (((Columna_num) columna).contieneDato((Number) dato)) {
+                    System.out.println("Dato encontrado: " + dato);
+                    return true;
+                }
+            } else if (dato instanceof Boolean && columna instanceof Columna_bool) {
+                if (((Columna_bool) columna).contieneDato((Boolean) dato)) {
+                    System.out.println("Dato encontrado: " + dato);
+                    return true;
+                }
+            }
+        }
+        System.out.println("Dato No encontrado: " + dato);
+        return false; 
+    }
 }

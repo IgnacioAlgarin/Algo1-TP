@@ -43,6 +43,10 @@ public class Columna_string <T, U> extends Columna <T, U> {
     public T getdato(int i){
         return datos.get(i);
     }
+
+    public boolean contieneDato(String dato) {
+        return datos.contains(dato);
+    }
 }
 
 

@@ -40,4 +40,8 @@ public class Columna_bool<T, U> extends Columna <T, U> {
     public T getdato(int i){
         return datos.get(i);
     }
+
+    public boolean contieneDato(Boolean dato) {
+        return datos.contains(dato);
+    }
 }
