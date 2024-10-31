@@ -62,5 +62,7 @@ public class App {
 
         Tabla tablaArchivo = new Tabla();
         tablaArchivo = archivo.importar(",", false);
+        System.out.println("tabla importada");
+        tablaArchivo.visualizar();
     }
 }

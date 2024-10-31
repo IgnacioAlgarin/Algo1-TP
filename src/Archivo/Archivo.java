@@ -5,12 +5,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Archivo {
     private String nombreArchivo;
     private String path;
-    private String[] etiquetas;
 
     // Contructores
     public Archivo(String nombreArchivo, String path) {
@@ -18,11 +18,6 @@ public class Archivo {
         this.path = path;
     };
 
-    //Seters y geters
-
-    public void setEtiquetas(String[] etiquetas) {
-        this.etiquetas = etiquetas;
-    }
 
     public void exportar(Tabla tabla, String path, char sep, Boolean header) {
 
@@ -31,19 +26,57 @@ public class Archivo {
     public Tabla importar(String sep, Boolean header) {
         Tabla tablaImportada = new Tabla();
         List<Object[]> datos = parseCSV(sep, header);
-        tablaImportada.agregarfila(datos);
+        List<String> etiquetasColumnas = new ArrayList<>();
+        
+        if (header && !datos.isEmpty()) {
+            for (Object etiqueta : datos.get(0)) {
+                etiquetasColumnas.add((String) etiqueta);
+        }
+            datos.remove(0);
+        }
+
+        List<Object[]> columnas = filasAColumnas(datos);
+        for (int i = 0; i < columnas.size(); i++) {
+            String etiquetaColumna;
+            List<Object> columna = Arrays.asList(columnas.get(i));
+            if (header) {
+               etiquetaColumna = etiquetasColumnas.get(i);
+            } else {
+               etiquetaColumna = "Columna_" + i;
+            }
+            tablaImportada.agregarColumna(columna, etiquetaColumna);
+        }
+        
         return tablaImportada;
+    }
+
+    private List<Object[]> filasAColumnas(List<Object[]> datos) {
+        // Lista que almacenará los datos organizados por columnas
+        List<Object[]> datosColumna = new ArrayList<>();
+        
+        if (datos.isEmpty()) {
+            return datosColumna;
+        }
+
+        int numColumnas = datos.get(0).length;
+        
+        for (int i = 0; i < numColumnas; i++) {
+            datosColumna.add(new Object[datos.size()]);
+        }
+    
+        for (int i = 0; i < datos.size(); i++) {
+            Object[] fila = datos.get(i);
+            for (int j = 0; j < fila.length; j++) {
+                datosColumna.get(j)[i] = fila[j];
+            }
+        }
+        return datosColumna;
     }
 
     public List<Object[]> parseCSV(String sep, Boolean header) {
         List<Object[]> datos = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path + nombreArchivo))) {
             String linea;
-    
-            // Leer la primera línea si el archivo tiene encabezado
-            if (header && (linea = bufferedReader.readLine()) != null) {
-                setEtiquetas(linea.split(sep));
-            }
     
             // Leer el resto de las líneas
             while ((linea = bufferedReader.readLine()) != null) {
