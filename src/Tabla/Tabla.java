@@ -1,10 +1,12 @@
 package Tabla;
 import java.util.List;
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import Columna.*;
 import Fila.Fila;
+import Operaciones.Operaciones;
 import excepciones.*;
 
 
@@ -268,6 +270,211 @@ public class Tabla {
         }
         
         System.out.println(filastring.toString());
+    }
+
+        public void visualizarParcial(List<String> etiquetasFilas, List<String> etiquetasColumnas) {
+        StringBuilder output = new StringBuilder();
+        output.append(String.format("%-8s %-8s", "", ""));
+        
+        List<Columna<?, ?>> columnasSeleccionadas = new ArrayList<>();
+        for (Columna<?, ?> columna : tabla) {
+            if (etiquetasColumnas == null || etiquetasColumnas.isEmpty() || etiquetasColumnas.contains(columna.getetiqueta())) {
+                columnasSeleccionadas.add(columna);
+                output.append(String.format("%-8s", columna.getetiqueta()));
+            }
+        }
+        output.append("\n");
+
+        for (Fila fila : filas) {
+            if (etiquetasFilas == null || etiquetasFilas.isEmpty() || etiquetasFilas.contains(fila.getetiqueta())) {
+                output.append(String.format("%-8s %-8s", fila.getposicion(), fila.getetiqueta()));
+                for (Columna<?, ?> columna : columnasSeleccionadas) {
+                    output.append(String.format("%-8s", columna.getdato(fila.getposicion())));
+                }
+                output.append("\n");
+            }
+        }
+
+        System.out.println(output.toString());
+    }
+
+    public void visualizarAleatorio(double porcentaje) {
+        if (porcentaje < 0 || porcentaje > 100) {
+            throw new IllegalArgumentException("El porcentaje debe estar entre 0 y 100.");
+        }
+
+        int numFilasSeleccionadas = (int) Math.round((porcentaje / 100) * filas.size());
+        Random random = new Random();
+        List<Fila> filasAleatorias = new ArrayList<>();
+
+        while (filasAleatorias.size() < numFilasSeleccionadas) {
+            int indiceAleatorio = random.nextInt(filas.size());
+            Fila filaSeleccionada = filas.get(indiceAleatorio);
+            if (!filasAleatorias.contains(filaSeleccionada)) {
+                filasAleatorias.add(filaSeleccionada);
+            }
+        }
+
+        StringBuilder output = new StringBuilder();
+        output.append(String.format("%-8s %-8s", "", ""));
+        for (Columna<?, ?> columna : tabla) {
+            output.append(String.format("%-8s", columna.getetiqueta()));
+        }
+        output.append("\n");
+
+        for (Fila fila : filasAleatorias) {
+            output.append(String.format("%-8s %-8s", fila.getposicion(), fila.getetiqueta()));
+            for (Columna<?, ?> columna : tabla) {
+                output.append(String.format("%-8s", columna.getdato(filas.indexOf(fila))));
+            }
+            output.append("\n");
+        }
+
+        System.out.println("Visualización aleatoria (" + porcentaje + "% de filas):");
+        System.out.println(output.toString());
+    }
+
+    public void visualizarResumen() {
+        StringBuilder resumen = new StringBuilder();
+        resumen.append(String.format("%-15s %-10s %-10s %-10s %-10s %-10s\n",
+                "Columna", "Tipo", "No Nulos", "Nulos", "Mín", "Máx"));
+    
+        for (Columna<?, ?> columna : tabla) {
+            String nombreColumna = columna.getetiqueta().toString();
+            String tipoColumna = columna.getTipoClase().getSimpleName();
+            int conteoNoNulos = 0;
+            int conteoNulos = 0;
+            Double min = null;
+            Double max = null;
+            Double suma = 0.0;
+            int conteoNumerico = 0;
+    
+            // Recorre los datos de la columna y calcula estadísticas
+            for (Object dato : columna.getDatos()) {
+                if (dato == null) {
+                    conteoNulos++;
+                } else {
+                    conteoNoNulos++;
+                    if (dato instanceof Number) {
+                        double valor = ((Number) dato).doubleValue();
+                        if (min == null || valor < min) min = valor;
+                        if (max == null || valor > max) max = valor;
+                        suma += valor;
+                        conteoNumerico++;
+                    }             
+                }
+            }
+    
+            // Calcular promedio si es numérico
+            Double promedio = conteoNumerico > 0 ? suma / conteoNumerico : null;
+    
+            // Formatear los resultados de acuerdo al tipo de columna
+            resumen.append(String.format("%-15s %-10s %-10d %-10d %-10s %-10s\n",
+                    nombreColumna,
+                    tipoColumna,
+                    conteoNoNulos,
+                    conteoNulos,
+                    min != null ? String.format("%.2f", min) : "-",
+                    max != null ? String.format("%.2f", max) : "-"));
+        }
+    
+        System.out.println("Resumen de la tabla:");
+        System.out.println(resumen.toString());
+    }
+
+    public class OperacionesColumna implements Operaciones<Double> {
+
+    private List<Number> datos;
+
+    public OperacionesColumna(List<Number> datos) {
+        this.datos = datos;
+    }
+
+    @Override
+    public Double sumar() {
+        double suma = 0;
+        for (Number dato : datos) {
+            if (dato != null) {
+                suma += dato.doubleValue();
+            }
+        }
+        return suma;
+    }
+
+    @Override
+    public Double contar() {
+        return (double) datos.size();
+    }
+
+    @Override
+    public Double promediar() {
+        return sumar() / contar();
+    }
+
+    @Override
+    public Double maximo() {
+        double max = Double.NEGATIVE_INFINITY;
+        for (Number dato : datos) {
+            if (dato != null && dato.doubleValue() > max) {
+                max = dato.doubleValue();
+            }
+        }
+        return max;
+    }
+
+    @Override
+    public Double minimo() {
+        double min = Double.POSITIVE_INFINITY;
+        for (Number dato : datos) {
+            if (dato != null && dato.doubleValue() < min) {
+                min = dato.doubleValue();
+            }
+        }
+        return min;
+    }
+
+    @Override
+    public Double varianza() {
+        double promedio = promediar();
+        double sumaCuadrados = 0;
+        for (Number dato : datos) {
+            if (dato != null) {
+                double diferencia = dato.doubleValue() - promedio;
+                sumaCuadrados += diferencia * diferencia;
+            }
+        }
+        return sumaCuadrados / contar();
+    }
+
+    @Override
+    public Double desvio() {
+        return Math.sqrt(varianza());
+    }
+
+    }
+
+    public Columna<Number, ?> obtenerColumnaNumerica(String etiquetaColumna) {
+        for (Columna<?, ?> columna : tabla) {
+            if (columna.getetiqueta().equals(etiquetaColumna) && columna instanceof Columna_num) {
+                // Casting seguro si la columna es de tipo numérico
+                return (Columna<Number, ?>) columna;
+            }
+        }
+        throw new IllegalArgumentException("Columna numérica con etiqueta " + etiquetaColumna + " no encontrada.");
+    }
+
+    public void mostrarResumenOperaciones(String etiquetaColumna) {
+        Columna<Number, ?> columna = obtenerColumnaNumerica(etiquetaColumna);
+        OperacionesColumna operaciones = new OperacionesColumna(columna.getDatos());
+
+        System.out.println("Resumen de operaciones para la columna: " + etiquetaColumna);
+        System.out.println("Suma: " + operaciones.sumar());
+        System.out.println("Conteo: " + operaciones.contar());
+        System.out.println("Promedio: " + operaciones.promediar());
+        System.out.println("Máximo: " + operaciones.maximo());
+        System.out.println("Mínimo: " + operaciones.minimo());
+        System.out.println("Varianza: " + operaciones.varianza());
+        System.out.println("Desvío: " + operaciones.desvio());
     }
 
     //getters y setter

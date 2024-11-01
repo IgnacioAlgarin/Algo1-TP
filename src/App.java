@@ -51,6 +51,11 @@ public class App {
         tabla.agregarfila("nuevo");
         tabla.visualizar();
 
+        List<Number> edades = Arrays.asList(25, 30, 7, 9, 90, 50);
+        tabla.agregarColumna(edades, "Edad");
+
+        tabla.mostrarResumenOperaciones("Edad"); 
+
         // Test lectura archivo
         Archivo archivo = new Archivo("datos_prueba.csv", "src\\");
         List<Object[]> datos = archivo.parseCSV(",", false);
