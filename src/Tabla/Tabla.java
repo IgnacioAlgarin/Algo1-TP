@@ -339,4 +339,23 @@ public class Tabla {
         System.out.println("Dato No encontrado: " + dato);
         return false; 
     }
+    //Con etiqueta de columna como parametro Falta con etiqueta no valida
+    public boolean buscarDatoC(Object dato, Object etiquetaColumna) {
+        for (Columna<?, ?> columna : tabla) {
+            if (columna.getetiqueta().equals(etiquetaColumna)) {
+                for (int f = 0; f < filas.size(); f++) {
+                    if (dato.equals(columna.getdato(f))) {
+                        System.out.println("Dato encontrado en columna '" + etiquetaColumna + "' en fila " + filas.get(f).getposicion() + " con etiqueta " + filas.get(f).getetiqueta() + ": " + dato);
+                        return true;
+                    }
+                }
+            }
+        }
+        System.out.println("Dato no encontrado en columna '" + etiquetaColumna + "': " + dato);
+        return false;
+   
+    }
+
+
+
 }
