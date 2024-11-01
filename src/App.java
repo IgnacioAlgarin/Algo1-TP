@@ -57,7 +57,8 @@ public class App {
         tabla.mostrarResumenOperaciones("Edad"); 
 
         // Test lectura archivo
-        Archivo archivo = new Archivo("datos_prueba.csv", "src\\");
+        System.out.println("inicio test archivo");
+        Archivo archivo = new Archivo("datos_prueba.csv", "src/");
         List<Object[]> datos = archivo.parseCSV(",", false);
 
         System.out.println("Contenido del archivo CSV:");
@@ -71,8 +72,8 @@ public class App {
         tablaArchivo.visualizar();
 
         //Test exportar archivo
-        Archivo archivo2 = new Archivo("prueba_exportar.csv", "src\\");
-        archivo2.exportar(tablaArchivo, "src/archivo.csv");
+        Archivo archivo2 = new Archivo("prueba_exportar.csv", "src/");
+        archivo2.exportar(tablaArchivo, "src/");
         
         // Test buscar dato
         tablaArchivo.buscarDato("hola"); 

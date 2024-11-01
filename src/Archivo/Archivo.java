@@ -35,7 +35,7 @@ public class Archivo {
 
     public void exportar(Tabla tabla, String path, String sep, Boolean header) throws ArchivoException {
         // Implementación para exportar datos
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path + nombreArchivo))) {
             if (header) {
                 List<String> encabezados = new ArrayList<>();
                 for (Columna<?, ?> c : tabla.getColumnas()) {
