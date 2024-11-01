@@ -65,12 +65,18 @@ public class App {
         System.out.println("tabla importada");
         tablaArchivo.visualizar();
 
+        //Test exportar archivo
+        Archivo archivo2 = new Archivo("prueba_exportar.csv", "src\\");
+        archivo2.exportar(tablaArchivo, "src/archivo.csv");
+        
         // Test buscar dato
 
        tablaArchivo.buscarDato("hola"); 
        tablaArchivo.buscarDato(0.1); 
        tablaArchivo.buscarDato(true);   
-       tablaArchivo.buscarDato("otra cosa");    
+       tablaArchivo.buscarDato("otra cosa");  
+       
+       
         
     }
 }

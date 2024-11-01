@@ -29,4 +29,8 @@ public abstract class Columna<T, U> {
         return datos.get(i);
     }
 
+    public List<T> getDatos() {
+        return datos;
+    }
+
 }

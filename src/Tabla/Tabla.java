@@ -270,6 +270,10 @@ public class Tabla {
         System.out.println(filastring.toString());
     }
 
+    //getters y setter
+    public List<Columna<?, ?>> getColumnas() {
+        return tabla;
+    }
 
 
 

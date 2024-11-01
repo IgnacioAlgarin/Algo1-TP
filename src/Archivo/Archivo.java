@@ -1,12 +1,18 @@
 package Archivo;
 
 import Tabla.Tabla;
+import excepciones.ArchivoException;
+
+import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import Columna.Columna;
 
 public class Archivo {
     private String nombreArchivo;
@@ -19,8 +25,44 @@ public class Archivo {
     };
 
 
-    public void exportar(Tabla tabla, String path, char sep, Boolean header) {
+    public void exportar(Tabla tabla, String path) throws ArchivoException {
+        exportar(tabla, path, ",", true); // Valores por defecto para `sep` y `header`
+    }
 
+    public void exportar(Tabla tabla, String path, String sep) throws ArchivoException {
+        exportar(tabla, path, sep, true); // Valor por defecto para `header`
+    }
+
+    public void exportar(Tabla tabla, String path, String sep, Boolean header) throws ArchivoException {
+        // Implementación para exportar datos
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            if (header) {
+                List<String> encabezados = new ArrayList<>();
+                for (Columna<?, ?> c : tabla.getColumnas()) {
+                    encabezados.add(c.getetiqueta().toString());
+                } 
+                String encabezado = String.join(sep, encabezados);
+                writer.write(encabezado);
+                writer.newLine();
+            }
+            
+            int numFilas = tabla.getColumnas().get(0).getDatos().size();
+            for (int i = 0; i < numFilas; i++) {
+                List<String> fila = new ArrayList<>();
+                for (Columna<?, ?> c : tabla.getColumnas()) {
+                    if (c.getdato(i) != null) {
+                        fila.add(c.getdato(i).toString());
+                    } else {
+                        fila.add("");
+                    }
+                }
+                String linea = String.join(sep, fila);
+                writer.write(linea);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new ArchivoException("Error al exportar los datos a " + path + e);
+        }
     }
 
     public Tabla importar(String sep, Boolean header) {
@@ -51,7 +93,6 @@ public class Archivo {
     }
 
     private List<Object[]> filasAColumnas(List<Object[]> datos) {
-        // Lista que almacenará los datos organizados por columnas
         List<Object[]> datosColumna = new ArrayList<>();
         
         if (datos.isEmpty()) {
@@ -90,7 +131,6 @@ public class Archivo {
                         valoresConvertidos[i] = detectarTipo(valores[i]);
                     }
                 }
-    
                 datos.add(valoresConvertidos);
             }
         } catch (IOException e) {
