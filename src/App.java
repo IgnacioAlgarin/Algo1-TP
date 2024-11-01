@@ -83,6 +83,7 @@ public class App {
         
         tablaArchivo.buscarDatoC(0.1,"Columna_0");
         tablaArchivo.buscarDatoC(0.1,"Columna_1");
+        tablaArchivo.buscarDatoC(0.1,"Columna_8");
         
         tablaArchivo.buscarDatosCRepetidos(true,"Columna_2"); 
     }
