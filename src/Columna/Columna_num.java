@@ -18,8 +18,14 @@ public class Columna_num<T, U> extends Columna <T, U> {
             datos.add(null);
         }else {
             datos.add(dato);
+        }      
+    }
+    public void setDato(int posicion, T dato) {       
+        if (dato == null) {
+            datos.set(posicion, null);
+        } else {
+            datos.set(posicion, dato);
         }
-
     }
 
     // public void cambiarDato(T dato, int i) {

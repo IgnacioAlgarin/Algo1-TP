@@ -528,17 +528,17 @@ public class Tabla {
         for (Columna<?, ?> columna : tabla) {
             if (dato instanceof String && columna instanceof Columna_string) {
                 if (((Columna_string) columna).contieneDato((String) dato)) {
-                    System.out.println("Dato encontrado: " + dato + " en columna '" + columna.getetiqueta() + "'");
+                    System.out.println("Dato encontrado: " + dato + " en columna '" + columna.getetiqueta() + "'" + " en fila " + filas.get(((Columna_string) columna).getDatos().indexOf(dato)).getposicion());
                     return true;
                 }
             } else if (dato instanceof Number && columna instanceof Columna_num) {
                 if (((Columna_num) columna).contieneDato((Number) dato)) {
-                    System.out.println("Dato encontrado: " + dato + " en columna '" + columna.getetiqueta() + "'");
+                    System.out.println("Dato encontrado: " + dato + " en columna '" + columna.getetiqueta() + "'" + " en fila " + filas.get(((Columna_num) columna).getDatos().indexOf(dato)).getposicion());
                     return true;
                 }
             } else if (dato instanceof Boolean && columna instanceof Columna_bool) {
                 if (((Columna_bool) columna).contieneDato((Boolean) dato)) {
-                    System.out.println("Dato encontrado: " + dato + " en columna '" + columna.getetiqueta() + "'");
+                    System.out.println("Dato encontrado: " + dato + " en columna '" + columna.getetiqueta() + "'" + " en fila " + filas.get(((Columna_bool) columna).getDatos().indexOf(dato)).getposicion());
                     return true;
                 }
             }
@@ -574,7 +574,52 @@ public class Tabla {
         }      
         return encontrado;
     }
+    //Modificar datos
+    public void modificarDato(Object etiquetaColumna, Object etiquetaFila, Object nuevoDato) {
+        boolean columnaEncontrada = false;
+        boolean filaEncontrada = false;
 
-
-
+        try {
+            for (Columna<?, ?> columna : tabla) {
+                if (columna.getetiqueta().equals(etiquetaColumna)) {
+                    columnaEncontrada = true;
+                    if ((columna instanceof Columna_string && !(nuevoDato instanceof String)) ||
+                        (columna instanceof Columna_num && !(nuevoDato instanceof Number)) ||
+                        (columna instanceof Columna_bool && !(nuevoDato instanceof Boolean))) {
+                        throw new TipoinconsistenteException("El tipo de dato de '" + nuevoDato + "' no coincide con el tipo de la columna '" + etiquetaColumna + "'.");
+                    }   
+                    for (Fila fila : filas) {
+                        if ((etiquetaFila instanceof String && etiquetaFila.equals(fila.getetiqueta())) ||
+                            (etiquetaFila instanceof Integer && etiquetaFila.equals(fila.getposicion()))) {
+                            filaEncontrada = true;
+                            int posicionFila = fila.getposicion();
+    
+                            if (columna instanceof Columna_string) {
+                                ((Columna_string<String, ?>) columna).setDato(posicionFila, (String) nuevoDato);
+                            } else if (columna instanceof Columna_num) {
+                                ((Columna_num<Number, ?>) columna).setDato(posicionFila, (Number) nuevoDato);
+                            } else if (columna instanceof Columna_bool) {
+                                ((Columna_bool<Boolean, ?>) columna).setDato(posicionFila, (Boolean) nuevoDato);
+                            }
+                            System.out.println("Dato modificado en columna '" + etiquetaColumna + "' y fila " + etiquetaFila + ": " + nuevoDato);
+                            return;
+                        }
+                    }  
+                    if (!filaEncontrada) {
+                        throw new EtiquetasfilaException("La fila con etiqueta '" + etiquetaFila + "' no existe.");
+                    }
+                }
+            }    
+            if (!columnaEncontrada) {
+                throw new ColumnaNoValidaException("La columna con etiqueta '" + etiquetaColumna + "' no existe.");
+            }
+        } catch (EtiquetasfilaException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (ColumnaNoValidaException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (TipoinconsistenteException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+    
 }

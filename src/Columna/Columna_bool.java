@@ -30,6 +30,13 @@ public class Columna_bool<T, U> extends Columna <T, U> {
             datos.set(i,dato);
         }
     }
+    public void setDato(int posicion, T dato) {       
+        if (dato == null) {
+            datos.set(posicion, null);
+        } else {
+            datos.set(posicion, dato);
+        }
+    }
     public Class<Boolean> getTipoClase() {
         return Boolean.class;
     }
@@ -44,4 +51,5 @@ public class Columna_bool<T, U> extends Columna <T, U> {
     public boolean contieneDato(Boolean dato) {
         return datos.contains(dato);
     }
+    
 }

@@ -84,6 +84,21 @@ public class App {
         tablaArchivo.buscarDatosPorColumna(0.1,"Columna_0");
         tablaArchivo.buscarDatosPorColumna(0.1,"Columna_1");
         tablaArchivo.buscarDatosPorColumna(0.1,"Columna_8");
-        tablaArchivo.buscarDatosPorColumna(true,"Columna_2"); 
+        tablaArchivo.buscarDatosPorColumna(true,"Columna_2");
+        
+        // Test modificar dato 
+        tablaArchivo.modificarDato("Columna_0", 2,0.3);
+        tablaArchivo.modificarDato("Columna_0", 20,0.3);
+        tablaArchivo.modificarDato("Columna_8", 2,0.3);        
+        tablaArchivo.visualizar();
+        tablaArchivo.modificarDato("Columna_8", 3,false); 
+        tablaArchivo.modificarDato("Columna_0", 30,4);
+        tablaArchivo.modificarDato("Columna_2", 3,"chau");
+        tablaArchivo.modificarDato("Columna_2", 3,false);
+        tablaArchivo.modificarDato("Columna_0", 3,4);
+        tablaArchivo.modificarDato("Columna_1", 3,"chau");
+        tablaArchivo.visualizar();
+        
+        
     }
 }
