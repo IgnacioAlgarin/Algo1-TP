@@ -528,17 +528,17 @@ public class Tabla {
         for (Columna<?, ?> columna : tabla) {
             if (dato instanceof String && columna instanceof Columna_string) {
                 if (((Columna_string) columna).contieneDato((String) dato)) {
-                    System.out.println("Dato encontrado: " + dato);
+                    System.out.println("Dato encontrado: " + dato + " en columna '" + columna.getetiqueta() + "'");
                     return true;
                 }
             } else if (dato instanceof Number && columna instanceof Columna_num) {
                 if (((Columna_num) columna).contieneDato((Number) dato)) {
-                    System.out.println("Dato encontrado: " + dato);
+                    System.out.println("Dato encontrado: " + dato + " en columna '" + columna.getetiqueta() + "'");
                     return true;
                 }
             } else if (dato instanceof Boolean && columna instanceof Columna_bool) {
                 if (((Columna_bool) columna).contieneDato((Boolean) dato)) {
-                    System.out.println("Dato encontrado: " + dato);
+                    System.out.println("Dato encontrado: " + dato + " en columna '" + columna.getetiqueta() + "'");
                     return true;
                 }
             }
@@ -547,49 +547,33 @@ public class Tabla {
         return false; 
     }
 
-    //Con etiqueta de columna como parametro Falta con etiqueta no valida
-    public boolean buscarDatoC(Object dato, Object etiquetaColumna) {
-        boolean columnaEncontrada = false;
-        
-        for (Columna<?, ?> columna : tabla) {
-            if (columna.getetiqueta().equals(etiquetaColumna)) {
-                columnaEncontrada = true;
-                for (int f = 0; f < filas.size(); f++) {
-                    if (dato.equals(columna.getdato(f))) {
-                        System.out.println("Dato encontrado en columna '" + etiquetaColumna + "' en fila " + filas.get(f).getposicion() + " con etiqueta " + filas.get(f).getetiqueta() + ": " + dato);
-                        return true;
-                    }
-                }
-                System.out.println("Dato no encontrado en columna '" + etiquetaColumna + "': " + dato);
-                return false;
-            }
-        }
-    
-        if (!columnaEncontrada) {
-            System.out.println("No existe columna con esa Etiqueta");
-        }
-        return false;
-    }
-    public boolean buscarDatosCRepetidos(Object dato, Object etiquetaColumna) {
+    //Buscar datos por columna y muestra si hay repetidos  
+    public boolean buscarDatosPorColumna(Object dato, Object etiquetaColumna) {
         boolean encontrado = false;
-    
-        for (Columna<?, ?> columna : tabla) {
-            if (columna.getetiqueta().equals(etiquetaColumna)) {
-                for (int f = 0; f < filas.size(); f++) {
-                    if (dato.equals(columna.getdato(f))) {
-                        System.out.println("Dato encontrado en columna '" + etiquetaColumna + "' en fila " + filas.get(f).getposicion() + " con etiqueta " + filas.get(f).getetiqueta() + ": " + dato);
-                        encontrado = true; 
+        try {
+            boolean columnaExiste = false;
+            for (Columna<?, ?> columna : tabla) {
+                if (columna.getetiqueta().equals(etiquetaColumna)) {
+                    columnaExiste = true; 
+                    for (int f = 0; f < filas.size(); f++) {
+                        if (dato.equals(columna.getdato(f))) {
+                            System.out.println("Dato encontrado en columna '" + etiquetaColumna + "' en fila " + filas.get(f).getposicion() + " con etiqueta " + filas.get(f).getetiqueta() + ": " + dato);
+                            encontrado = true;
+                        }
                     }
                 }
             }
-        }
-        
-        if (!encontrado) {
-            System.out.println("Dato no encontrado en columna '" + etiquetaColumna + "': " + dato);
-        }
-        
+            if (!columnaExiste) {
+                throw new ColumnaNoValidaException("La columna '" + etiquetaColumna + "' no existe.");
+            }
+            if (!encontrado) {
+                System.out.println("Dato no encontrado en columna '" + etiquetaColumna + "': " + dato);
+            }   
+        } catch (ColumnaNoValidaException e) {
+            System.out.println(e.getMessage());
+        }      
         return encontrado;
-    }    
+    }
 
 
 

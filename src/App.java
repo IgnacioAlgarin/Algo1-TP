@@ -81,10 +81,9 @@ public class App {
         tablaArchivo.buscarDato(true);   
         tablaArchivo.buscarDato("otra cosa");
         
-        tablaArchivo.buscarDatoC(0.1,"Columna_0");
-        tablaArchivo.buscarDatoC(0.1,"Columna_1");
-        tablaArchivo.buscarDatoC(0.1,"Columna_8");
-        
-        tablaArchivo.buscarDatosCRepetidos(true,"Columna_2"); 
+        tablaArchivo.buscarDatosPorColumna(0.1,"Columna_0");
+        tablaArchivo.buscarDatosPorColumna(0.1,"Columna_1");
+        tablaArchivo.buscarDatosPorColumna(0.1,"Columna_8");
+        tablaArchivo.buscarDatosPorColumna(true,"Columna_2"); 
     }
 }
