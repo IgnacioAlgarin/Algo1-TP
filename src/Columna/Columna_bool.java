@@ -1,10 +1,17 @@
 package Columna;
+import java.util.ArrayList;
+import java.util.List;
+
 import NA.NA;
 
 public class Columna_bool<T, U> extends Columna <T, U> {
     // Constructores
     public Columna_bool(U etiqueta ) {
         super(etiqueta);
+    }
+
+    public Columna_bool(U etiqueta, List<T> datos ) {
+        super(etiqueta, datos);
     }
 
     //generamos toString para visualizar mientras probamos.
@@ -50,6 +57,12 @@ public class Columna_bool<T, U> extends Columna <T, U> {
 
     public boolean contieneDato(Boolean dato) {
         return datos.contains(dato);
+    }
+
+    public Columna_bool<T,U> copiaProfunda() {
+        
+        List<T> datosCopia = new ArrayList<>(this.datos);
+        return new Columna_bool<>( this.etiqueta , datosCopia);
     }
     
 }

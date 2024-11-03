@@ -54,50 +54,63 @@ public class App {
         List<Number> edades = Arrays.asList(25, 30, 7, 9, 90, 50);
         tabla.agregarColumna(edades, "Edad");
 
-        tabla.mostrarResumenOperaciones("Edad"); 
+        tabla.mostrarResumenOperaciones("Edad");
+        
+        Tabla tabla2 = tabla.copia_p();
+        datofila.add(4);
+        tabla.agregarfila(datofila);
+        Tabla tabla3 = new Tabla(tabla);
+        tabla.agregarfila(datofila);
+        System.err.println("tabla1");
+        tabla.visualizar();
+        System.err.println("tabla2");
+        tabla2.visualizar();
+
+        System.err.println("tabla3");
+        tabla3.visualizar();
 
         // Test lectura archivo
-        System.out.println("inicio test archivo");
-        Archivo archivo = new Archivo("datos_prueba.csv", "src/");
-        List<Object[]> datos = archivo.parseCSV(",", false);
+         System.out.println("inicio test archivo");
+         Archivo archivo = new Archivo("datos_prueba.csv", "src/");
+         List<Object[]> datos = archivo.parseCSV(",", false);
 
-        System.out.println("Contenido del archivo CSV:");
-        for (Object[] fila : datos) {
-            System.out.println(Arrays.toString(fila));
-        }
+         System.out.println("Contenido del archivo CSV:");
+         for (Object[] fila : datos) {
+             System.out.println(Arrays.toString(fila));
+         }
 
-        Tabla tablaArchivo = new Tabla();
-        tablaArchivo = archivo.importar(",", false);
-        System.out.println("tabla importada");
-        tablaArchivo.visualizar();
+         Tabla tablaArchivo = new Tabla();
+         tablaArchivo = archivo.importar(",", false);
+         System.out.println("tabla importada");
+         tablaArchivo.visualizar();
 
         //Test exportar archivo
-        Archivo archivo2 = new Archivo("prueba_exportar.csv", "src/");
-        archivo2.exportar(tablaArchivo, "src/");
+         Archivo archivo2 = new Archivo("prueba_exportar.csv", "src/");
+         archivo2.exportar(tablaArchivo, "src/");
         
         // Test buscar dato
-        tablaArchivo.buscarDato("hola"); 
-        tablaArchivo.buscarDato(0.1); 
-        tablaArchivo.buscarDato(true);   
-        tablaArchivo.buscarDato("otra cosa");
+         tablaArchivo.buscarDato("hola"); 
+         tablaArchivo.buscarDato(0.1); 
+         tablaArchivo.buscarDato(true);   
+         tablaArchivo.buscarDato("otra cosa");
         
-        tablaArchivo.buscarDatosPorColumna(0.1,"Columna_0");
-        tablaArchivo.buscarDatosPorColumna(0.1,"Columna_1");
-        tablaArchivo.buscarDatosPorColumna(0.1,"Columna_8");
-        tablaArchivo.buscarDatosPorColumna(true,"Columna_2");
+         tablaArchivo.buscarDatosPorColumna(0.1,"Columna_0");
+         tablaArchivo.buscarDatosPorColumna(0.1,"Columna_1");
+         tablaArchivo.buscarDatosPorColumna(0.1,"Columna_8");
+         tablaArchivo.buscarDatosPorColumna(true,"Columna_2");
         
-        // Test modificar dato 
-        tablaArchivo.modificarDato("Columna_0", 2,0.3);
-        tablaArchivo.modificarDato("Columna_0", 20,0.3);
-        tablaArchivo.modificarDato("Columna_8", 2,0.3);        
-        tablaArchivo.visualizar();
-        tablaArchivo.modificarDato("Columna_8", 3,false); 
-        tablaArchivo.modificarDato("Columna_0", 30,4);
-        tablaArchivo.modificarDato("Columna_2", 3,"chau");
-        tablaArchivo.modificarDato("Columna_2", 3,false);
-        tablaArchivo.modificarDato("Columna_0", 3,4);
-        tablaArchivo.modificarDato("Columna_1", 3,"chau");
-        tablaArchivo.visualizar();
+        // // Test modificar dato 
+         tablaArchivo.modificarDato("Columna_0", 2,0.3);
+         tablaArchivo.modificarDato("Columna_0", 20,0.3);
+         tablaArchivo.modificarDato("Columna_8", 2,0.3);        
+         tablaArchivo.visualizar();
+         tablaArchivo.modificarDato("Columna_8", 3,false); 
+         tablaArchivo.modificarDato("Columna_0", 30,4);
+         tablaArchivo.modificarDato("Columna_2", 3,"chau");
+         tablaArchivo.modificarDato("Columna_2", 3,false);
+         tablaArchivo.modificarDato("Columna_0", 3,4);
+         tablaArchivo.modificarDato("Columna_1", 3,"chau");
+         tablaArchivo.visualizar();
         
         
     }

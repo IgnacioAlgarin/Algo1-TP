@@ -27,6 +27,27 @@ public class Tabla {
         etiquetasUsadasf = new HashSet<>();
         filas = new ArrayList<>();
     }
+
+    public Tabla(Tabla otraTabla){
+        this.tabla = new ArrayList<>();
+        for (Columna<?, ?> columna : otraTabla.tabla) {
+            this.tabla.add(columna.copiaProfunda());
+        }
+
+        this.filas = new ArrayList<>();
+        for (Fila fila : otraTabla.filas) {
+            this.filas.add(new Fila(fila.getetiqueta(), fila.getposicion()));
+        }
+        
+        this.contadorEtiquetac = otraTabla.contadorEtiquetac;
+        this.contadorEtiquetaf = otraTabla.contadorEtiquetaf;
+        this.etiquetasUsadasc = new HashSet<>(otraTabla.etiquetasUsadasc);
+        this.etiquetasUsadasf = new HashSet<>(otraTabla.etiquetasUsadasf);
+    }
+
+
+
+
     private Integer generarEtiquetac(){
         int nuevaetiqueta;
         do{
@@ -205,7 +226,7 @@ public class Tabla {
     }
 
      public void agregarfila (String etiqueta,List<?> datos){
-        if (etiquetasUsadasf.contains(etiqueta) ){
+        if (etiquetasUsadasf.contains(etiqueta) && etiqueta != null ){
             throw new EtiquetaEnUsoException("Etiquetas en uso");
         }
         if ( datos.size() != tabla.size()){
@@ -484,9 +505,23 @@ public class Tabla {
 
 
 
-    public Tabla copia_p(String nombre) {
-        Tabla copiaTabla = new Tabla();
-        return copiaTabla;
+    public Tabla copia_p() {
+        Tabla copia = new Tabla();
+
+        for (Columna<?, ?> columna : this.tabla) {
+            copia.tabla.add(columna.copiaProfunda());
+        }
+
+        for (Fila fila : this.filas) {
+            copia.filas.add(new Fila(fila.getetiqueta(), fila.getposicion()));
+        }
+
+        copia.contadorEtiquetac = this.contadorEtiquetac;
+        copia.contadorEtiquetaf = this.contadorEtiquetaf;
+        copia.etiquetasUsadasc = new HashSet<>(this.etiquetasUsadasc);
+        copia.etiquetasUsadasf = new HashSet<>(this.etiquetasUsadasf);
+
+        return copia;
     }
 
     public void index() {

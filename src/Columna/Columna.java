@@ -9,7 +9,14 @@ public abstract class Columna<T, U> {
     public Columna(U etiqueta) {
         this.etiqueta = etiqueta;
         this.datos = new ArrayList<>();
-    }  
+    } 
+    
+    public Columna(U etiqueta, List<T> datos) {
+        this.etiqueta = etiqueta;
+        this.datos = new ArrayList<>(datos);
+    }
+
+
 
     public Class<?> getTipoClase() {
         return Object.class;
@@ -32,5 +39,7 @@ public abstract class Columna<T, U> {
     public List<T> getDatos() {
         return datos;
     }
+
+    public abstract Columna<T, U> copiaProfunda();
 
 }
