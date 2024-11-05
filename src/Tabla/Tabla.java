@@ -2,6 +2,8 @@ package Tabla;
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import Columna.*;
@@ -696,6 +698,128 @@ public class Tabla {
                     }
                 }
             }
+        }
+    }
+
+       public void mostrarEtiquetasColumnas() {
+        System.out.print("Etiquetas de columnas: ");
+        for (Columna<?, ?> columna : tabla) {
+            System.out.print(columna.getetiqueta() + " ");
+        }
+        System.out.println();  
+    }
+
+    public void eliminarColumna(String etiquetaColumna) {
+        boolean encontrada = false;
+        for (int i = 0; i < tabla.size(); i++) {
+            if (tabla.get(i).getetiqueta().equals(etiquetaColumna)) {
+                tabla.remove(i);
+                encontrada = true;
+                System.out.println("Columna con etiqueta '" + etiquetaColumna + "' eliminada.");
+                break;
+            }
+        }
+        if (!encontrada) {
+            throw new IllegalArgumentException("La columna con etiqueta '" + etiquetaColumna + "' no fue encontrada.");
+        }
+    }
+
+    public void eliminarColumna(int indiceColumna) {
+        if (indiceColumna < 0 || indiceColumna >= tabla.size()) {
+            throw new IndexOutOfBoundsException("Índice de columna fuera de rango.");
+        }
+        // Elimina la columna en el índice especificado sin considerar etiquetas
+        Columna<?, ?> columnaEliminada = tabla.remove(indiceColumna);
+        System.out.println("Columna eliminada en el índice " + indiceColumna + " con etiqueta: " + columnaEliminada.getetiqueta());
+    }
+    
+    public void eliminarFila(int indiceFila) {
+        if (indiceFila < 0 || indiceFila >= filas.size()) {
+            throw new IndexOutOfBoundsException("Índice de fila fuera de rango.");
+        }
+        filas.remove(indiceFila);
+        for (Columna<?, ?> columna : tabla) {
+            columna.getDatos().remove(indiceFila);  // Elimina el dato de esa fila en cada columna
+        }
+        System.out.println("Fila en el índice " + indiceFila + " eliminada.");
+    }
+    
+    public void eliminarFila(String etiquetaFila) {
+        boolean encontrada = false;
+        for (int i = 0; i < filas.size(); i++) {
+            if (filas.get(i).getetiqueta().equals(etiquetaFila)) {
+                filas.remove(i);
+                for (Columna<?, ?> columna : tabla) {
+                    columna.getDatos().remove(i);  // Elimina el dato de esa fila en cada columna
+                }
+                encontrada = true;
+                System.out.println("Fila con etiqueta '" + etiquetaFila + "' eliminada.");
+                break;
+            }
+        }
+        if (!encontrada) {
+            throw new IllegalArgumentException("La fila con etiqueta '" + etiquetaFila + "' no fue encontrada.");
+        }
+    }
+
+    public Columna<?, ?> obtenerColumnaPorEtiqueta(String etiquetaColumna) {
+        for (Columna<?, ?> columna : tabla) {
+            if (columna.getetiqueta().equals(etiquetaColumna)) {
+                return columna;
+            }
+        }
+        throw new IllegalArgumentException("Columna no encontrada: " + etiquetaColumna);
+    }
+    
+    public void ordenarTabla(List<String> etiquetasColumnas, List<Boolean> ordenAscendente) {
+        if (etiquetasColumnas.size() != ordenAscendente.size()) {
+            throw new IllegalArgumentException("La cantidad de columnas y de órdenes deben coincidir.");
+        }
+    
+        // Crear el comparador compuesto para ordenar `filas`
+        Comparator<Fila> comparadorFinal = (fila1, fila2) -> 0;
+    
+        for (int i = 0; i < etiquetasColumnas.size(); i++) {
+            String etiquetaColumna = etiquetasColumnas.get(i);
+            boolean ascendente = ordenAscendente.get(i);
+    
+            // Obtener la columna correspondiente
+            Columna<?, ?> columna = obtenerColumnaPorEtiqueta(etiquetaColumna);
+            if (columna == null) {
+                throw new IllegalArgumentException("Columna no encontrada: " + etiquetaColumna);
+            }
+    
+            // Comparador para la columna actual
+            Comparator<Fila> comparadorColumna = (fila1, fila2) -> {
+                Comparable dato1 = (Comparable) columna.getdato(fila1.getIndice());
+                Comparable dato2 = (Comparable) columna.getdato(fila2.getIndice());
+    
+                if (dato1 == null && dato2 == null) return 0;
+                if (dato1 == null) return ascendente ? -1 : 1;
+                if (dato2 == null) return ascendente ? 1 : -1;
+    
+                int resultado = dato1.compareTo(dato2);
+                return ascendente ? resultado : -resultado;
+            };
+    
+            comparadorFinal = comparadorFinal.thenComparing(comparadorColumna);
+        }
+    
+        // Ordenar la lista de filas
+        Collections.sort(filas, comparadorFinal);
+    
+        // Reorganizar los datos de cada columna en base al nuevo orden de `filas`
+        for (Columna<?, ?> columna : tabla) {
+            List<?> datos = columna.getDatos(); // Obtener los datos actuales
+            List<Object> nuevosDatos = new ArrayList<>(filas.size());
+    
+            // Reorganizar los datos de la columna en el orden de las filas ordenadas
+            for (Fila fila : filas) {
+                nuevosDatos.add(datos.get(fila.getIndice()));
+            }
+    
+            // Actualizar la columna con el nuevo orden de datos
+            columna.setDatos(nuevosDatos);
         }
     }
     

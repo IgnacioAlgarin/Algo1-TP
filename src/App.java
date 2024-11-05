@@ -116,6 +116,50 @@ public class App {
          tablaArchivo.modificarDato("Columna_0", 3,4);
          tablaArchivo.modificarDato("Columna_1", 3,"chau");
          tablaArchivo.visualizar();
+
+                 // Test eliminar por fila y columna
+        System.out.println("\n\nTEST ELIMINAR FILA Y COLUMNA");
+        // Agregar columna de texto con etiqueta "Nombre"
+        List<String> nombres = Arrays.asList("Ana", "Luis", "Marta", "Juan", "Pedro", "Sofía", "Lucía", "Carlos");
+        tabla.agregarColumna(nombres, "Nombre");
+
+        // Agregar columna booleana con etiqueta "Activo"
+        List<Boolean> activo = Arrays.asList(true, false, true, true, false, true, true ,false);
+        tabla.agregarColumna(activo, "Activo");
+
+        // Mostrar la tabla inicial
+        System.out.println("Tabla inicial:");
+        tabla.visualizar();
+
+        // Test: Eliminar una columna por etiqueta
+        System.out.println("\nEliminando la columna 'Activo'...");
+        tabla.eliminarColumna("Activo");
+        tabla.visualizar();
+
+        System.out.println("Antes de eliminar la columna en el índice 0:");
+        tabla.mostrarEtiquetasColumnas();
+
+        // Test: Eliminar una columna por índice
+        System.out.println("\nEliminando la columna en el índice 0...");
+        tabla.eliminarColumna(0); 
+        tabla.visualizar();
+
+        // Test: Eliminar una fila por índice
+        System.out.println("\nEliminando la fila en el índice 0...");
+        tabla.eliminarFila(0);
+        tabla.visualizar();
+        
+        // Test: Ordenamiento
+        System.out.println("Antes de ordenar por 'Edad' ascendente y 'Nombre' descendente:");
+        tabla.visualizar();
+        
+        List<String> etiquetas = Arrays.asList("Edad", "Nombre");
+        List<Boolean> orden = Arrays.asList(true, false);  // Edad ascendente, Nombre descendente
+        
+        tabla.ordenarTabla(etiquetas, orden);
+        
+        System.out.println("Después de ordenar:");
+        tabla.visualizar();
         
     }
 }

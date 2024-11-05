@@ -16,7 +16,9 @@ public abstract class Columna<T, U> {
         this.datos = new ArrayList<>(datos);
     }
 
-
+    public void setDatos(List<?> nuevosDatos) {
+        this.datos = (List<T>) nuevosDatos;  // Conversión genérica a T
+    }
 
     public Class<?> getTipoClase() {
         return Object.class;

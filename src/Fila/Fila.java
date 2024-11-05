@@ -25,4 +25,8 @@ public class Fila {
     public String getetiqueta(){
         return etiqueta;
     }
+
+    public int getIndice(){
+        return posicion - 1;
+    }
 }
