@@ -275,25 +275,34 @@ public class Tabla {
 
     public void visualizar() {
         StringBuilder filastring = new StringBuilder();
-        filastring.append(String.format("%-8s %-8s", "", ""));
+        filastring.append(String.format("%-5s %-8s", "", ""));
     
         for (Columna<?, ?> columna : tabla) {
-            filastring.append(String.format("%-8s", columna.getetiqueta()));
+            String dato;
+            dato = (String.format("%-10s", columna.getetiqueta()));
+            if (dato.length() > 11){
+                dato = dato.substring(0, 8) + "..";
+            }
+            filastring.append(dato);
         }
         filastring.append("\n");
     
         for (int f = 0; f < filas.size(); f++) {
-            filastring.append(String.format("%-8s %-8s", filas.get(f).getposicion(), filas.get(f).getetiqueta()));
+
+            filastring.append(String.format("%-5s %-8s", filas.get(f).getposicion(), filas.get(f).getetiqueta()));
             for (Columna<?, ?> columna : tabla) {
-                filastring.append(String.format("%-8s", columna.getdato(f)));
+                String dato;
+                dato = String.format("%-10s", columna.getdato(f));
+                if (dato.length()>11){
+                    dato = dato.substring (0,8) + "..";
+                }
+                filastring.append(dato);
             }
             filastring.append("\n");
         }
-        
-        System.out.println(filastring.toString());
     }
 
-        public void visualizarParcial(List<String> etiquetasFilas, List<String> etiquetasColumnas) {
+    public void visualizarParcial(List<String> etiquetasFilas, List<String> etiquetasColumnas) {
         StringBuilder output = new StringBuilder();
         output.append(String.format("%-8s %-8s", "", ""));
         
