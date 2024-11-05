@@ -714,6 +714,7 @@ public class Tabla {
         for (int i = 0; i < tabla.size(); i++) {
             if (tabla.get(i).getetiqueta().equals(etiquetaColumna)) {
                 tabla.remove(i);
+                etiquetasUsadasc.remove(etiquetaColumna);
                 encontrada = true;
                 System.out.println("Columna con etiqueta '" + etiquetaColumna + "' eliminada.");
                 break;
@@ -749,6 +750,7 @@ public class Tabla {
         for (int i = 0; i < filas.size(); i++) {
             if (filas.get(i).getetiqueta().equals(etiquetaFila)) {
                 filas.remove(i);
+                etiquetasUsadasf.remove(etiquetaFila);
                 for (Columna<?, ?> columna : tabla) {
                     columna.getDatos().remove(i);  // Elimina el dato de esa fila en cada columna
                 }
