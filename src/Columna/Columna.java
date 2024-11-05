@@ -42,4 +42,6 @@ public abstract class Columna<T, U> {
 
     public abstract Columna<T, U> copiaProfunda();
 
+    
+
 }

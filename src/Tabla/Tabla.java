@@ -609,7 +609,7 @@ public class Tabla {
         }      
         return encontrado;
     }
-    //Modificar datos
+    //Modificar datos recibe la etiqueta de la columna y fila y el nuevo dato
     public void modificarDato(Object etiquetaColumna, Object etiquetaFila, Object nuevoDato) {
         boolean columnaEncontrada = false;
         boolean filaEncontrada = false;
@@ -654,6 +654,36 @@ public class Tabla {
             System.out.println("Error: " + e.getMessage());
         } catch (TipoinconsistenteException e) {
             System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    //Manejar NA, rellena datos faltantes segun tipo de columna (toma la tabla entera!!)
+
+    public void rellenarDatosFaltantes() {
+        for (Columna<?, ?> columna : tabla) {
+            if (columna instanceof Columna_num) {
+                Columna_num<Number, ?> columnaNum = (Columna_num<Number, ?>) columna;
+                Double media = columnaNum.promediar(); 
+                for (int i = 0; i < columnaNum.getDatos().size(); i++) {
+                    if (columnaNum.getDatos().get(i) == null) {
+                        columnaNum.setDato(i, media);
+                    }
+                }
+            } else if (columna instanceof Columna_string) {
+                Columna_string<String, ?> columnaString = (Columna_string<String, ?>) columna;
+                for (int i = 0; i < columnaString.getDatos().size(); i++) {
+                    if (columnaString.getDatos().get(i) == null) {
+                        columnaString.setDato(i, "NA");
+                    }
+                }
+            } else if (columna instanceof Columna_bool) {
+                Columna_bool<Boolean, ?> columnaBool = (Columna_bool<Boolean, ?>) columna;
+                for (int i = 0; i < columnaBool.getDatos().size(); i++) {
+                    if (columnaBool.getDatos().get(i) == null) {
+                        columnaBool.setDato(i, false);
+                    }
+                }
+            }
         }
     }
     

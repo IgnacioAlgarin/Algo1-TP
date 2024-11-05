@@ -44,6 +44,8 @@ public class Columna_bool<T, U> extends Columna <T, U> {
             datos.set(posicion, dato);
         }
     }
+
+
     public Class<Boolean> getTipoClase() {
         return Boolean.class;
     }
@@ -64,5 +66,11 @@ public class Columna_bool<T, U> extends Columna <T, U> {
         List<T> datosCopia = new ArrayList<>(this.datos);
         return new Columna_bool<>( this.etiqueta , datosCopia);
     }
+    
+    
+
+    
+
+
     
 }

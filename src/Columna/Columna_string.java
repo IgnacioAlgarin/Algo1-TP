@@ -67,6 +67,7 @@ public class Columna_string <T, U> extends Columna <T, U> {
         List<T> datosCopia = new ArrayList<>(this.datos);
         return new Columna_string<>( this.etiqueta , datosCopia);
     }
+
 }
 
 
