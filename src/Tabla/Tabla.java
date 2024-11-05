@@ -275,7 +275,7 @@ public class Tabla {
 
     public void visualizar() {
         StringBuilder filastring = new StringBuilder();
-        filastring.append(String.format("%-5s %-8s", "", ""));
+        filastring.append(String.format("%-5s %-8s", "ID", "Etiqueta"));
     
         for (Columna<?, ?> columna : tabla) {
             String dato;
@@ -300,6 +300,7 @@ public class Tabla {
             }
             filastring.append("\n");
         }
+        System.out.println(filastring);
     }
 
     public void visualizarParcial(List<String> etiquetasFilas, List<String> etiquetasColumnas) {
@@ -571,7 +572,7 @@ public class Tabla {
     public boolean buscarDato(Object dato) {
         for (Columna<?, ?> columna : tabla) {
             if (dato instanceof String && columna instanceof Columna_string) {
-                if (((Columna_string) columna).contieneDato((String) dato)) {
+                if (((Columna_string<?,?>) columna).contieneDato((String) dato)) {
                     System.out.println("Dato encontrado: " + dato + " en columna '" + columna.getetiqueta() + "'" + " en fila " + filas.get(((Columna_string) columna).getDatos().indexOf(dato)).getposicion());
                     return true;
                 }
@@ -627,7 +628,9 @@ public class Tabla {
             for (Columna<?, ?> columna : tabla) {
                 if (columna.getetiqueta().equals(etiquetaColumna)) {
                     columnaEncontrada = true;
-                    if ((columna instanceof Columna_string && !(nuevoDato instanceof String)) ||
+                    if ( nuevoDato == null){
+
+                    } else if ((columna instanceof Columna_string && !(nuevoDato instanceof String)) ||
                         (columna instanceof Columna_num && !(nuevoDato instanceof Number)) ||
                         (columna instanceof Columna_bool && !(nuevoDato instanceof Boolean))) {
                         throw new TipoinconsistenteException("El tipo de dato de '" + nuevoDato + "' no coincide con el tipo de la columna '" + etiquetaColumna + "'.");
