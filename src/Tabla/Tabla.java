@@ -764,7 +764,7 @@ public class Tabla {
         }
     }
 
-    public Columna<?, ?> obtenerColumnaPorEtiqueta(String etiquetaColumna) {
+    public <E> Columna<?, ?> obtenerColumnaPorEtiqueta(E etiquetaColumna) {
         for (Columna<?, ?> columna : tabla) {
             if (columna.getetiqueta().equals(etiquetaColumna)) {
                 return columna;
@@ -773,7 +773,7 @@ public class Tabla {
         throw new IllegalArgumentException("Columna no encontrada: " + etiquetaColumna);
     }
     
-    public void ordenarTabla(List<String> etiquetasColumnas, List<Boolean> ordenAscendente) {
+    public <E> void ordenarTabla(List<E> etiquetasColumnas, List<Boolean> ordenAscendente) {
         if (etiquetasColumnas.size() != ordenAscendente.size()) {
             throw new IllegalArgumentException("La cantidad de columnas y de órdenes deben coincidir.");
         }
@@ -782,10 +782,10 @@ public class Tabla {
         Comparator<Fila> comparadorFinal = (fila1, fila2) -> 0;
     
         for (int i = 0; i < etiquetasColumnas.size(); i++) {
-            String etiquetaColumna = etiquetasColumnas.get(i);
+            E etiquetaColumna = etiquetasColumnas.get(i);
             boolean ascendente = ordenAscendente.get(i);
     
-            // Obtener la columna correspondiente
+            // Obtener la columna correspondiente usando una etiqueta de tipo genérico `E`
             Columna<?, ?> columna = obtenerColumnaPorEtiqueta(etiquetaColumna);
             if (columna == null) {
                 throw new IllegalArgumentException("Columna no encontrada: " + etiquetaColumna);
