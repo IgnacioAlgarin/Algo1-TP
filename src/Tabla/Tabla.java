@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.Collectors;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
@@ -711,36 +712,82 @@ public class Tabla {
             }
         }
     }
+    // cantidad filas
+    public int getCantidadFilas() {
+        return filas.size();
+    }
 
-    // public void rellenarDatosFaltantes() {
-    //     for (Columna<?, ?> columna : tabla) {
-    //         if (columna instanceof Columna_num) {
-    //             Columna_num<Number, ?> columnaNum = (Columna_num<Number, ?>) columna;
-    //             Double media = columnaNum.promediar(); 
-    //             for (int i = 0; i < columnaNum.getDatos().size(); i++) {
-    //                 if (columnaNum.getDatos().get(i) == null) {
-    //                     columnaNum.setDato(i, media);
-    //                 }
-    //             }
-    //         } else if (columna instanceof Columna_string) {
-    //             Columna_string<String, ?> columnaString = (Columna_string<String, ?>) columna;
-    //             for (int i = 0; i < columnaString.getDatos().size(); i++) {
-    //                 if (columnaString.getDatos().get(i) == null) {
-    //                     columnaString.setDato(i, "NA");
-    //                 }
-    //             }
-    //         } else if (columna instanceof Columna_bool) {
-    //             Columna_bool<Boolean, ?> columnaBool = (Columna_bool<Boolean, ?>) columna;
-    //             for (int i = 0; i < columnaBool.getDatos().size(); i++) {
-    //                 if (columnaBool.getDatos().get(i) == null) {
-    //                     columnaBool.setDato(i, false);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+    // cantidad columnas
+    public int getCantidadColumnas() {
+        return tabla.size();
+    }
 
-       public void mostrarEtiquetasColumnas() {
+    // get etiquetas como lista de strings
+        public List<String> getEtiquetasFilas() {
+        List<String> etiquetasf = new ArrayList<>();
+        for (Fila fila : filas) {
+            etiquetasf.add(fila.getetiqueta());  
+        }
+        return etiquetasf;
+    }
+
+    // cuenta nulls
+    private int contarValoresNulos(int indiceColumna) {
+        int contador = 0;
+        Columna<?, ?> columna = tabla.get(indiceColumna);
+        for (Object dato : columna.getDatos()) {
+            if (dato == null) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
+    // cuenta "NA"s
+    private int contarValoresNA(int indiceColumna) {
+        int contador = 0;
+        Columna<?, ?> columna = tabla.get(indiceColumna);
+        for (Object dato : columna.getDatos()) {
+            if (dato instanceof NA) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
+    // mostrar cuadro de información de la tabla
+    public void mostrarCuadroInformacion() {    
+        System.out.printf("%-15s %-15s %-15s %-15s %-15s %-15s%n", 
+                          "Columna", "Tipo de Dato", "Cantidad de Filas", "Registros", "Valores Nulos", "Valores NA");
+        System.out.println("-----------------------------------------------------------------------------------------");
+    
+        for (int i = 0; i < getCantidadColumnas(); i++) {
+            Columna<?, ?> columna = tabla.get(i);
+            String nombreColumna = columna.getetiqueta().toString();
+            Class<?> tipoDato = columna.getTipoClase();
+            int cantidadFilas = getCantidadFilas();
+            int registros = cantidadFilas - contarValoresNulos(i); 
+            int valoresNulos = contarValoresNulos(i);
+            int valoresNA = contarValoresNA(i);
+    
+            System.out.printf("%-15s %-20s %-15d %-15d %-15d %-15d%n", 
+                              nombreColumna, tipoDato.getSimpleName(), cantidadFilas, registros, valoresNulos, valoresNA);
+        }
+
+        List<String> etiquetasFilas = getEtiquetasFilas();
+        int maxEtiquetas = 5;  
+
+        String etiquetasString;
+        if (etiquetasFilas.size() > maxEtiquetas) {
+        etiquetasString = "[" + String.join(", ", etiquetasFilas.subList(0, maxEtiquetas)) + ",....., " + etiquetasFilas.get(etiquetasFilas.size() - 1) + "]";
+        } else {
+        etiquetasString = etiquetasFilas.toString();
+        }
+        System.out.println("\nEtiquetas de Filas: " + etiquetasString);
+        System.out.println();
+    }
+
+    public void mostrarEtiquetasColumnas() {
         System.out.print("Etiquetas de columnas: ");
         for (Columna<?, ?> columna : tabla) {
             System.out.print(columna.getetiqueta() + " ");

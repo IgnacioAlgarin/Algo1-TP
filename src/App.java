@@ -103,12 +103,20 @@ public class App {
         // Test completar NA
         System.out.println("\nTEST remplazar null con NA y rellenar datos faltantes\n");
 
+        tablaArchivo.mostrarCuadroInformacion();
         tablaArchivo.reemplazarNullConNA();
-        tablaArchivo.visualizar(); 
+        tablaArchivo.visualizar();
+        tablaArchivo.mostrarCuadroInformacion(); 
         tablaArchivo.rellenarDatosFaltantes("Columna_2",1); 
         tablaArchivo.visualizar();
         tablaArchivo.rellenarDatosFaltantes("Columna_2",true); 
-        tablaArchivo.visualizar();    
+        tablaArchivo.visualizar(); 
+        tablaArchivo.mostrarCuadroInformacion(); 
+        
+        tabla.mostrarCuadroInformacion(); 
+        tabla3.mostrarCuadroInformacion();
+         
+
 
         // Test modificar dato 
          tablaArchivo.modificarDato("Columna_0", 2,0.3);
@@ -123,7 +131,7 @@ public class App {
          tablaArchivo.modificarDato("Columna_1", 3,"chau");
          tablaArchivo.visualizar();
 
-                 // Test eliminar por fila y columna
+        // Test eliminar por fila y columna
         System.out.println("\n\nTEST ELIMINAR FILA Y COLUMNA");
         // Agregar columna de texto con etiqueta "Nombre"
         List<String> nombres = Arrays.asList("Ana", "Luis", "Marta", "Juan", "Pedro", "Sofía", "Lucía", "Carlos");

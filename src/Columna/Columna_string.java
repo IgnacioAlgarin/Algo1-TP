@@ -36,13 +36,13 @@ public class Columna_string <T, U> extends Columna <T, U> {
     }
 
 
-    public void cambiarDato(T dato, int i) {
-        if (dato == null){
-            datos.set(i,(T) new NA());
-        }else {
-            datos.set(i,dato);
-        }
-    }
+    // public void cambiarDato(T dato, int i) {
+    //     if (dato == null){
+    //         datos.set(i,(T) new NA());
+    //     }else {
+    //         datos.set(i,dato);
+    //     }
+    // }
     public void setDato(int posicion, T dato) {       
         if (dato == null) {
             datos.set(posicion, null);
