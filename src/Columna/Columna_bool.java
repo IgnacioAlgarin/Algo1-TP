@@ -20,7 +20,6 @@ public class Columna_bool<T, U> extends Columna <T, U> {
         return "Columna_bool [columna=" + datos.toString() + "] " + etiqueta.toString();
     }
 
-    @SuppressWarnings("unchecked")
     public void agregarDato(T dato) {
         if (dato == null){
             datos.add(null);
@@ -29,14 +28,14 @@ public class Columna_bool<T, U> extends Columna <T, U> {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public void cambiarDato(T dato, int i) {
-        if (dato == null){
-            datos.set(i,(T) new NA());
-        }else {
-            datos.set(i,dato);
-        }
-    }
+    // @SuppressWarnings("unchecked")
+    // public void cambiarDato(T dato, int i) {
+    //     if (dato == null){
+    //         datos.set(i,(T) new NA());
+    //     }else {
+    //         datos.set(i,dato);
+    //     }
+    // }
     public void setDato(int posicion, T dato) {       
         if (dato == null) {
             datos.set(posicion, null);
