@@ -101,8 +101,14 @@ public class App {
         tablaArchivo.visualizar(); 
 
         // Test completar NA
-        tablaArchivo.rellenarDatosFaltantes(); 
-        tablaArchivo.visualizar();   
+        System.out.println("\nTEST remplazar null con NA y rellenar datos faltantes\n");
+
+        tablaArchivo.reemplazarNullConNA();
+        tablaArchivo.visualizar(); 
+        tablaArchivo.rellenarDatosFaltantes("Columna_2",1); 
+        tablaArchivo.visualizar();
+        tablaArchivo.rellenarDatosFaltantes("Columna_2",true); 
+        tablaArchivo.visualizar();    
 
         // Test modificar dato 
          tablaArchivo.modificarDato("Columna_0", 2,0.3);

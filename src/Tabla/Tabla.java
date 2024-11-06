@@ -10,6 +10,7 @@ import Columna.*;
 import Fila.Fila;
 import Operaciones.Operaciones;
 import excepciones.*;
+import NA.NA;
 
 
 public class Tabla {
@@ -671,35 +672,73 @@ public class Tabla {
         }
     }
 
-    //Manejar NA, rellena datos faltantes segun tipo de columna (toma la tabla entera!!)
+    //Reemplazar null con NA (para simular datos faltantes)
 
-    public void rellenarDatosFaltantes() {
+    public void reemplazarNullConNA() {
         for (Columna<?, ?> columna : tabla) {
-            if (columna instanceof Columna_num) {
-                Columna_num<Number, ?> columnaNum = (Columna_num<Number, ?>) columna;
-                Double media = columnaNum.promediar(); 
-                for (int i = 0; i < columnaNum.getDatos().size(); i++) {
-                    if (columnaNum.getDatos().get(i) == null) {
-                        columnaNum.setDato(i, media);
-                    }
-                }
-            } else if (columna instanceof Columna_string) {
-                Columna_string<String, ?> columnaString = (Columna_string<String, ?>) columna;
-                for (int i = 0; i < columnaString.getDatos().size(); i++) {
-                    if (columnaString.getDatos().get(i) == null) {
-                        columnaString.setDato(i, "NA");
-                    }
-                }
-            } else if (columna instanceof Columna_bool) {
-                Columna_bool<Boolean, ?> columnaBool = (Columna_bool<Boolean, ?>) columna;
-                for (int i = 0; i < columnaBool.getDatos().size(); i++) {
-                    if (columnaBool.getDatos().get(i) == null) {
-                        columnaBool.setDato(i, false);
-                    }
+            List<Object> valores = (List<Object>) columna.getDatos(); 
+            for (int i = 0; i < valores.size(); i++) {
+                if (valores.get(i) == null) {
+                    valores.set(i, NA.getInstance()); 
                 }
             }
         }
     }
+
+    // Método para rellenar datos faltantes (NA) en una columna específica dado un nuevo valor
+    public void rellenarDatosFaltantes(String etiquetaColumna, Object nuevoValor) {
+        for (Columna<?, ?> columna : tabla) {
+            if (columna.getetiqueta().equals(etiquetaColumna)) {
+                List<?> datos = columna.getDatos();
+                List<Object> valores = (List<Object>) datos;
+    
+                try {
+                    Class<?> tipoColumna = columna.getTipoClase(); 
+                    if (!tipoColumna.isInstance(nuevoValor)) {
+                        throw new TipoinconsistenteException("El tipo de nuevoValor no coincide con el tipo de la columna.");
+                    }
+
+                    for (int i = 0; i < valores.size(); i++) {
+                        if (valores.get(i) instanceof NA) {
+                            valores.set(i, nuevoValor);
+                        }
+                    }
+    
+                } catch (TipoinconsistenteException e) {
+                    System.out.println(e.getMessage());               
+                }
+                break; 
+            }
+        }
+    }
+
+    // public void rellenarDatosFaltantes() {
+    //     for (Columna<?, ?> columna : tabla) {
+    //         if (columna instanceof Columna_num) {
+    //             Columna_num<Number, ?> columnaNum = (Columna_num<Number, ?>) columna;
+    //             Double media = columnaNum.promediar(); 
+    //             for (int i = 0; i < columnaNum.getDatos().size(); i++) {
+    //                 if (columnaNum.getDatos().get(i) == null) {
+    //                     columnaNum.setDato(i, media);
+    //                 }
+    //             }
+    //         } else if (columna instanceof Columna_string) {
+    //             Columna_string<String, ?> columnaString = (Columna_string<String, ?>) columna;
+    //             for (int i = 0; i < columnaString.getDatos().size(); i++) {
+    //                 if (columnaString.getDatos().get(i) == null) {
+    //                     columnaString.setDato(i, "NA");
+    //                 }
+    //             }
+    //         } else if (columna instanceof Columna_bool) {
+    //             Columna_bool<Boolean, ?> columnaBool = (Columna_bool<Boolean, ?>) columna;
+    //             for (int i = 0; i < columnaBool.getDatos().size(); i++) {
+    //                 if (columnaBool.getDatos().get(i) == null) {
+    //                     columnaBool.setDato(i, false);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
        public void mostrarEtiquetasColumnas() {
         System.out.print("Etiquetas de columnas: ");

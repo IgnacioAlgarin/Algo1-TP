@@ -1,16 +1,26 @@
 package NA;
 
 public class NA {
+    private static final NA instance = new NA();
 
-    public void ignorarValidarTipo() {
+    private NA() {}
 
+    public static NA getInstance() {
+        return instance;
     }
 
-    public void completarNA(){
-        
-    }
     @Override
-    public String toString(){
-        return "Na";
+    public String toString() {
+        return "NA";
     }
+
+    // public void ignorarValidarTipo() {
+    // }
+    // public void completarNA(){
+    
+    // }
+    // @Override
+    // public String toString(){
+    //     return "Na";
+    // }
 }
