@@ -184,6 +184,8 @@ public class App {
         tabla.ordenarTabla(etiquetas2, orden2);
         tabla.visualizar();
 
+        // Test: Filtrado
+        System.out.println("inicia test filtrado de tabla");
         
     }
 }

@@ -1,6 +1,9 @@
 package Filtro;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.function.Predicate;
 
 import Columna.Columna;
 import Columna.Columna_bool;
@@ -9,6 +12,31 @@ import Columna.Columna_string;
 import Tabla.Tabla;
 
 public class Filtro {
+
+    static <E> Tabla filtrar(Tabla tabla, int columna, char operador, E valor){
+        Map<Character, Predicate<E>> operadores = new HashMap<>();
+        operadores.put('<', e -> e.compareTo(valor) < 0);
+        operadores.put('>', e -> e.compareTo(valor) > 0);
+        operadores.put('=', e -> e.compareTo(valor) == 0);
+        operadores.put('!', e -> e.compareTo(valor) != 0);
+
+        Predicate<E> condicion = operadores.get(operador);
+        
+        Tabla tablaFiltrada = tabla.copia_p();
+
+        if(condicion == null){
+            throw new IllegalArgumentException("Operador no válido. Los operaadores válidos son '<', '>', '=', '!'");
+        }
+        List<String> etiquetas = tablaFiltrada.getEtiquetasFilas();
+        Columna columnaAFiltrar = tablaFiltrada.obtenerColumnaPorEtiqueta(columna);
+        // for(int indice : tabla.getEtiquetasFilas().size()){
+        //     E valorAComparar = tabla.getColumnas().indexOf(condicion);
+        //     if(!condicion.test(valorAComparar)){
+        //         tablaFiltrada.eliminarFila(entrada.getKey());
+        //     }
+        // }
+        return tablaFiltrada;
+    }
 
     static Tabla filtrar(Tabla tabla, String argumento) {
         Tabla tablaFiltrada = tabla.copia_p();
