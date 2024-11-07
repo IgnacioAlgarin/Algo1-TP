@@ -13,43 +13,54 @@ import Tabla.Tabla;
 
 public interface Filtro {
 
-    default <E extends Comparable<E>> Tabla filtrar(Tabla tabla, String etiquetaColumna, char operador, E valor){
+    default <E extends Comparable<E>> Tabla filtrar(Tabla tabla, String etiquetaColumna, char operador, E valor) {
         Map<Character, Predicate<E>> operadores = new HashMap<>();
-        operadores.put('<', e -> e != null && e.getClass() == valor.getClass() && e.compareTo(valor) < 0);
-        operadores.put('>', e -> e != null && e.getClass() == valor.getClass() && e.compareTo(valor) > 0);
-        operadores.put('=', e -> e != null && e.getClass() == valor.getClass() && e.compareTo(valor) == 0);
-        operadores.put('!', e -> e != null && e.getClass() == valor.getClass() && e.compareTo(valor) != 0);
-
+    
+        operadores.put('<', e -> compararNumeros(e, valor) < 0);
+        operadores.put('>', e -> compararNumeros(e, valor) > 0);
+        operadores.put('=', e -> compararNumeros(e, valor) == 0);
+        operadores.put('!', e -> compararNumeros(e, valor) != 0);
+    
         Predicate<E> condicion = operadores.get(operador);
-
+    
         if (condicion == null) {
             throw new IllegalArgumentException("Operador no válido. Los operadores válidos son '<', '>', '=', '!'");
         }
-        
+    
         Tabla tablaFiltrada = tabla.copia_p();
-
-        if(condicion == null){
-            throw new IllegalArgumentException("Operador no válido. Los operaadores válidos son '<', '>', '=', '!'");
-        }
-        List<String> etiquetas = tablaFiltrada.getEtiquetasFilas();
         Columna columnaAFiltrar = tablaFiltrada.obtenerColumnaPorEtiqueta(etiquetaColumna);
-        System.out.println(columnaAFiltrar);
-
+    
         if (columnaAFiltrar == null) {
             throw new IllegalArgumentException("La columna con la etiqueta " + etiquetaColumna + " no existe.");
         }
-
+    
         for (int i = columnaAFiltrar.largoColumna() - 1; i >= 0; i--) {
             E valorAComparar = (E) columnaAFiltrar.getdato(i);
-            if (!condicion.test(valorAComparar)) {
-                tablaFiltrada.visualizar();
+            if (valorAComparar == null || !condicion.test(valorAComparar)) {
                 tablaFiltrada.eliminarFila(i);
             }
         }
-        tablaFiltrada.visualizar();
+    
         return tablaFiltrada;
     }
-
+    
+    @SuppressWarnings("unchecked")
+    private <E> int compararNumeros(E e, E valor) {
+        if (e == null || valor == null) {
+            return 1;  // Si alguno es nulo, tratamos el valor como no válido
+        }
+        
+        // Convierte ambos valores a Double si son números
+        if (e instanceof Number && valor instanceof Number) {
+            Double eDouble = ((Number) e).doubleValue();
+            Double valorDouble = ((Number) valor).doubleValue();
+            return eDouble.compareTo(valorDouble);
+        }
+        
+        // Si no son números, intenta la comparación genérica
+        return ((Comparable<E>) e).compareTo(valor);
+    }
+    
     // static Tabla filtrar(Tabla tabla, String argumento) {
     //     Tabla tablaFiltrada = tabla.copia_p();
 

@@ -192,6 +192,14 @@ public class App {
 
         // Test: Filtrado
         System.out.println("inicia test filtrado de tabla");
+
+        Tabla tablaAFiltrar = new Tabla();
+        tablaAFiltrar = archivo.importar(",", false);
+        tablaAFiltrar.visualizar();
+
+        System.out.println("testeo filtrar");
+        tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar, "Columna_0", '>', 0.1);
+        tablaAFiltrar.visualizar();
         
     }
 }
