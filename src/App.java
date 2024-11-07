@@ -201,6 +201,9 @@ public class App {
         tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar, "Columna_0", '>', 0.1);
         tablaAFiltrar.visualizar();
 
+        tablaAFiltrar = archivo.importar(",", false);
+        tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar,"Columna_0 > 1 and Columna_2 = true");
+        tablaAFiltrar.visualizar();
 
         // Test: de acceso indexado
         // Acceder a una fila completa
