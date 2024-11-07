@@ -880,15 +880,6 @@ public class Tabla implements Filtro {
             throw new IllegalArgumentException("La fila con etiqueta '" + etiquetaFila + "' no fue encontrada.");
         }
     }
-
-    public <E> Columna<?, ?> obtenerColumnaPorEtiqueta(E etiquetaColumna) {
-        for (Columna<?, ?> columna : tabla) {
-            if (columna.getetiqueta().equals(etiquetaColumna)) {
-                return columna;
-            }
-        }
-        throw new IllegalArgumentException("Columna no encontrada: " + etiquetaColumna);
-    }
     
     public <E> void ordenarTabla(List<E> etiquetasColumnas, List<Boolean> ordenAscendente) {
         if (etiquetasColumnas.size() != ordenAscendente.size()) {
@@ -940,6 +931,67 @@ public class Tabla implements Filtro {
             // Actualizar la columna con el nuevo orden de datos
             columna.setDatos(nuevosDatos);
         }
+    }
+
+    public List<Object> obtenerFilaPorEtiqueta(Object etiquetaFila) {
+        for (Fila fila : filas) {
+            // Verifica que la etiqueta no sea nula antes de usar equals
+            if (fila.getetiqueta() != null && fila.getetiqueta().equals(etiquetaFila)) {
+                List<Object> datosFila = new ArrayList<>();
+                for (Columna<?, ?> columna : tabla) {
+                    datosFila.add(columna.getdato(fila.getIndice()));
+                }
+                return datosFila;
+            }
+        }
+        throw new IllegalArgumentException("Fila no encontrada con la etiqueta: " + etiquetaFila);
+    }
+    
+    
+    public <E> Columna<?, ?> obtenerColumnaPorEtiqueta(E etiquetaColumna) {
+        for (Columna<?, ?> columna : tabla) {
+            if (columna.getetiqueta().equals(etiquetaColumna)) {
+                return columna;
+            }
+        }
+        throw new IllegalArgumentException("Columna no encontrada: " + etiquetaColumna);
+    }
+
+    public List<?> obtenerColumnaPorEtiquetaIndex(Object etiquetaColumna) {
+        for (Columna<?, ?> columna : tabla) {
+            if (columna.getetiqueta().equals(etiquetaColumna)) {
+                return columna.getDatos(); // Devuelve todos los datos en la columna
+            }
+        }
+        throw new IllegalArgumentException("Columna no encontrada con la etiqueta: " + etiquetaColumna);
+    }
+    
+    public Object obtenerCelda(Object etiquetaFila, Object etiquetaColumna) {
+        Fila filaEncontrada = null;
+        for (Fila fila : filas) {
+            if (fila.getetiqueta() != null && fila.getetiqueta().equals(etiquetaFila)) {
+                filaEncontrada = fila;
+                break;
+            }
+        }
+    
+        if (filaEncontrada == null) {
+            throw new IllegalArgumentException("Fila no encontrada con la etiqueta: " + etiquetaFila);
+        }
+    
+        Columna<?, ?> columnaEncontrada = null;
+        for (Columna<?, ?> columna : tabla) {
+            if (columna.getetiqueta() != null && columna.getetiqueta().equals(etiquetaColumna)) {
+                columnaEncontrada = columna;
+                break;
+            }
+        }
+    
+        if (columnaEncontrada == null) {
+            throw new IllegalArgumentException("Columna no encontrada con la etiqueta: " + etiquetaColumna);
+        }
+    
+        return columnaEncontrada.getdato(filaEncontrada.getIndice());
     }
     
 }

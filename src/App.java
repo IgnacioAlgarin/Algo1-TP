@@ -200,6 +200,23 @@ public class App {
         System.out.println("testeo filtrar");
         tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar, "Columna_0", '>', 0.1);
         tablaAFiltrar.visualizar();
-        
+
+
+        // Test: de acceso indexado
+        // Acceder a una fila completa
+        System.out.print("Accediendo a una fila ('mundo') completa: ");
+        List<Object> datosFila = tabla.obtenerFilaPorEtiqueta("mundo");
+        System.out.println(datosFila);
+
+        // Acceder a una columna completa
+        System.out.print("Accediendo a una columna ('Edad') completa: ");
+        List<?> datosColumna = tabla.obtenerColumnaPorEtiquetaIndex("Edad");
+        System.out.println(datosColumna);
+
+        // Acceder a una celda específica
+        System.out.print("Accediendo a una celda ('mundo' y 'Edad') específica: ");
+        Object datoCelda = tabla.obtenerCelda("mundo", "Edad");
+        System.out.println(datoCelda);
+
     }
 }
