@@ -59,6 +59,7 @@ public class App {
         Tabla tabla2 = tabla.copia_p();
         datofila.add(4);
         tabla.agregarfila(datofila);
+        Tabla concatenada = tabla.concatenar(tabla2);
         Tabla tabla3 = new Tabla(tabla);
         tabla.agregarfila(datofila);
         System.err.println("tabla1");
@@ -68,6 +69,10 @@ public class App {
 
         System.err.println("tabla3");
         tabla3.visualizar();
+
+        //Test Concatenar
+        System.out.println("Prueba concatenar:");
+        concatenada.visualizar();
 
         // Test lectura archivo
          System.out.println("inicio test archivo");
@@ -186,6 +191,8 @@ public class App {
 
         // Test: Filtrado
         System.out.println("inicia test filtrado de tabla");
+
+
         
     }
 }
