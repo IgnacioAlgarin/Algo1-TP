@@ -547,9 +547,44 @@ public class Tabla implements Filtro {
 
     }
 
-    public Tabla concatenar(Tabla tabla1, Tabla tabla2, String etiqueta) {
-        Tabla concatenada = new Tabla();
-        return concatenada; 
+    private Boolean comprobarOrden (Tabla tabla2){
+        Boolean ordenado = true;
+        for (int i = 0; i < tabla.size(); i++){
+            if (tabla2.tabla.get(i).getetiqueta() != tabla.get(i).getetiqueta() || ( tabla.get(i).getClass() != tabla2.tabla.get(i).getClass() )){
+                ordenado = false;
+                break;
+            }
+        }
+        return ordenado;
+    }
+
+    public Tabla concatenar(Tabla tabla2) {
+        try{
+            if ( tabla2.tabla.size()  != tabla.size() || !comprobarOrden(tabla2)){
+                throw new Tablanovalidaexception("Estas dos tablas no son validas para concantenarse");
+            }
+    
+            Tabla nuevaTabla = copia_p();
+
+            Tabla tablaauxiliar = tabla2.copia_p();
+
+            for (int i=0; i< tablaauxiliar.filas.size(); i++){
+                List<Object> listaAuxiliar = new ArrayList<>();
+                for (Columna<?,?> columna : tablaauxiliar.tabla){
+                    listaAuxiliar.add(columna.getdato(i));
+
+
+                }
+                nuevaTabla.agregarfila(listaAuxiliar);
+
+            }
+            return nuevaTabla;
+
+        } catch (Tablanovalidaexception e) {
+            System.out.println(e.getMessage());               
+        }
+
+        return null; 
     }
 
     public <E,T> Tabla seleccionar(List<E> etiquetaFila, List<T> etiquetaColumna) {

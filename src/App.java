@@ -60,6 +60,7 @@ public class App {
         Tabla tabla2 = tabla.copia_p();
         datofila.add(4);
         tabla.agregarfila(datofila);
+        Tabla concatenada = tabla.concatenar(tabla2);
         Tabla tabla3 = new Tabla(tabla);
         tabla.agregarfila(datofila);
         System.err.println("tabla1");
@@ -69,6 +70,10 @@ public class App {
 
         System.err.println("tabla3");
         tabla3.visualizar();
+
+        //Test Concatenar
+        System.out.println("Prueba concatenar:");
+        concatenada.visualizar();
 
         // Test lectura archivo
          System.out.println("inicio test archivo");
@@ -187,17 +192,6 @@ public class App {
 
         // Test: Filtrado
         System.out.println("inicia test filtrado de tabla");
-
-        Tabla tablaAFiltrar = new Tabla();
-        tablaAFiltrar = archivo.importar(",", false);
-        tablaAFiltrar.visualizar();
-        // for (Columna col : tablaAFiltrar.getColumnas()) {
-        //     System.out.println(col.getetiqueta().equals("Columna_0"));
-        // }
-        // System.out.println(tablaAFiltrar.obtenerColumnaPorEtiqueta("Columna_0").getdato(0).getClass());
-
-        System.out.println("testeo filtrar");
-        tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar, "Columna_0", '>', 1);
-        tablaAFiltrar.visualizar();
+        
     }
 }
