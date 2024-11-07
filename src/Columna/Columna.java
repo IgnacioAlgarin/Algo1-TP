@@ -42,6 +42,9 @@ public abstract class Columna<T, U> {
         return datos;
     }
 
+    public int largoColumna() {
+        return datos.size();
+    }
     public abstract Columna<T, U> copiaProfunda();
 
     

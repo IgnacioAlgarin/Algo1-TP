@@ -3,6 +3,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import Archivo.Archivo;
+import Columna.Columna;
 import Tabla.Tabla;
 import excepciones.*;
 
@@ -186,6 +187,17 @@ public class App {
 
         // Test: Filtrado
         System.out.println("inicia test filtrado de tabla");
-        
+
+        Tabla tablaAFiltrar = new Tabla();
+        tablaAFiltrar = archivo.importar(",", false);
+        tablaAFiltrar.visualizar();
+        // for (Columna col : tablaAFiltrar.getColumnas()) {
+        //     System.out.println(col.getetiqueta().equals("Columna_0"));
+        // }
+        // System.out.println(tablaAFiltrar.obtenerColumnaPorEtiqueta("Columna_0").getdato(0).getClass());
+
+        System.out.println("testeo filtrar");
+        tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar, "Columna_0", '>', 1);
+        tablaAFiltrar.visualizar();
     }
 }

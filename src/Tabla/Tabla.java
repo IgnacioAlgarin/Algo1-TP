@@ -12,9 +12,10 @@ import Fila.Fila;
 import Operaciones.Operaciones;
 import excepciones.*;
 import NA.NA;
+import Filtro.Filtro;
 
 
-public class Tabla {
+public class Tabla implements Filtro {
 
     private List<Columna<?, ?>> tabla;
     private List <Fila> filas;
@@ -549,11 +550,6 @@ public class Tabla {
     public Tabla concatenar(Tabla tabla1, Tabla tabla2, String etiqueta) {
         Tabla concatenada = new Tabla();
         return concatenada; 
-    }
-
-    public Tabla filtrar(Tabla tabla) {
-        Tabla filtrada = new Tabla();
-        return filtrada;
     }
 
     public <E,T> Tabla seleccionar(List<E> etiquetaFila, List<T> etiquetaColumna) {
