@@ -754,12 +754,21 @@ public class Tabla implements Filtro {
     }
 
     // get etiquetas como lista de strings
-        public List<String> getEtiquetasFilas() {
+    public List<String> getEtiquetasFilas() {
         List<String> etiquetasf = new ArrayList<>();
         for (Fila fila : filas) {
             etiquetasf.add(fila.getetiqueta());  
         }
         return etiquetasf;
+    }
+
+    public List<Integer> getPosicionFilas() {
+        // Devuelve una lista de enteros con los id de filas
+        List<Integer> posicionf = new ArrayList<>();
+        for (Fila fila : filas) {
+            posicionf.add(fila.getposicion());  
+        }
+        return posicionf;
     }
 
     // cuenta nulls
@@ -947,7 +956,20 @@ public class Tabla implements Filtro {
         throw new IllegalArgumentException("Fila no encontrada con la etiqueta: " + etiquetaFila);
     }
     
-    
+    public List<Object> obtenerFilaPorPosicion(int posicion) {
+        for (Fila fila : filas) {
+            // Verifica que la posicion no sea nula antes de usar equals
+            if (fila.getposicion() == posicion) {
+                List<Object> datosFila = new ArrayList<>();
+                for (Columna<?, ?> columna : tabla) {
+                    datosFila.add(columna.getdato(fila.getposicion()));
+                }
+                return datosFila;
+            }
+        }
+        throw new IllegalArgumentException("Fila no encontrada con la posicion: " + posicion);
+    }
+
     public <E> Columna<?, ?> obtenerColumnaPorEtiqueta(E etiquetaColumna) {
         for (Columna<?, ?> columna : tabla) {
             if (columna.getetiqueta().equals(etiquetaColumna)) {

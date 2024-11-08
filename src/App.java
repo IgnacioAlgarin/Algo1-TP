@@ -190,20 +190,20 @@ public class App {
         tabla.ordenarTabla(etiquetas2, orden2);
         tabla.visualizar();
 
-        // Test: Filtrado
-        System.out.println("inicia test filtrado de tabla");
+        // // Test: Filtrado
+        // System.out.println("inicia test filtrado de tabla");
 
-        Tabla tablaAFiltrar = new Tabla();
-        tablaAFiltrar = archivo.importar(",", false);
-        tablaAFiltrar.visualizar();
+        // Tabla tablaAFiltrar = new Tabla();
+        // tablaAFiltrar = archivo.importar(",", false);
+        // tablaAFiltrar.visualizar();
 
-        System.out.println("testeo filtrar");
-        tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar, "Columna_0", '>', 0.1);
-        tablaAFiltrar.visualizar();
+        // System.out.println("testeo filtrar");
+        // tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar, "Columna_0", '>', 0.1);
+        // tablaAFiltrar.visualizar();
 
-        tablaAFiltrar = archivo.importar(",", false);
-        tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar,"Columna_0 > 1 and Columna_2 = true");
-        tablaAFiltrar.visualizar();
+        // tablaAFiltrar = archivo.importar(",", false);
+        // tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar,"Columna_0 > 1 and Columna_2 = true");
+        // tablaAFiltrar.visualizar();
 
         // Test: de acceso indexado
         // Acceder a una fila completa

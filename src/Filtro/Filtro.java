@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.function.Predicate;
 
 import Columna.Columna;
-import Columna.Columna_bool;
-import Columna.Columna_num;
-import Columna.Columna_string;
 import Tabla.Tabla;
 
 public interface Filtro {
@@ -17,25 +14,35 @@ public interface Filtro {
     default Tabla filtrar(Tabla tabla, String query) {
         List<String[]> condiciones = interpretarQuery(query);
         Tabla tablaFiltrada = tabla.copia_p();
+        List<Tabla> tablasFiltradas = new ArrayList<>();
+        String logico = "";
 
         for (String[] condicion : condiciones) {
             String columna = condicion[0];
             char operador = condicion[1].charAt(0);
-            String valor = condicion[2];
-            String logico = condicion.length > 3 ? condicion[3].toLowerCase() : "";
-
+            String valor = condicion[2]; 
+         
             Tabla resultadoCondicion = filtrarPorCondicion(tablaFiltrada, columna, operador, valor);
-
-            if ("and".equals(logico)) {
-                tablaFiltrada = interseccion(tablaFiltrada, resultadoCondicion); // Mantener filas comunes
-            } else if ("or".equals(logico)) {
-                tablaFiltrada = union(tablaFiltrada, resultadoCondicion); // Mantener filas de cualquiera de los dos
-            } else if ("not".equals(logico)) {
-                tablaFiltrada = diferencia(tablaFiltrada, resultadoCondicion); // Eliminar filas que cumplen la condición
-            } else {
-                tablaFiltrada = resultadoCondicion; // Primera condición o sin operador lógico
-            }
+            tablasFiltradas.add(resultadoCondicion);
         }
+
+        if (condiciones.get(0).length > 3) {
+            logico = condiciones.get(0)[3].toLowerCase();
+        }
+        // System.out.println("tabla 1");
+        // tablasFiltradas.get(0).visualizar();
+        // System.out.println("tabla 2");
+        // tablasFiltradas.get(1).visualizar();
+        if ("and".equals(logico)) {
+            tablaFiltrada = interseccion(tablasFiltradas.get(0), tablasFiltradas.get(1)); // Mantener filas comunes
+        } else if ("or".equals(logico)) {
+            tablaFiltrada = union(tablasFiltradas.get(0), tablasFiltradas.get(1)); // Mantener filas de cualquiera de los dos
+        } else if ("not".equals(logico)) {
+            tablaFiltrada = diferencia(tablasFiltradas.get(0), tablasFiltradas.get(1)); // Eliminar filas que cumplen la condición
+        } else {
+            tablaFiltrada = tablasFiltradas.get(0); // Primera condición o sin operador lógico
+        }
+        
 
         return tablaFiltrada;
     }
@@ -107,8 +114,8 @@ public interface Filtro {
 
     private Tabla interseccion(Tabla tabla1, Tabla tabla2) {
         Tabla resultado = tabla1.copia_p();
-        for (int i = resultado.getEtiquetasFilas().size() - 1; i >= 0; i--) {
-            if (!tabla2.getEtiquetasFilas().contains(resultado.getEtiquetasFilas().get(i))) {
+        for (int i = resultado.getCantidadFilas() - 1; i >= 0; i--) {
+            if (!tabla2.getPosicionFilas().contains(resultado.getPosicionFilas().get(i))) {
                 resultado.eliminarFila(i);
             }
         }
@@ -117,9 +124,10 @@ public interface Filtro {
 
     private Tabla union(Tabla tabla1, Tabla tabla2) {
         Tabla resultado = tabla1.copia_p();
-        for (String etiquetaFila : tabla2.getEtiquetasFilas()) {
-            if (!resultado.getEtiquetasFilas().contains(etiquetaFila)) {
-                resultado.agregarfila(tabla2.obtenerFilaPorEtiqueta(etiquetaFila));
+
+        for (int posicionFila : tabla2.getPosicionFilas()) {
+            if (!resultado.getPosicionFilas().contains(posicionFila)) {
+                resultado.agregarfila(tabla2.obtenerFilaPorPosicion(posicionFila)); 
             }
         }
         return resultado;
@@ -127,11 +135,12 @@ public interface Filtro {
 
     private Tabla diferencia(Tabla tabla1, Tabla tabla2) {
         Tabla resultado = tabla1.copia_p();
-        for (String etiquetaFila : tabla2.getEtiquetasFilas()) {
-            resultado.eliminarFila(etiquetaFila);
+        for (int posicionFila : tabla2.getPosicionFilas()) {
+            resultado.eliminarFila(posicionFila);
         }
         return resultado;
     }
+
     default <E extends Comparable<E>> Tabla filtrar(Tabla tabla, String etiquetaColumna, char operador, E valor) {
         Map<Character, Predicate<E>> operadores = new HashMap<>();
     

@@ -16,12 +16,17 @@ public class TestFiltro {
         tablaAFiltrar = archivo.importar(",", false);
         tablaAFiltrar.visualizar();
 
-        System.out.println("testeo filtrar");
+        System.out.println("testeo filtrar sin query");
+        System.out.println("Columna_0 > 0.1");
         tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar, "Columna_0", '>', 0.1);
         tablaAFiltrar.visualizar();
 
+        System.out.println("testeo filtrar con query");
+        String query = "Columna_0 > 0 and Columna_1 = mundo";
+        System.out.println(query);
         tablaAFiltrar = archivo.importar(",", false);
-        tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar,"Columna_0 > 1 or Columna_1 = hola");
+        tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar,query);
         tablaAFiltrar.visualizar();
+
     }
 }
