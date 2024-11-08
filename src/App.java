@@ -174,7 +174,7 @@ public class App {
         List<Object> etiquetas2 = Arrays.asList("Edad", 0); // "Edad" y el índice 0 como etiquetas
         List<Boolean> orden2 = Arrays.asList(false, false);  // Orden ascendente para "Edad", descendente para 1
         System.out.println("Después de ordenar:");
-        tabla.ordenarTabla(etiquetas2, orden2);
+        //tabla.ordenarTabla(etiquetas2, orden2);
         tabla.visualizar();
 
         // // Test: Filtrado

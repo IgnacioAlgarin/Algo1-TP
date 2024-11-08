@@ -27,6 +27,6 @@ public class Fila {
     }
 
     public int getIndice(){
-        return posicion - 1;
+        return posicion ;
     }
 }

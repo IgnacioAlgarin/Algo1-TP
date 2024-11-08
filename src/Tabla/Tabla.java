@@ -518,7 +518,9 @@ public class Tabla implements Filtro {
         return tabla;
     }
 
-
+    public List<Fila> getFilas() {
+        return filas;
+    }
 
     public Tabla copia_p() {
         Tabla copia = new Tabla();
@@ -890,41 +892,42 @@ public class Tabla implements Filtro {
         }
     }
     
-    public <E> void ordenarTabla(List<E> etiquetasColumnas, List<Boolean> ordenAscendente) {
+    public void ordenarTabla(List<String> etiquetasColumnas, List<Boolean> ordenAscendente) {
         if (etiquetasColumnas.size() != ordenAscendente.size()) {
             throw new IllegalArgumentException("La cantidad de columnas y de órdenes deben coincidir.");
         }
     
-        // Crear el comparador compuesto para ordenar `filas`
         Comparator<Fila> comparadorFinal = (fila1, fila2) -> 0;
     
         for (int i = 0; i < etiquetasColumnas.size(); i++) {
-            E etiquetaColumna = etiquetasColumnas.get(i);
+            String etiquetaColumna = etiquetasColumnas.get(i);
             boolean ascendente = ordenAscendente.get(i);
     
-            // Obtener la columna correspondiente usando una etiqueta de tipo genérico `E`
             Columna<?, ?> columna = obtenerColumnaPorEtiqueta(etiquetaColumna);
             if (columna == null) {
                 throw new IllegalArgumentException("Columna no encontrada: " + etiquetaColumna);
             }
     
-            // Comparador para la columna actual
             Comparator<Fila> comparadorColumna = (fila1, fila2) -> {
-                Comparable dato1 = (Comparable) columna.getdato(fila1.getIndice());
-                Comparable dato2 = (Comparable) columna.getdato(fila2.getIndice());
+                int indexFila1 = fila1.getIndice();
+                int indexFila2 = fila2.getIndice();
+                
+                Object dato1 = (indexFila1 < columna.getDatos().size()) ? columna.getdato(indexFila1) : null;
+                Object dato2 = (indexFila2 < columna.getDatos().size()) ? columna.getdato(indexFila2) : null;
     
-                if (dato1 == null && dato2 == null) return 0;
-                if (dato1 == null) return ascendente ? -1 : 1;
-                if (dato2 == null) return ascendente ? 1 : -1;
+                if (dato1 == null || dato1 instanceof NA) return ascendente ? 1 : -1;
+                if (dato2 == null || dato2 instanceof NA) return ascendente ? -1 : 1;
     
-                int resultado = dato1.compareTo(dato2);
-                return ascendente ? resultado : -resultado;
+                if (dato1 instanceof Comparable && dato2 instanceof Comparable) {
+                    return ascendente ? ((Comparable) dato1).compareTo(dato2) : ((Comparable) dato2).compareTo(dato1);
+                } else {
+                    throw new ClassCastException("Datos no comparables en la columna: " + etiquetaColumna);
+                }
             };
     
             comparadorFinal = comparadorFinal.thenComparing(comparadorColumna);
         }
     
-        // Ordenar la lista de filas
         Collections.sort(filas, comparadorFinal);
     
         // Reorganizar los datos de cada columna en base al nuevo orden de `filas`
@@ -1015,5 +1018,7 @@ public class Tabla implements Filtro {
     
         return columnaEncontrada.getdato(filaEncontrada.getIndice());
     }
+
+
     
 }
