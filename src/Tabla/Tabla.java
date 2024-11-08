@@ -15,7 +15,7 @@ import NA.NA;
 import Filtro.Filtro;
 
 
-public class Tabla implements Filtro {
+public class Tabla  implements Filtro{
 
     private List<Columna<?, ?>> tabla;
     private List <Fila> filas;
@@ -50,9 +50,7 @@ public class Tabla implements Filtro {
         this.etiquetasUsadasf = new HashSet<>(otraTabla.etiquetasUsadasf);
     }
 
-
-
-
+    //Metodos privados
     private Integer generarEtiquetac(){
         int nuevaetiqueta;
         do{
@@ -119,80 +117,97 @@ public class Tabla implements Filtro {
 
     // Metodos publicos
 
+    // Agrega una nueva columna
     public <E> void agregarColumna(List<?> columna, E etiqueta, List<String> etiquetaf) {
-        if (columna.isEmpty()){
-            throw new ListaDatosVaciaException("No se puede agregar una columna sin elementos");
-        } 
-        if (!(etiqueta instanceof String) && !(etiqueta instanceof Integer)){
-            throw new TipoDeEtiquetaInvalido ("Por favor utilice una etiqueta de tipo entero o string");
-        }
-        if (etiquetasUsadasc.contains(etiqueta)){
-            throw new EtiquetaEnUsoException ("la etiqueta ya se encuentra en uso, por favor utilice otra");
-        }
-        Columna <?, ?> nueva_columna;
-        boolean todosNull = true;
-        Class<?> tipoPrimero = null;
-        for (Object dato: columna) {
-            if (dato != null) {
-                todosNull = false;
-                if (tipoPrimero == null) {
-                    if (dato instanceof Number){
-                        tipoPrimero = Number.class;
-                    } else {
-                        tipoPrimero = dato.getClass();
-                    }
-                } else if (tipoPrimero != Number.class && !tipoPrimero.isAssignableFrom(dato.getClass())){
-                    throw new TipoinconsistenteException ("La columna contiene tipos de datos distintos");
-                }
+        try {
+            if (columna.isEmpty()) {
+                throw new ListaDatosVaciaException("No se puede agregar una columna sin elementos");
             }
-        }
-        if (todosNull) {
-            nueva_columna = new Columna_string<String, E>(etiqueta);
-
-        } else {
-            if (tipoPrimero == String.class) {
-                nueva_columna = new Columna_string<String, E>(etiqueta);
-            } else if (tipoPrimero == Number.class) {
-                nueva_columna = new Columna_num<Number, E>(etiqueta);
-            } else if (tipoPrimero == Boolean.class) {
-                nueva_columna = new Columna_bool<Boolean, E>(etiqueta);
-            } else {
-                throw new TipoNoSoportadoException ("Tipo de dato no soportado");
+            if (!(etiqueta instanceof String) && !(etiqueta instanceof Integer)) {
+                throw new TipoDeEtiquetaInvalidoException("Por favor utilice una etiqueta de tipo entero o string");
             }
-        }
-        
-        if (comprobarstring(etiquetaf) || etiquetaf.isEmpty()){
-            List<String> listaString = new ArrayList<>();
-            for (Object elemento : etiquetaf){
-                listaString.add((String) elemento);
+            if (etiquetasUsadasc.contains(etiqueta)) {
+                throw new EtiquetaEnUsoException("la etiqueta ya se encuentra en uso, por favor utilice otra");
             }
-            iniciarfilasI(columna.size(), listaString);
-
-        } else {
-            throw new TipoinconsistenteException ("Hay elementos de distinto tipos en la lista de etiquetas de fila ");
-        }
-
-        if (todosNull){
-            for (int i = 0; i < columna.size(); i++){
-                nueva_columna.agregarDato(null);
-            }
-        } else{
+            Columna<?, ?> nueva_columna;
+            boolean todosNull = true;
+            Class<?> tipoPrimero = null;
             for (Object dato : columna) {
-                if (dato == null) {
-                    nueva_columna.agregarDato(null);
-                } else {
-                    if (nueva_columna instanceof Columna_string){
-                        ((Columna_string<String, E>) nueva_columna).agregarDato((String)dato);
-                    } else if (nueva_columna instanceof Columna_num){
-                        ((Columna_num<Number, E>) nueva_columna).agregarDato((Number)dato);
-                    } else if (nueva_columna instanceof Columna_bool){
-                        ((Columna_bool<Boolean, E>) nueva_columna).agregarDato((Boolean)dato);
-                    }                
+                if (dato != null) {
+                    todosNull = false;
+                    if (tipoPrimero == null) {
+                        if (dato instanceof Number) {
+                            tipoPrimero = Number.class;
+                        } else {
+                            tipoPrimero = dato.getClass();
+                        }
+                    } else if (tipoPrimero != Number.class && !tipoPrimero.isAssignableFrom(dato.getClass())) {
+                        throw new TipoinconsistenteException("La columna contiene tipos de datos distintos");
+                    }
                 }
             }
+            if (todosNull) {
+                nueva_columna = new Columna_string<String, E>(etiqueta);
+
+            } else {
+                if (tipoPrimero == String.class) {
+                    nueva_columna = new Columna_string<String, E>(etiqueta);
+                } else if (tipoPrimero == Number.class) {
+                    nueva_columna = new Columna_num<Number, E>(etiqueta);
+                } else if (tipoPrimero == Boolean.class) {
+                    nueva_columna = new Columna_bool<Boolean, E>(etiqueta);
+                } else {
+                    throw new TipoNoSoportadoException("Tipo de dato no soportado");
+                }
+            }
+
+            if (comprobarstring(etiquetaf) || etiquetaf.isEmpty()) {
+                List<String> listaString = new ArrayList<>();
+                for (Object elemento : etiquetaf) {
+                    listaString.add((String) elemento);
+                }
+                iniciarfilasI(columna.size(), listaString);
+
+            } else {
+                throw new TipoinconsistenteException(
+                        "Hay elementos de distinto tipos en la lista de etiquetas de fila ");
+            }
+
+            if (todosNull) {
+                for (int i = 0; i < columna.size(); i++) {
+                    nueva_columna.agregarDato(null);
+                }
+            } else {
+                for (Object dato : columna) {
+                    if (dato == null) {
+                        nueva_columna.agregarDato(null);
+                    } else {
+                        if (nueva_columna instanceof Columna_string) {
+                            ((Columna_string<String, E>) nueva_columna).agregarDato((String) dato);
+                        } else if (nueva_columna instanceof Columna_num) {
+                            ((Columna_num<Number, E>) nueva_columna).agregarDato((Number) dato);
+                        } else if (nueva_columna instanceof Columna_bool) {
+                            ((Columna_bool<Boolean, E>) nueva_columna).agregarDato((Boolean) dato);
+                        }
+                    }
+                }
+            }
+            etiquetasUsadasc.add(etiqueta);
+            tabla.add(nueva_columna);
+
+        } catch (EtiquetaEnUsoException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (ListaDatosVaciaException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (TipoDeEtiquetaInvalidoException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (EtiquetasfilaException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (TipoinconsistenteException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (TipoNoSoportadoException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-        etiquetasUsadasc.add(etiqueta);
-        tabla.add(nueva_columna);
     }
 
     public void agregarColumna(List<?> columna, int etiquetaColumna) {
@@ -210,19 +225,22 @@ public class Tabla implements Filtro {
         agregarColumna(columna, generarEtiquetac(), listaf);                
     }
 
-    public void agregarfila (String etiqueta){
-        if (etiquetasUsadasf.contains(etiqueta)){
-            throw new EtiquetaEnUsoException("Etiquetas en uso");
+    public void agregarfila(String etiqueta) {
+        try {
+            if (etiquetasUsadasf.contains(etiqueta)) {
+                throw new EtiquetaEnUsoException("Etiquetas en uso");
+            }
+            for (Columna<?, ?> columna : tabla) {
+                columna.agregarDato(null);
+            }
+            int i = generarEtiquetaf();
+            Fila nuevafila = new Fila(etiqueta, i);
+            filas.add(nuevafila);
+            etiquetasUsadasf.add(etiqueta);
+            etiquetasUsadasf.add(i);
+        } catch (EtiquetaEnUsoException e) {
+            System.out.println("Error" + e.getMessage());
         }
-        for (Columna<?,?> columna: tabla){
-            columna.agregarDato(null);
-        }        
-        int i = generarEtiquetaf();
-        Fila nuevafila = new Fila(etiqueta, i);
-        filas.add(nuevafila); 
-        etiquetasUsadasf.add(etiqueta);
-        etiquetasUsadasf.add(i); 
-
     }
 
     public void agregarfila(){
@@ -230,78 +248,104 @@ public class Tabla implements Filtro {
         agregarfila(etiqueta);   
     }
 
-     public void agregarfila (String etiqueta,List<?> datos){
-        if (etiquetasUsadasf.contains(etiqueta) && etiqueta != null ){
-            throw new EtiquetaEnUsoException("Etiquetas en uso");
-        }
-        if ( datos.size() != tabla.size()){
-            throw new DiferentetamañoException ("La cantidad de datos a insertar no coincide con la cantidad de columnas");
-        }
-        for (int f = 0; f < tabla.size(); f++){
-            Columna<?, ?> columna = tabla.get(f);
-            Object dato = datos.get(f);
-            if (dato == null){
-                continue;
+    public void agregarfila(String etiqueta, List<?> datos) {
+        try {
+            if (etiquetasUsadasf.contains(etiqueta) && etiqueta != null) {
+                throw new EtiquetaEnUsoException("Etiquetas en uso");
             }
+            if (datos.size() != tabla.size()) {
+                throw new DiferentetamañoException(
+                        "La cantidad de datos a insertar no coincide con la cantidad de columnas");
+            }
+            for (int f = 0; f < tabla.size(); f++) {
+                Columna<?, ?> columna = tabla.get(f);
+                Object dato = datos.get(f);
+                if (dato == null) {
+                    continue;
+                }
 
-            if (!columna.getTipoClase().isInstance(dato)){
-                throw new TipoinconsistenteException ("No coinciden los tipos de datos con los ya establecidos en las columnas.");
+                if (!columna.getTipoClase().isInstance(dato)) {
+                    throw new TipoinconsistenteException(
+                            "No coinciden los tipos de datos con los ya establecidos en las columnas.");
+                }
             }
-        }
-        for (int f = 0; f < tabla.size(); f++){
-            Columna<?, ?> columna = tabla.get(f);
-            Object dato = datos.get(f);  
-            if (dato == null){
-                columna.agregarDato(null);
-            } else {
-                if (columna instanceof Columna_string){
-                    ((Columna_string<String, ?>) columna).agregarDato((String)dato);
-                } else if (columna instanceof Columna_num){
-                    ((Columna_num<Number, ?>) columna).agregarDato((Number)dato);
-                } else if (columna instanceof Columna_bool){
-                    ((Columna_bool<Boolean, ?>) columna).agregarDato((Boolean)dato);
-                }      
+            for (int f = 0; f < tabla.size(); f++) {
+                Columna<?, ?> columna = tabla.get(f);
+                Object dato = datos.get(f);
+                if (dato == null) {
+                    columna.agregarDato(null);
+                } else {
+                    if (columna instanceof Columna_string) {
+                        ((Columna_string<String, ?>) columna).agregarDato((String) dato);
+                    } else if (columna instanceof Columna_num) {
+                        ((Columna_num<Number, ?>) columna).agregarDato((Number) dato);
+                    } else if (columna instanceof Columna_bool) {
+                        ((Columna_bool<Boolean, ?>) columna).agregarDato((Boolean) dato);
+                    }
+                }
             }
+            int i = generarEtiquetaf();
+            Fila nuevafila = new Fila(etiqueta, i);
+            filas.add(nuevafila);
+            etiquetasUsadasf.add(etiqueta);
+            etiquetasUsadasf.add(i);
+        } catch (EtiquetaEnUsoException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (DiferentetamañoException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (TipoinconsistenteException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-        int i = generarEtiquetaf();
-        Fila nuevafila = new Fila(etiqueta, i);
-        filas.add(nuevafila);    
-        etiquetasUsadasf.add(etiqueta);
-        etiquetasUsadasf.add(i);
     }
 
-    public void agregarfila(List<?> datos){
+    public void agregarfila(List<?> datos) {
         String etiqueta = null;
         agregarfila(etiqueta, datos);
-        
+
     }
-
-
 
     public void visualizar() {
         StringBuilder filastring = new StringBuilder();
-        filastring.append(String.format("%-5s %-8s", "ID", "Etiqueta"));
-    
+        filastring.append("+-------+----------+");
         for (Columna<?, ?> columna : tabla) {
-            String dato;
-            dato = (String.format("%-10s", columna.getetiqueta()));
-            if (dato.length() > 11){
-                dato = dato.substring(0, 8) + "..";
-            }
-            filastring.append(dato);
+            filastring.append("----------+");
         }
         filastring.append("\n");
-    
+        filastring.append(String.format("| %-5s | %-8s |", "ID", "Etiqueta"));
+        for (Columna<?, ?> columna : tabla) {
+            String etiqueta = String.format("%-8s", columna.getetiqueta());
+            if (etiqueta.length() > 8) {
+                etiqueta = etiqueta.substring(0, 6) + "..";
+            }
+            filastring.append(String.format(" %-8s |", etiqueta));
+        }
+        filastring.append("\n");
+        filastring.append("+-------+----------+");
+        for (Columna<?, ?> columna : tabla) {
+            filastring.append("----------+");
+        }
+        filastring.append("\n");
         for (int f = 0; f < filas.size(); f++) {
-
-            filastring.append(String.format("%-5s %-8s", filas.get(f).getposicion(), filas.get(f).getetiqueta()));
+            String posicionLimitada = String.format("%-5s",filas.get(f).getposicion());
+            if (posicionLimitada.length() > 5) {
+                posicionLimitada = posicionLimitada.substring(0, 3) + "..";
+            }
+            String etiquetaLimitada = String.format("%-8s",filas.get(f).getetiqueta());
+            if (etiquetaLimitada.length() > 8) {
+                etiquetaLimitada = etiquetaLimitada.substring(0, 6) + "..";
+            }
+            filastring.append(String.format("| %-5s | %-8s |", posicionLimitada, etiquetaLimitada));
             for (Columna<?, ?> columna : tabla) {
-                String dato;
-                dato = String.format("%-10s", columna.getdato(f));
-                if (dato.length()>11){
-                    dato = dato.substring (0,8) + "..";
+                String dato = String.format("%-8s",columna.getdato(f));
+                if (dato.length() > 8) {
+                    dato = dato.substring(0, 6) + "..";
                 }
-                filastring.append(dato);
+                filastring.append(String.format(" %-8s |", dato));
+            }
+            filastring.append("\n");
+            filastring.append("+-------+----------+");
+            for (Columna<?, ?> columna : tabla) {
+                filastring.append("----------+");
             }
             filastring.append("\n");
         }
