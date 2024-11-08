@@ -12,6 +12,9 @@ import Tabla.Tabla;
 public interface Filtro {
 // query : “columna1 > 3 and columna2 = Verdadero”
     default Tabla filtrar(Tabla tabla, String query) {
+        // Filtra una tabla segun un string con el siguiente formato 
+        // nombre_Columna operador(>, <, =) valor
+        // nombre_Columna operador(>, <, =) valor operadorLogico(and, or, not) nombre_Columna operador(>, <, =) valor
         List<String[]> condiciones = interpretarQuery(query);
         Tabla tablaFiltrada = tabla.copia_p();
         List<Tabla> tablasFiltradas = new ArrayList<>();
@@ -29,10 +32,6 @@ public interface Filtro {
         if (condiciones.get(0).length > 3) {
             logico = condiciones.get(0)[3].toLowerCase();
         }
-        // System.out.println("tabla 1");
-        // tablasFiltradas.get(0).visualizar();
-        // System.out.println("tabla 2");
-        // tablasFiltradas.get(1).visualizar();
         if ("and".equals(logico)) {
             tablaFiltrada = interseccion(tablasFiltradas.get(0), tablasFiltradas.get(1)); // Mantener filas comunes
         } else if ("or".equals(logico)) {
@@ -48,6 +47,7 @@ public interface Filtro {
     }
 
     private List<String[]> interpretarQuery(String query) {
+        // divide un string en Columna, operador, valor y logico
         String[] queryPartes = query.split(" ");
         List<String[]> condiciones = new ArrayList<>();
 
@@ -64,6 +64,7 @@ public interface Filtro {
     }
 
     default Tabla filtrarPorCondicion(Tabla tabla, String etiquetaColumna, char operador, String valor) {
+        // filtra una tabla segun el nombre de columna, el operador (>, < , =) y un valor
         Map<Character, Predicate<Object>> operadores = new HashMap<>();
 
         operadores.put('<', e -> compararNumeros(e, valor) < 0);
@@ -95,6 +96,7 @@ public interface Filtro {
     }
 
     private int compararNumeros(Object e, String valor) {
+        // compara dos numeros
         if (e == null || valor == null) {
             return 1;
         }
@@ -113,6 +115,7 @@ public interface Filtro {
     }
 
     private Tabla interseccion(Tabla tabla1, Tabla tabla2) {
+        //devuelve la interseccion entre dos tablas
         Tabla resultado = tabla1.copia_p();
         for (int i = resultado.getCantidadFilas() - 1; i >= 0; i--) {
             if (!tabla2.getPosicionFilas().contains(resultado.getPosicionFilas().get(i))) {
@@ -123,6 +126,7 @@ public interface Filtro {
     }
 
     private Tabla union(Tabla tabla1, Tabla tabla2) {
+        // Devuelve la union entre dos tablas
         Tabla resultado = tabla1.copia_p();
 
         for (int posicionFila : tabla2.getPosicionFilas()) {
@@ -134,6 +138,7 @@ public interface Filtro {
     }
 
     private Tabla diferencia(Tabla tabla1, Tabla tabla2) {
+        //Devuelve la diferencia entre dos tablas
         Tabla resultado = tabla1.copia_p();
         for (int posicionFila : tabla2.getPosicionFilas()) {
             resultado.eliminarFila(posicionFila);
@@ -141,51 +146,51 @@ public interface Filtro {
         return resultado;
     }
 
-    default <E extends Comparable<E>> Tabla filtrar(Tabla tabla, String etiquetaColumna, char operador, E valor) {
-        Map<Character, Predicate<E>> operadores = new HashMap<>();
+    // default <E extends Comparable<E>> Tabla filtrar(Tabla tabla, String etiquetaColumna, char operador, E valor) {
+    //     Map<Character, Predicate<E>> operadores = new HashMap<>();
     
-        operadores.put('<', e -> compararNumeros(e, valor) < 0);
-        operadores.put('>', e -> compararNumeros(e, valor) > 0);
-        operadores.put('=', e -> compararNumeros(e, valor) == 0);
-        operadores.put('!', e -> compararNumeros(e, valor) != 0);
+    //     operadores.put('<', e -> compararNumeros(e, valor) < 0);
+    //     operadores.put('>', e -> compararNumeros(e, valor) > 0);
+    //     operadores.put('=', e -> compararNumeros(e, valor) == 0);
+    //     operadores.put('!', e -> compararNumeros(e, valor) != 0);
     
-        Predicate<E> condicion = operadores.get(operador);
+    //     Predicate<E> condicion = operadores.get(operador);
     
-        if (condicion == null) {
-            throw new IllegalArgumentException("Operador no válido. Los operadores válidos son '<', '>', '=', '!'");
-        }
+    //     if (condicion == null) {
+    //         throw new IllegalArgumentException("Operador no válido. Los operadores válidos son '<', '>', '=', '!'");
+    //     }
     
-        Tabla tablaFiltrada = tabla.copia_p();
-        Columna columnaAFiltrar = tablaFiltrada.obtenerColumnaPorEtiqueta(etiquetaColumna);
+    //     Tabla tablaFiltrada = tabla.copia_p();
+    //     Columna columnaAFiltrar = tablaFiltrada.obtenerColumnaPorEtiqueta(etiquetaColumna);
     
-        if (columnaAFiltrar == null) {
-            throw new IllegalArgumentException("La columna con la etiqueta " + etiquetaColumna + " no existe.");
-        }
+    //     if (columnaAFiltrar == null) {
+    //         throw new IllegalArgumentException("La columna con la etiqueta " + etiquetaColumna + " no existe.");
+    //     }
     
-        for (int i = columnaAFiltrar.largoColumna() - 1; i >= 0; i--) {
-            E valorAComparar = (E) columnaAFiltrar.getdato(i);
-            if (valorAComparar == null || !condicion.test(valorAComparar)) {
-                tablaFiltrada.eliminarFila(i);
-            }
-        }
+    //     for (int i = columnaAFiltrar.largoColumna() - 1; i >= 0; i--) {
+    //         E valorAComparar = (E) columnaAFiltrar.getdato(i);
+    //         if (valorAComparar == null || !condicion.test(valorAComparar)) {
+    //             tablaFiltrada.eliminarFila(i);
+    //         }
+    //     }
     
-        return tablaFiltrada;
-    }
+    //     return tablaFiltrada;
+    // }
     
-    @SuppressWarnings("unchecked")
-    private <E> int compararNumeros(E e, E valor) {
-        if (e == null || valor == null) {
-            return 1;  // Si alguno es nulo, tratamos el valor como no válido
-        }
+    // @SuppressWarnings("unchecked")
+    // private <E> int compararNumeros(E e, E valor) {
+    //     if (e == null || valor == null) {
+    //         return 1;  // Si alguno es nulo, tratamos el valor como no válido
+    //     }
         
-        // Convierte ambos valores a Double si son números
-        if (e instanceof Number && valor instanceof Number) {
-            Double eDouble = ((Number) e).doubleValue();
-            Double valorDouble = ((Number) valor).doubleValue();
-            return eDouble.compareTo(valorDouble);
-        }
+    //     // Convierte ambos valores a Double si son números
+    //     if (e instanceof Number && valor instanceof Number) {
+    //         Double eDouble = ((Number) e).doubleValue();
+    //         Double valorDouble = ((Number) valor).doubleValue();
+    //         return eDouble.compareTo(valorDouble);
+    //     }
         
-        // Si no son números, intenta la comparación genérica
-        return ((Comparable<E>) e).compareTo(valor);
-    }
+    //     // Si no son números, intenta la comparación genérica
+    //     return ((Comparable<E>) e).compareTo(valor);
+    // }
 }

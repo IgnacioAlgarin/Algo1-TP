@@ -18,7 +18,7 @@ public class TestFiltro {
 
         System.out.println("testeo filtrar sin query");
         System.out.println("Columna_0 > 0.1");
-        tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar, "Columna_0", '>', 0.1);
+        tablaAFiltrar = tablaAFiltrar.filtrarPorCondicion(tablaAFiltrar, "Columna_0", '>', "0.1");
         tablaAFiltrar.visualizar();
 
         System.out.println("testeo filtrar con query");
