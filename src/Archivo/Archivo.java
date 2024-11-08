@@ -24,17 +24,19 @@ public class Archivo {
         this.path = path;
     };
 
-
+    //Metodos publicos
     public void exportar(Tabla tabla, String path) throws ArchivoException {
+        // Exporta una tabla a un archivo con valores por defecto para sep y header
         exportar(tabla, path, ",", true); // Valores por defecto para `sep` y `header`
     }
 
     public void exportar(Tabla tabla, String path, String sep) throws ArchivoException {
+        // Exporta una tabla a un archivo con valores por defecto para header
         exportar(tabla, path, sep, true); // Valor por defecto para `header`
     }
 
     public void exportar(Tabla tabla, String path, String sep, Boolean header) throws ArchivoException {
-        // Implementación para exportar datos
+        // Exporta una tabla a un archivo aclarando cual separador usar y si tiene encabezados las columnas
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path + nombreArchivo))) {
             if (header) {
                 List<String> encabezados = new ArrayList<>();
@@ -66,6 +68,7 @@ public class Archivo {
     }
 
     public Tabla importar(String sep, Boolean header) {
+        //Importa un archivo de texto a una tabla aclarando si tiene encabezados las columnas
         Tabla tablaImportada = new Tabla();
         List<Object[]> datos = parseCSV(sep, header);
         List<String> etiquetasColumnas = new ArrayList<>();
@@ -92,7 +95,9 @@ public class Archivo {
         return tablaImportada;
     }
 
+    //Metodos privados
     private List<Object[]> filasAColumnas(List<Object[]> datos) {
+        //Convierte los datos de filas para utilizarlos como columnas.
         List<Object[]> datosColumna = new ArrayList<>();
         
         if (datos.isEmpty()) {
@@ -114,7 +119,8 @@ public class Archivo {
         return datosColumna;
     }
 
-    public List<Object[]> parseCSV(String sep, Boolean header) {
+    private List<Object[]> parseCSV(String sep, Boolean header) {
+        // Recorre un archivo de texto para extraer los datos 
         List<Object[]> datos = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path + nombreArchivo))) {
             String linea;
@@ -139,8 +145,8 @@ public class Archivo {
         return datos;
     }
     
-    // Método para detectar el tipo de dato de cada valor
     private Object detectarTipo(String valor) {
+        // Método para detectar el tipo de dato de cada valor
         if (valor.equalsIgnoreCase("true") || valor.equalsIgnoreCase("false")) {
             return Boolean.parseBoolean(valor);
         } 
@@ -153,13 +159,5 @@ public class Archivo {
                 return valor; // Si no es booleano o número, lo tratamos como String
             }
         }
-    }
-
-    public void cargarDatoColumna() {
-        // crear metodo para carga dato de parseCSV y lo cargue en una Columna
-    }
-
-    public void extraerDatoColumna() {
-        // crear metodo para extraer Dato de Columna y lo envie para exportar a un archivo
     }
 }
