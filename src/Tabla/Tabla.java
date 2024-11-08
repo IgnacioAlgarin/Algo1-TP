@@ -13,6 +13,7 @@ import Operaciones.Operaciones;
 import excepciones.*;
 import NA.NA;
 import Filtro.Filtro;
+import Operaciones.OperacionesColumna;
 
 
 public class Tabla  implements Filtro{
@@ -462,77 +463,7 @@ public class Tabla  implements Filtro{
         System.out.println(resumen.toString());
     }
 
-    public class OperacionesColumna implements Operaciones<Double> {
-
-    private List<Number> datos;
-
-    public OperacionesColumna(List<Number> datos) {
-        this.datos = datos;
-    }
-
-    @Override
-    public Double sumar() {
-        double suma = 0;
-        for (Number dato : datos) {
-            if (dato != null) {
-                suma += dato.doubleValue();
-            }
-        }
-        return suma;
-    }
-
-    @Override
-    public Double contar() {
-        return (double) datos.size();
-    }
-
-    @Override
-    public Double promediar() {
-        return sumar() / contar();
-    }
-
-    @Override
-    public Double maximo() {
-        double max = Double.NEGATIVE_INFINITY;
-        for (Number dato : datos) {
-            if (dato != null && dato.doubleValue() > max) {
-                max = dato.doubleValue();
-            }
-        }
-        return max;
-    }
-
-    @Override
-    public Double minimo() {
-        double min = Double.POSITIVE_INFINITY;
-        for (Number dato : datos) {
-            if (dato != null && dato.doubleValue() < min) {
-                min = dato.doubleValue();
-            }
-        }
-        return min;
-    }
-
-    @Override
-    public Double varianza() {
-        double promedio = promediar();
-        double sumaCuadrados = 0;
-        for (Number dato : datos) {
-            if (dato != null) {
-                double diferencia = dato.doubleValue() - promedio;
-                sumaCuadrados += diferencia * diferencia;
-            }
-        }
-        return sumaCuadrados / contar();
-    }
-
-    @Override
-    public Double desvio() {
-        return Math.sqrt(varianza());
-    }
-
-    }
-
+    
     public Columna<Number, ?> obtenerColumnaNumerica(String etiquetaColumna) {
         for (Columna<?, ?> columna : tabla) {
             if (columna.getetiqueta().equals(etiquetaColumna) && columna instanceof Columna_num) {
@@ -585,14 +516,6 @@ public class Tabla  implements Filtro{
         return copia;
     }
 
-    public void index() {
-
-    }
-
-    public void agregar_NA() {
-
-    }
-
     private Boolean comprobarOrden (Tabla tabla2){
         Boolean ordenado = true;
         for (int i = 0; i < tabla.size(); i++){
@@ -637,16 +560,6 @@ public class Tabla  implements Filtro{
         Tabla seleccion = new Tabla();
         return seleccion;
     }
-
-    public Tabla aletorio(Double porcentaje) {
-        Tabla aleatorio = new Tabla();
-        return aleatorio;
-    }
-
-    public Tabla limit(int cantidad, Boolean head) {
-        Tabla limitada = new Tabla();
-        return limitada;
-    } 
 
     //Buscar Datos
 
