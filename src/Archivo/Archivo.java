@@ -64,35 +64,40 @@ public class Archivo {
             }
         } catch (IOException e) {
             throw new ArchivoException("Error al exportar los datos a " + path + e);
+        } catch (IndexOutOfBoundsException e) {
+            throw new ArchivoException("La tabla a exportar esta vacia");
         }
     }
 
-    public Tabla importar(String sep, Boolean header) {
-        //Importa un archivo de texto a una tabla aclarando si tiene encabezados las columnas
-        Tabla tablaImportada = new Tabla();
-        List<Object[]> datos = parseCSV(sep, header);
-        List<String> etiquetasColumnas = new ArrayList<>();
-        
-        if (header && !datos.isEmpty()) {
-            for (Object etiqueta : datos.get(0)) {
-                etiquetasColumnas.add((String) etiqueta);
-        }
-            datos.remove(0);
-        }
-
-        List<Object[]> columnas = filasAColumnas(datos);
-        for (int i = 0; i < columnas.size(); i++) {
-            String etiquetaColumna;
-            List<Object> columna = Arrays.asList(columnas.get(i));
-            if (header) {
-               etiquetaColumna = etiquetasColumnas.get(i);
-            } else {
-               etiquetaColumna = "Columna_" + i;
+    public Tabla importar(String sep, Boolean header) throws IOException {
+        try {
+            Tabla tablaImportada = new Tabla();
+            List<Object[]> datos = parseCSV(sep, header);
+            List<String> etiquetasColumnas = new ArrayList<>();
+    
+            if (header && !datos.isEmpty()) {
+                for (Object etiqueta : datos.get(0)) {
+                    etiquetasColumnas.add((String) etiqueta);
+                }
+                datos.remove(0);
             }
-            tablaImportada.agregarColumna(columna, etiquetaColumna);
+    
+            List<Object[]> columnas = filasAColumnas(datos);
+            for (int i = 0; i < columnas.size(); i++) {
+                String etiquetaColumna;
+                List<Object> columna = Arrays.asList(columnas.get(i));
+                if (header) {
+                    etiquetaColumna = etiquetasColumnas.get(i);
+                } else {
+                    etiquetaColumna = "Columna_" + i;
+                }
+                tablaImportada.agregarColumna(columna, etiquetaColumna);
+            }
+            return tablaImportada;
+        } catch (ClassCastException e) {
+            System.out.println("Error de conversión de tipos en los datos: " + e.getMessage());
         }
-        
-        return tablaImportada;
+        return null;
     }
 
     //Metodos privados
