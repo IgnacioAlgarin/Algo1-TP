@@ -15,29 +15,21 @@ import java.util.List;
 import Columna.Columna;
 
 public class Archivo {
-    private String nombreArchivo;
-    private String path;
-
-    // Contructores
-    public Archivo(String nombreArchivo, String path) {
-        this.nombreArchivo = nombreArchivo;
-        this.path = path;
-    };
-
+    
     //Metodos publicos
-    public void exportar(Tabla tabla, String path) throws ArchivoException {
+    public static void exportar(Tabla tabla, String nombreArchivo) throws ArchivoException {
         // Exporta una tabla a un archivo con valores por defecto para sep y header
-        exportar(tabla, path, ",", true); // Valores por defecto para `sep` y `header`
+        exportar(tabla, nombreArchivo, ",", true); // Valores por defecto para `sep` y `header`
     }
 
-    public void exportar(Tabla tabla, String path, String sep) throws ArchivoException {
+    public static void exportar(Tabla tabla, String nombreArchivo, String sep) throws ArchivoException {
         // Exporta una tabla a un archivo con valores por defecto para header
-        exportar(tabla, path, sep, true); // Valor por defecto para `header`
+        exportar(tabla, nombreArchivo, sep, true); // Valor por defecto para `header`
     }
 
-    public void exportar(Tabla tabla, String path, String sep, Boolean header) throws ArchivoException {
+    public static void exportar(Tabla tabla, String nombreArchivo, String sep, Boolean header) throws ArchivoException {
         // Exporta una tabla a un archivo aclarando cual separador usar y si tiene encabezados las columnas
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path + nombreArchivo))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nombreArchivo))) {
             if (header) {
                 List<String> encabezados = new ArrayList<>();
                 for (Columna<?, ?> c : tabla.getColumnas()) {
@@ -63,16 +55,16 @@ public class Archivo {
                 writer.newLine();
             }
         } catch (IOException e) {
-            throw new ArchivoException("Error al exportar los datos a " + path + e);
+            throw new ArchivoException("Error al exportar los datos a " + nombreArchivo + e);
         } catch (IndexOutOfBoundsException e) {
             throw new ArchivoException("La tabla a exportar esta vacia");
         }
     }
 
-    public Tabla importar(String sep, Boolean header) throws IOException {
+    public static Tabla importar(String nombreArchivo, String sep, Boolean header) throws IOException {
         try {
             Tabla tablaImportada = new Tabla();
-            List<Object[]> datos = parseCSV(sep, header);
+            List<Object[]> datos = parseCSV(nombreArchivo, sep, header);
             List<String> etiquetasColumnas = new ArrayList<>();
     
             if (header && !datos.isEmpty()) {
@@ -101,7 +93,7 @@ public class Archivo {
     }
 
     //Metodos privados
-    private List<Object[]> filasAColumnas(List<Object[]> datos) {
+    private static List<Object[]> filasAColumnas(List<Object[]> datos) {
         //Convierte los datos de filas para utilizarlos como columnas.
         List<Object[]> datosColumna = new ArrayList<>();
         
@@ -124,10 +116,10 @@ public class Archivo {
         return datosColumna;
     }
 
-    private List<Object[]> parseCSV(String sep, Boolean header) {
+    private static List<Object[]> parseCSV(String nombreArchivo, String sep, Boolean header) {
         // Recorre un archivo de texto para extraer los datos 
         List<Object[]> datos = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path + nombreArchivo))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(nombreArchivo))) {
             String linea;
     
             // Leer el resto de las líneas
@@ -150,7 +142,7 @@ public class Archivo {
         return datos;
     }
     
-    private Object detectarTipo(String valor) {
+    private static Object detectarTipo(String valor) {
         // Método para detectar el tipo de dato de cada valor
         if (valor.equalsIgnoreCase("true") || valor.equalsIgnoreCase("false")) {
             return Boolean.parseBoolean(valor);

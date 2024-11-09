@@ -12,7 +12,6 @@ public class TestArchivo {
         
         // Test lectura archivo
         System.out.println("inicio test archivo");
-        Archivo archivo = new Archivo("datos_prueba.csv", "src/");
         
         
         // List<Object[]> datos = archivo.parseCSV(",", false);
@@ -23,13 +22,13 @@ public class TestArchivo {
         // }
 
         Tabla tablaArchivo = new Tabla();
-        tablaArchivo = archivo.importar(",", false);
+        tablaArchivo = Archivo.importar("src/datos_prueba.csv",",", false);
         System.out.println("tabla importada");
         tablaArchivo.visualizar();
 
        //Test exportar archivo
-        Archivo archivo2 = new Archivo("prueba_exportar.csv", "src/");
-        archivo2.exportar(tablaArchivo, "src/");
+       System.out.println("Test exportar archivo");
+        Archivo.exportar(tablaArchivo, "src/prueba_exportar.csv");
 
     }
 }

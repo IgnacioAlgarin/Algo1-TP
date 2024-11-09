@@ -11,9 +11,8 @@ public class TestFiltro {
     public static void main(String[] args) throws Exception {
         // Test: Filtrado
         System.out.println("inicia test filtrado de tabla");
-        Archivo archivo = new Archivo("datos_prueba.csv", "src/");
         Tabla tablaAFiltrar = new Tabla();
-        tablaAFiltrar = archivo.importar(",", false);
+        tablaAFiltrar = Archivo.importar("src/datos_prueba.csv",",", false);
         tablaAFiltrar.visualizar();
 
         System.out.println("testeo filtrar sin query");
@@ -24,7 +23,7 @@ public class TestFiltro {
         System.out.println("testeo filtrar con query");
         String query = "Columna_0 > 0 and Columna_1 = mundo";
         System.out.println(query);
-        tablaAFiltrar = archivo.importar(",", false);
+        tablaAFiltrar = Archivo.importar("src/datos_prueba.csv",",", false);
         tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar,query);
         tablaAFiltrar.visualizar();
 

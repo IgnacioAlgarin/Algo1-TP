@@ -78,9 +78,8 @@ public class App {
         
         
         // Test buscar dato
-        Archivo archivo = new Archivo("datos_prueba.csv", "src/");
         Tabla tablaArchivo = new Tabla();
-        tablaArchivo = archivo.importar(",", false);
+        tablaArchivo = Archivo.importar("src/datos_prueba.csv",",", false);
 
         tablaArchivo.buscarDato("hola"); 
         tablaArchivo.buscarDato(0.1); 
