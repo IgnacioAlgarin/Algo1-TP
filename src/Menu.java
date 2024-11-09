@@ -6,6 +6,7 @@ import java.util.Scanner;
 import Archivo.Archivo;
 import Tabla.Tabla;
 import excepciones.*;
+import Test.*;
 
 public class Menu {
 
@@ -16,21 +17,34 @@ public class Menu {
 
         boolean continuar = true;
 
+        String[] opciones = {
+            "Agregar columna numérica adicional",
+            "Agregar columna string adicional",
+            "Agregar columna booleana adicional",
+            "Test agregar columna con etiqueta repetida",
+            "Test completar NA y rellenar datos faltantes",
+            "Test ordenar tabla",
+            "Test acceso indexado",
+            "Eliminar fila",
+            "Eliminar columna",
+            "Exportar e importar",
+            "Equals Columnas y Tablas",
+            "Filtro",
+            "Salir"
+        };
+
         while (continuar) {
             System.out.println("\n--- MENÚ DE TESTING ---");
-            System.out.println("1. Agregar columna numérica adicional");
-            System.out.println("2. Agregar columna string adicional");
-            System.out.println("3. Agregar columna booleana adicional");
-            System.out.println("4. Test agregar columna con etiqueta repetida");
-            System.out.println("5. Test completar NA y rellenar datos faltantes");
-            System.out.println("6. Test ordenar tabla");
-            System.out.println("7. Test acceso indexado");
-            System.out.println("8. Eliminar fila");
-            System.out.println("9. Eliminar columna");
-            System.out.println("10. Salir");
+
+            // Mostrar las opciones del menú de forma dinámica
+            for (int i = 0; i < opciones.length; i++) {
+                System.out.printf("%d. %s\n", i + 1, opciones[i]);
+            }
+
             System.out.print("Seleccione una opción: ");
             int opcion = scanner.nextInt();
 
+            // Lógica de selección basada en el índice
             switch (opcion) {
                 case 1:
                     testColumnaNumerica(tabla);
@@ -60,6 +74,15 @@ public class Menu {
                     testEliminarColumna(tabla);
                     break;
                 case 10:
+                    TestArchivo.main(args);
+                    break;
+                case 11:
+                    TestEquals.main(args);
+                    break;
+                case 12:
+                    TestFiltro.main(args);
+                    break;
+                case 13:  // Salir
                     System.out.println("Saliendo del programa.");
                     continuar = false;
                     break;
@@ -69,6 +92,7 @@ public class Menu {
         }
         scanner.close();
     }
+
 
     // Cargar datos iniciales en la tabla
     public static void cargarDatosIniciales(Tabla tabla) {
