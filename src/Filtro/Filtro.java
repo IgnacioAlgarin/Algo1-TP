@@ -9,12 +9,21 @@ import java.util.function.Predicate;
 import Columna.Columna;
 import Tabla.Tabla;
 
+/**
+ * Esta interfaz define un filtro para aplicar criterios de filtrado sobre columnas de una tabla.
+ */
 public interface Filtro {
-// query : “columna1 > 3 and columna2 = Verdadero”
+
+    /**
+     * Filtra una tabla según una cadena de consulta (query) en un formato específico.
+     * Ejemplo de query: “columna1 > 3 and columna2 = Verdadero”
+     * La query puede contener operadores (>, <, =) y operadores lógicos (and, or, not).
+     *
+     * @param tabla  La tabla sobre la cual se aplicará el filtro.
+     * @param query  La cadena de consulta que define las condiciones del filtro.
+     * @return Una nueva tabla que contiene las filas que cumplen con las condiciones especificadas en la query.
+     */
     default Tabla filtrar(Tabla tabla, String query) {
-        // Filtra una tabla segun un string con el siguiente formato 
-        // nombre_Columna operador(>, <, =) valor
-        // nombre_Columna operador(>, <, =) valor operadorLogico(and, or, not) nombre_Columna operador(>, <, =) valor
         List<String[]> condiciones = interpretarQuery(query);
         Tabla tablaFiltrada = tabla.copia_p();
         List<Tabla> tablasFiltradas = new ArrayList<>();
@@ -23,8 +32,8 @@ public interface Filtro {
         for (String[] condicion : condiciones) {
             String columna = condicion[0];
             char operador = condicion[1].charAt(0);
-            String valor = condicion[2]; 
-         
+            String valor = condicion[2];
+
             Tabla resultadoCondicion = filtrarPorCondicion(tablaFiltrada, columna, operador, valor);
             tablasFiltradas.add(resultadoCondicion);
         }
@@ -33,21 +42,25 @@ public interface Filtro {
             logico = condiciones.get(0)[3].toLowerCase();
         }
         if ("and".equals(logico)) {
-            tablaFiltrada = interseccion(tablasFiltradas.get(0), tablasFiltradas.get(1)); // Mantener filas comunes
+            tablaFiltrada = interseccion(tablasFiltradas.get(0), tablasFiltradas.get(1));
         } else if ("or".equals(logico)) {
-            tablaFiltrada = union(tablasFiltradas.get(0), tablasFiltradas.get(1)); // Mantener filas de cualquiera de los dos
+            tablaFiltrada = union(tablasFiltradas.get(0), tablasFiltradas.get(1));
         } else if ("not".equals(logico)) {
-            tablaFiltrada = diferencia(tablasFiltradas.get(0), tablasFiltradas.get(1)); // Eliminar filas que cumplen la condición
+            tablaFiltrada = diferencia(tablasFiltradas.get(0), tablasFiltradas.get(1));
         } else {
-            tablaFiltrada = tablasFiltradas.get(0); // Primera condición o sin operador lógico
+            tablaFiltrada = tablasFiltradas.get(0);
         }
-        
 
         return tablaFiltrada;
     }
 
+    /**
+     * Interpreta la cadena de consulta (query) para dividirla en condiciones de filtrado.
+     *
+     * @param query La cadena de consulta que contiene las condiciones.
+     * @return Una lista de arreglos de cadenas que representan las condiciones separadas.
+     */
     private List<String[]> interpretarQuery(String query) {
-        // divide un string en Columna, operador, valor y logico
         String[] queryPartes = query.split(" ");
         List<String[]> condiciones = new ArrayList<>();
 
@@ -63,10 +76,17 @@ public interface Filtro {
         return condiciones;
     }
 
+    /**
+     * Filtra una tabla según una condición específica.
+     *
+     * @param tabla           La tabla a filtrar.
+     * @param etiquetaColumna La etiqueta de la columna sobre la cual se aplicará la condición.
+     * @param operador        El operador de comparación ('>', '<', '=', '!').
+     * @param valor           El valor contra el cual se comparará.
+     * @return Una nueva tabla que contiene las filas que cumplen con la condición.
+     */
     default Tabla filtrarPorCondicion(Tabla tabla, String etiquetaColumna, char operador, String valor) {
-        // filtra una tabla segun el nombre de columna, el operador (>, < , =) y un valor
         Map<Character, Predicate<Object>> operadores = new HashMap<>();
-
         operadores.put('<', e -> compararNumeros(e, valor) < 0);
         operadores.put('>', e -> compararNumeros(e, valor) > 0);
         operadores.put('=', e -> compararNumeros(e, valor) == 0);
@@ -95,8 +115,14 @@ public interface Filtro {
         return tablaFiltrada;
     }
 
+    /**
+     * Compara un objeto numérico con un valor en formato de cadena.
+     *
+     * @param e     El valor numérico a comparar.
+     * @param valor La cadena que representa el valor numérico con el que se compara.
+     * @return Un valor entero indicando el resultado de la comparación.
+     */
     private int compararNumeros(Object e, String valor) {
-        // compara dos numeros
         if (e == null || valor == null) {
             return 1;
         }
@@ -114,8 +140,14 @@ public interface Filtro {
         }
     }
 
+    /**
+     * Realiza la intersección de dos tablas, manteniendo solo las filas comunes.
+     *
+     * @param tabla1 La primera tabla.
+     * @param tabla2 La segunda tabla.
+     * @return Una nueva tabla que contiene solo las filas comunes.
+     */
     private Tabla interseccion(Tabla tabla1, Tabla tabla2) {
-        //devuelve la interseccion entre dos tablas
         Tabla resultado = tabla1.copia_p();
         for (int i = resultado.getCantidadFilas() - 1; i >= 0; i--) {
             if (!tabla2.getPosicionFilas().contains(resultado.getPosicionFilas().get(i))) {
@@ -125,72 +157,36 @@ public interface Filtro {
         return resultado;
     }
 
+    /**
+     * Realiza la unión de dos tablas, manteniendo todas las filas de ambas tablas.
+     *
+     * @param tabla1 La primera tabla.
+     * @param tabla2 La segunda tabla.
+     * @return Una nueva tabla que contiene todas las filas de ambas tablas.
+     */
     private Tabla union(Tabla tabla1, Tabla tabla2) {
-        // Devuelve la union entre dos tablas
         Tabla resultado = tabla1.copia_p();
 
         for (int posicionFila : tabla2.getPosicionFilas()) {
             if (!resultado.getPosicionFilas().contains(posicionFila)) {
-                resultado.agregarfila(tabla2.obtenerFilaPorPosicion(posicionFila)); 
+                resultado.agregarfila(tabla2.obtenerFilaPorPosicion(posicionFila));
             }
         }
         return resultado;
     }
 
+    /**
+     * Realiza la diferencia entre dos tablas, eliminando de la primera tabla las filas que están en la segunda.
+     *
+     * @param tabla1 La tabla base.
+     * @param tabla2 La tabla cuyas filas se eliminarán de la tabla base.
+     * @return Una nueva tabla que contiene las filas de la primera tabla que no están en la segunda.
+     */
     private Tabla diferencia(Tabla tabla1, Tabla tabla2) {
-        //Devuelve la diferencia entre dos tablas
         Tabla resultado = tabla1.copia_p();
         for (int posicionFila : tabla2.getPosicionFilas()) {
             resultado.eliminarFila(posicionFila);
         }
         return resultado;
     }
-
-    // default <E extends Comparable<E>> Tabla filtrar(Tabla tabla, String etiquetaColumna, char operador, E valor) {
-    //     Map<Character, Predicate<E>> operadores = new HashMap<>();
-    
-    //     operadores.put('<', e -> compararNumeros(e, valor) < 0);
-    //     operadores.put('>', e -> compararNumeros(e, valor) > 0);
-    //     operadores.put('=', e -> compararNumeros(e, valor) == 0);
-    //     operadores.put('!', e -> compararNumeros(e, valor) != 0);
-    
-    //     Predicate<E> condicion = operadores.get(operador);
-    
-    //     if (condicion == null) {
-    //         throw new IllegalArgumentException("Operador no válido. Los operadores válidos son '<', '>', '=', '!'");
-    //     }
-    
-    //     Tabla tablaFiltrada = tabla.copia_p();
-    //     Columna columnaAFiltrar = tablaFiltrada.obtenerColumnaPorEtiqueta(etiquetaColumna);
-    
-    //     if (columnaAFiltrar == null) {
-    //         throw new IllegalArgumentException("La columna con la etiqueta " + etiquetaColumna + " no existe.");
-    //     }
-    
-    //     for (int i = columnaAFiltrar.largoColumna() - 1; i >= 0; i--) {
-    //         E valorAComparar = (E) columnaAFiltrar.getdato(i);
-    //         if (valorAComparar == null || !condicion.test(valorAComparar)) {
-    //             tablaFiltrada.eliminarFila(i);
-    //         }
-    //     }
-    
-    //     return tablaFiltrada;
-    // }
-    
-    // @SuppressWarnings("unchecked")
-    // private <E> int compararNumeros(E e, E valor) {
-    //     if (e == null || valor == null) {
-    //         return 1;  // Si alguno es nulo, tratamos el valor como no válido
-    //     }
-        
-    //     // Convierte ambos valores a Double si son números
-    //     if (e instanceof Number && valor instanceof Number) {
-    //         Double eDouble = ((Number) e).doubleValue();
-    //         Double valorDouble = ((Number) valor).doubleValue();
-    //         return eDouble.compareTo(valorDouble);
-    //     }
-        
-    //     // Si no son números, intenta la comparación genérica
-    //     return ((Comparable<E>) e).compareTo(valor);
-    // }
 }
