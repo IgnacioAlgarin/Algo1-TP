@@ -108,7 +108,7 @@ public interface Filtro {
         for (int i = columnaAFiltrar.largoColumna() - 1; i >= 0; i--) {
             Object valorAComparar = columnaAFiltrar.getdato(i);
             if (valorAComparar == null || !condicion.test(valorAComparar)) {
-                tablaFiltrada.eliminarFila(i);
+                tablaFiltrada.eliminarFila(i, false);
             }
         }
 

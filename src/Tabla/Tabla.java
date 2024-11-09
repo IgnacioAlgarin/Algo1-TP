@@ -820,6 +820,10 @@ public class Tabla  implements Filtro{
     }
     
     public void eliminarFila(int indiceFila) {
+        eliminarFila(indiceFila, true);
+    }
+
+    public void eliminarFila(int indiceFila, Boolean mostrarMensaje) {
         if (indiceFila < 0 || indiceFila >= filas.size()) {
             throw new IndexOutOfBoundsException("Índice de fila fuera de rango.");
         }
@@ -827,7 +831,9 @@ public class Tabla  implements Filtro{
         for (Columna<?, ?> columna : tabla) {
             columna.getDatos().remove(indiceFila);  // Elimina el dato de esa fila en cada columna
         }
-        System.out.println("Fila en el índice " + indiceFila + " eliminada.");
+        if(mostrarMensaje) {
+            System.out.println("Fila en el índice " + indiceFila + " eliminada.");
+        }
     }
     
     public void eliminarFila(String etiquetaFila) {
