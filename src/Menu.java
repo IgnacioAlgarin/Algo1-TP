@@ -1,12 +1,9 @@
-import java.util.ArrayList;
+import Tabla.Tabla;
+import Test.*;
+import excepciones.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import Archivo.Archivo;
-import Tabla.Tabla;
-import excepciones.*;
-import Test.*;
 
 public class Menu {
 
@@ -30,6 +27,7 @@ public class Menu {
             "Exportar e importar",
             "Equals Columnas y Tablas",
             "Filtro",
+            "Información de la tabla",
             "Salir"
         };
 
@@ -82,7 +80,10 @@ public class Menu {
                 case 12:
                     TestFiltro.main(args);
                     break;
-                case 13:  // Salir
+                case 13:
+                    TestInfo.testInfoTabla(tabla);;
+                    break;    
+                case 14:  // Salir
                     System.out.println("Saliendo del programa.");
                     continuar = false;
                     break;

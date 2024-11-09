@@ -1,19 +1,17 @@
 package Tabla;
-import java.util.List;
-import java.util.Random;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.stream.Collectors;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
 import Columna.*;
 import Fila.Fila;
-import Operaciones.Operaciones;
-import excepciones.*;
-import NA.NA;
 import Filtro.Filtro;
+import NA.NA;
 import Operaciones.OperacionesColumna;
+import excepciones.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 
 public class Tabla  implements Filtro{
@@ -676,7 +674,13 @@ public class Tabla  implements Filtro{
         }
     }
 
-    // Método para rellenar datos faltantes (NA) en una columna específica dado un nuevo valor
+    /**
+     * Rellena los datos faltantes (NA) en una columna específica con un nuevo valor.
+     * @param etiquetaColumna
+     * @param nuevoValor
+     * @throws TipoinconsistenteException si el tipo de nuevoValor no coincide con el tipo de la columna.
+     */
+
     public void rellenarDatosFaltantes(String etiquetaColumna, Object nuevoValor) {
         for (Columna<?, ?> columna : tabla) {
             if (columna.getetiqueta().equals(etiquetaColumna)) {
@@ -712,13 +716,12 @@ public class Tabla  implements Filtro{
         return tabla.size();
     }
 
-    // get etiquetas como lista de strings
     public List<String> getEtiquetasFilas() {
-        List<String> etiquetasf = new ArrayList<>();
+        List<String> etiquetas = new ArrayList<>();
         for (Fila fila : filas) {
-            etiquetasf.add(fila.getetiqueta());  
+            etiquetas.add(fila.getetiqueta()); 
         }
-        return etiquetasf;
+        return etiquetas;
     }
 
     public List<Integer> getPosicionFilas() {
@@ -754,7 +757,16 @@ public class Tabla  implements Filtro{
         return contador;
     }
 
-    // mostrar cuadro de información de la tabla
+    
+    /**
+     * Muestra un cuadro de información con los siguientes datos de cada columna:
+     * - Columna: etiqueta de la columna
+     * - Tipo de Dato: tipo de dato de la columna   
+     * - Cantidad de Filas: cantidad de filas en la tabla
+     * - Registros: cantidad de registros válidos (no nulos ni NA) en la columna
+     * - Valores Nulos: cantidad de valores nulos en la columna
+     * - Valores NA: cantidad de valores NA en la columna      
+     */
     public void mostrarCuadroInformacion() {    
         System.out.printf("%-15s %-15s %-15s %-15s %-15s %-15s%n", 
                           "Columna", "Tipo de Dato", "Cantidad de Filas", "Registros", "Valores Nulos", "Valores NA");
@@ -765,7 +777,7 @@ public class Tabla  implements Filtro{
             String nombreColumna = columna.getetiqueta().toString();
             Class<?> tipoDato = columna.getTipoClase();
             int cantidadFilas = getCantidadFilas();
-            int registros = cantidadFilas - contarValoresNulos(i); 
+            int registros = cantidadFilas - contarValoresNulos(i) - contarValoresNA(i); 
             int valoresNulos = contarValoresNulos(i);
             int valoresNA = contarValoresNA(i);
     
