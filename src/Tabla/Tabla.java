@@ -797,19 +797,28 @@ public class Tabla  implements Filtro{
         return tabla.size();
     }
 
+    /**
+     * Obtiene una lista con las etiquetas de todas las filas.
+     *
+     * @return Lista de etiquetas de las filas en la tabla.
+     */
     public List<String> getEtiquetasFilas() {
         List<String> etiquetas = new ArrayList<>();
         for (Fila fila : filas) {
-            etiquetas.add(filas.get(fila.getposicion()).getetiqueta()); 
+            etiquetas.add(fila.getetiqueta());  // Agrega la etiqueta de cada fila
         }
         return etiquetas;
     }
 
+    /**
+     * Obtiene una lista con las posiciones de todas las filas.
+     *
+     * @return Lista de posiciones (ID) de las filas en la tabla.
+     */
     public List<Integer> getPosicionFilas() {
-        // Devuelve una lista de enteros con los id de filas
         List<Integer> posicionf = new ArrayList<>();
         for (Fila fila : filas) {
-            posicionf.add(fila.getposicion());  
+            posicionf.add(fila.getposicion());  // Agrega la posición de cada fila
         }
         return posicionf;
     }
@@ -879,60 +888,104 @@ public class Tabla  implements Filtro{
         System.out.println();
     }
 
+    /**
+     * Muestra las etiquetas de todas las columnas de la tabla en la consola.
+     * Si no hay columnas en la tabla, muestra un mensaje indicando que no existen etiquetas de columnas.
+     */
     public void mostrarEtiquetasColumnas() {
+        if (tabla.isEmpty()) {
+            System.out.println("No existen etiquetas de columnas.");
+            return;
+        }
+
         System.out.print("Etiquetas de columnas: ");
         for (Columna<?, ?> columna : tabla) {
             System.out.print(columna.getetiqueta() + " ");
         }
-        System.out.println();  
+        System.out.println();  // Salto de línea al final
     }
 
+    /**
+     * Elimina una columna de la tabla en función de su etiqueta.
+     *
+     * @param etiquetaColumna La etiqueta de la columna que se desea eliminar.
+     * @throws IllegalArgumentException si no se encuentra una columna con la etiqueta especificada.
+     */
     public void eliminarColumna(String etiquetaColumna) {
         boolean encontrada = false;
+
         for (int i = 0; i < tabla.size(); i++) {
             if (tabla.get(i).getetiqueta().equals(etiquetaColumna)) {
-                tabla.remove(i);
-                etiquetasUsadasc.remove(etiquetaColumna);
+                tabla.remove(i);  // Elimina la columna del índice encontrado
+                etiquetasUsadasc.remove(etiquetaColumna);  // Actualiza el conjunto de etiquetas usadas
                 encontrada = true;
                 System.out.println("Columna con etiqueta '" + etiquetaColumna + "' eliminada.");
                 break;
             }
         }
+
         if (!encontrada) {
             throw new IllegalArgumentException("La columna con etiqueta '" + etiquetaColumna + "' no fue encontrada.");
         }
     }
 
+    /**
+     * Elimina una columna de la tabla en función de su índice.
+     *
+     * @param indiceColumna El índice de la columna que se desea eliminar.
+     * @throws IndexOutOfBoundsException si el índice de la columna está fuera del rango de columnas existentes.
+     */
     public void eliminarColumna(int indiceColumna) {
         if (indiceColumna < 0 || indiceColumna >= tabla.size()) {
             throw new IndexOutOfBoundsException("Índice de columna fuera de rango.");
         }
-        // Elimina la columna en el índice especificado sin considerar etiquetas
+        
+        // Elimina la columna en el índice especificado
         Columna<?, ?> columnaEliminada = tabla.remove(indiceColumna);
         System.out.println("Columna eliminada en el índice " + indiceColumna + " con etiqueta: " + columnaEliminada.getetiqueta());
     }
+
     
     public void eliminarFila(int indiceFila) {
         eliminarFila(indiceFila, true);
     }
 
+    /**
+     * Elimina una fila de la tabla en función de su índice.
+     * La fila y sus datos en todas las columnas serán eliminados.
+     *
+     * @param indiceFila El índice de la fila que se desea eliminar.
+     * @param mostrarMensaje Indica si se debe mostrar un mensaje de confirmación tras la eliminación.
+     * @throws IndexOutOfBoundsException si el índice está fuera del rango de las filas existentes.
+     */
     public void eliminarFila(int indiceFila, Boolean mostrarMensaje) {
         if (indiceFila < 0 || indiceFila >= filas.size()) {
             throw new IndexOutOfBoundsException("Índice de fila fuera de rango.");
         }
-       
-   
-       etiquetasUsadasf.remove(filas.get(indiceFila).getetiqueta());
-       etiquetasUsadasf.remove(filas.get(indiceFila).getposicion());
-       filas.remove(indiceFila);
-       for (Columna<?, ?> columna : tabla) {
-           columna.getDatos().remove(indiceFila);  // Elimina el dato de esa fila en cada columna
-       }
-       if(mostrarMensaje) {
-           System.out.println("Fila en el índice " + indiceFila + " eliminada.");
-       }
+
+        // Remueve la etiqueta asociada a la fila eliminada
+        etiquetasUsadasf.remove(filas.get(indiceFila).getetiqueta());
+        etiquetasUsadasf.remove(filas.get(indiceFila).getposicion());
+        filas.remove(indiceFila);
+
+        // Elimina los datos de esa fila en cada columna
+        for (Columna<?, ?> columna : tabla) {
+            columna.getDatos().remove(indiceFila);
+        }
+
+        // Mostrar mensaje de confirmación si se indica
+        if (mostrarMensaje) {
+            System.out.println("Fila en el índice " + indiceFila + " eliminada.");
+        }
     }
     
+    /**
+     * Elimina una fila de la tabla basada en su etiqueta. 
+     * La fila y sus datos en todas las columnas serán eliminados.
+     *
+     * @param etiquetaFila La etiqueta de la fila que se desea eliminar.
+     * @throws FilaNoValidaException si la fila con la etiqueta especificada no existe.
+     */
     public void eliminarFila(String etiquetaFila) {
         boolean encontrada = false;
         for (int i = 0; i < filas.size(); i++) {
@@ -947,63 +1000,80 @@ public class Tabla  implements Filtro{
                 break;
             }
         }
+        
+        // Lanzar excepción si la fila no se encontró
         if (!encontrada) {
-            throw new IllegalArgumentException("La fila con etiqueta '" + etiquetaFila + "' no fue encontrada.");
+            throw new FilaNoValidaException("La fila con etiqueta '" + etiquetaFila + "' no fue encontrada.");
         }
     }
+
     
+    /**
+     * Ordena las filas de la tabla en función de las columnas especificadas y el orden ascendente o descendente indicado.
+     *
+     * @param etiquetasColumnas Lista de etiquetas de las columnas por las que se desea ordenar.
+     * @param ordenAscendente Lista de booleanos que indica el orden para cada columna (true para ascendente, false para descendente).
+     * @throws IllegalArgumentException si la cantidad de etiquetas de columnas y órdenes no coinciden o si alguna columna no existe.
+     * @throws ClassCastException si los datos en una columna no son comparables.
+     */
     public void ordenarTabla(List<String> etiquetasColumnas, List<Boolean> ordenAscendente) {
         if (etiquetasColumnas.size() != ordenAscendente.size()) {
             throw new IllegalArgumentException("La cantidad de columnas y de órdenes deben coincidir.");
         }
-    
+
         // Configurar el comparador para ordenar filas según las columnas especificadas
         Comparator<Fila> comparadorFinal = (fila1, fila2) -> 0;
-    
+
         for (int i = 0; i < etiquetasColumnas.size(); i++) {
             String etiquetaColumna = etiquetasColumnas.get(i);
             boolean ascendente = ordenAscendente.get(i);
-    
-            // Obtener la columna correspondiente
-            Columna<?, ?> columna = obtenerColumnaPorEtiqueta(etiquetaColumna);
-            if (columna == null) {
-                throw new IllegalArgumentException("Columna no encontrada: " + etiquetaColumna);
+
+            try {
+                // Obtener la columna correspondiente
+                Columna<?, ?> columna = obtenerColumnaPorEtiqueta(etiquetaColumna);
+
+                Comparator<Fila> comparadorColumna = (fila1, fila2) -> {
+                    int indexFila1 = filas.indexOf(fila1);
+                    int indexFila2 = filas.indexOf(fila2);
+
+                    Object dato1 = columna.getdato(indexFila1);
+                    Object dato2 = columna.getdato(indexFila2);
+
+                    if (dato1 == null || dato1 instanceof NA) return ascendente ? 1 : -1;
+                    if (dato2 == null || dato2 instanceof NA) return ascendente ? -1 : 1;
+
+                    if (dato1 instanceof Comparable && dato2 instanceof Comparable) {
+                        return ascendente ? ((Comparable) dato1).compareTo(dato2) : ((Comparable) dato2).compareTo(dato1);
+                    } else {
+                        throw new ClassCastException("Datos no comparables en la columna: " + etiquetaColumna);
+                    }
+                };
+
+                comparadorFinal = comparadorFinal.thenComparing(comparadorColumna);
+            } catch (ColumnaNoValidaException e) {
+                System.out.println("Error: " + e.getMessage());
             }
-    
-            Comparator<Fila> comparadorColumna = (fila1, fila2) -> {
-                int indexFila1 = filas.indexOf(fila1);
-                int indexFila2 = filas.indexOf(fila2);
-    
-                Object dato1 = columna.getdato(indexFila1);
-                Object dato2 = columna.getdato(indexFila2);
-    
-                if (dato1 == null || dato1 instanceof NA) return ascendente ? 1 : -1;
-                if (dato2 == null || dato2 instanceof NA) return ascendente ? -1 : 1;
-    
-                if (dato1 instanceof Comparable && dato2 instanceof Comparable) {
-                    return ascendente ? ((Comparable) dato1).compareTo(dato2) : ((Comparable) dato2).compareTo(dato1);
-                } else {
-                    throw new ClassCastException("Datos no comparables en la columna: " + etiquetaColumna);
-                }
-            };
-    
-            comparadorFinal = comparadorFinal.thenComparing(comparadorColumna);
         }
-    
+
         // Realizar una copia temporal de las filas y ordenar esa lista
         List<Fila> filasOrdenadas = new ArrayList<>(filas);
         Collections.sort(filasOrdenadas, comparadorFinal);
-    
+
         // Actualizar las filas en la tabla con el nuevo orden
         filas.clear();
         filas.addAll(filasOrdenadas);
-    
+
         System.out.println("Ordenamiento completado. Tabla actualizada:");
         this.visualizar();  // Muestra la tabla para verificar el resultado
     }
-    
-    
 
+    /**
+     * Obtiene los datos de una fila en función de su etiqueta.
+     *
+     * @param etiquetaFila La etiqueta de la fila que se desea obtener.
+     * @return Lista de objetos que representan los datos de la fila con la etiqueta especificada.
+     * @throws IllegalArgumentException si no se encuentra una fila con la etiqueta especificada.
+     */
     public List<Object> obtenerFilaPorEtiqueta(Object etiquetaFila) {
         for (Fila fila : filas) {
             // Verifica que la etiqueta no sea nula antes de usar equals
@@ -1018,9 +1088,16 @@ public class Tabla  implements Filtro{
         throw new IllegalArgumentException("Fila no encontrada con la etiqueta: " + etiquetaFila);
     }
     
+    /**
+     * Obtiene los datos de una fila en función de su posición.
+     *
+     * @param posicion La posición de la fila que se desea obtener.
+     * @return Lista de objetos que representan los datos de la fila en la posición especificada.
+     * @throws IllegalArgumentException si no se encuentra una fila en la posición especificada.
+     */
     public List<Object> obtenerFilaPorPosicion(int posicion) {
         for (Fila fila : filas) {
-            // Verifica que la posicion no sea nula antes de usar equals
+            // Verifica que la posición coincida con la buscada
             if (fila.getposicion() == posicion) {
                 List<Object> datosFila = new ArrayList<>();
                 for (Columna<?, ?> columna : tabla) {
@@ -1029,27 +1106,51 @@ public class Tabla  implements Filtro{
                 return datosFila;
             }
         }
-        throw new IllegalArgumentException("Fila no encontrada con la posicion: " + posicion);
+        throw new IllegalArgumentException("Fila no encontrada con la posición: " + posicion);
     }
 
+    /**
+     * Obtiene una columna de la tabla según su etiqueta.
+     *
+     * @param <E> Tipo de la etiqueta de la columna.
+     * @param etiquetaColumna Etiqueta de la columna a buscar.
+     * @return Columna encontrada con la etiqueta proporcionada.
+     * @throws ColumnaNoValidaException si la columna con la etiqueta dada no existe.
+     */
     public <E> Columna<?, ?> obtenerColumnaPorEtiqueta(E etiquetaColumna) {
         for (Columna<?, ?> columna : tabla) {
             if (columna.getetiqueta().equals(etiquetaColumna)) {
                 return columna;
             }
         }
-        throw new IllegalArgumentException("Columna no encontrada: " + etiquetaColumna);
+        throw new ColumnaNoValidaException("Columna no encontrada: " + etiquetaColumna);
     }
 
+    /**
+     * Obtiene todos los datos de una columna específica según su etiqueta.
+     *
+     * @param etiquetaColumna Etiqueta de la columna a buscar.
+     * @return List<?> Lista de datos en la columna encontrada.
+     * @throws ColumnaNoValidaException si la columna con la etiqueta dada no existe.
+     */
     public List<?> obtenerColumnaPorEtiquetaIndex(Object etiquetaColumna) {
         for (Columna<?, ?> columna : tabla) {
             if (columna.getetiqueta().equals(etiquetaColumna)) {
                 return columna.getDatos(); // Devuelve todos los datos en la columna
             }
         }
-        throw new IllegalArgumentException("Columna no encontrada con la etiqueta: " + etiquetaColumna);
+        throw new ColumnaNoValidaException("Columna no encontrada con la etiqueta: " + etiquetaColumna);
     }
     
+    /**
+     * Obtiene el valor de una celda específica en la tabla, identificada por las etiquetas de fila y columna.
+     * 
+     * @param etiquetaFila Etiqueta de la fila de la celda.
+     * @param etiquetaColumna Etiqueta de la columna de la celda.
+     * @return Object El valor encontrado en la celda.
+     * @throws FilaNoValidaException si la fila con la etiqueta dada no existe.
+     * @throws ColumnaNoValidaException si la columna con la etiqueta dada no existe.
+     */
     public Object obtenerCelda(Object etiquetaFila, Object etiquetaColumna) {
         Fila filaEncontrada = null;
         for (Fila fila : filas) {
@@ -1058,11 +1159,12 @@ public class Tabla  implements Filtro{
                 break;
             }
         }
-    
+
+        // Lanza excepción si no se encontró la fila
         if (filaEncontrada == null) {
-            throw new IllegalArgumentException("Fila no encontrada con la etiqueta: " + etiquetaFila);
+            throw new FilaNoValidaException("Fila no encontrada con la etiqueta: " + etiquetaFila);
         }
-    
+
         Columna<?, ?> columnaEncontrada = null;
         for (Columna<?, ?> columna : tabla) {
             if (columna.getetiqueta() != null && columna.getetiqueta().equals(etiquetaColumna)) {
@@ -1070,14 +1172,15 @@ public class Tabla  implements Filtro{
                 break;
             }
         }
-    
+
+        // Lanza excepción si no se encontró la columna
         if (columnaEncontrada == null) {
-            throw new IllegalArgumentException("Columna no encontrada con la etiqueta: " + etiquetaColumna);
+            throw new ColumnaNoValidaException("Columna no encontrada con la etiqueta: " + etiquetaColumna);
         }
-    
+
+        // Retorna el dato en la celda especificada
         return columnaEncontrada.getdato(filaEncontrada.getIndice());
     }
-
 
     
 }
