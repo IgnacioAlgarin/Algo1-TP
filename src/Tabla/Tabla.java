@@ -304,7 +304,7 @@ public class Tabla  implements Filtro{
         agregarfila(etiqueta, datos);
 
     }
-    //Imprime la tabla en pantalla mostrando hasta 8 columnas y 30 filas
+    //Imprime la tabla en pantalla mostrando hasta 8 columnas 
     public void visualizar() {
         StringBuilder filastring = new StringBuilder();
         filastring.append("+-------+----------+");
@@ -395,7 +395,7 @@ public class Tabla  implements Filtro{
         }
         return null;
     }
-
+    // Imprime en pantalla una tabla con un porcentaje de filas elegidas al azar definida por el usuario
     public Tabla visualizarAleatorio(double porcentaje) {
         try {
             if (porcentaje < 0 || porcentaje > 100) {
@@ -431,7 +431,7 @@ public class Tabla  implements Filtro{
             }
             posicionelim.removeAll(posicionaux);
     
-            for ( int i=posicionelim.size()-1; i>-1 ; i-- ){
+            for ( int i = posicionelim.size() - 1; i > -1 ; i-- ){
                 tablaAleatoria.eliminarFila(posicionelim.get(i), false);
             }
             tablaAleatoria.etiquetasUsadasc = this.etiquetasUsadasc;
@@ -444,7 +444,44 @@ public class Tabla  implements Filtro{
             System.out.println("Error: " + e.getMessage());
         }
         return null;
-     }
+    }
+    // Imprime en pantalla las primeras x cantidad de filas solicitadas por el usuario 
+    public void head(int cant){
+        try {
+            if (cant <= 0){
+                throw new ValorNoEsperadoException("Por favor inserte una cantidad de filas valida");
+            }
+            Tabla tablaaux = this.copia_p();
+            if (cant > tablaaux.filas.size()){
+                cant = tablaaux.filas.size() ;
+            }
+            for (int i = tablaaux.filas.size()-1; i > cant - 1; i-- ){
+                tablaaux.eliminarFila(i, false);
+            }
+            tablaaux.visualizar();
+        } catch (ValorNoEsperadoException e){
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+    // Imprime en pantalla las ultimas x cantidad de filas solicitadas por el usuario 
+    public void tail(int cant){
+        try {
+            if (cant <= 0){
+                throw new ValorNoEsperadoException("Por favor inserte una cantidad de filas valida");
+            }
+            if (cant > filas.size()){
+                cant = filas.size() ;
+            }
+            Tabla tablaaux = this.copia_p();
+
+            for (int i = tablaaux.filas.size() - cant-1; i > -1; i-- ){
+                tablaaux.eliminarFila(i, false);
+            }
+            tablaaux.visualizar();
+        } catch (ValorNoEsperadoException e){
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
 
     public void visualizarResumen() {
         StringBuilder resumen = new StringBuilder();

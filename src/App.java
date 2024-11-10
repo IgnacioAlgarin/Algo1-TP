@@ -211,6 +211,7 @@ public class App {
         tabla.visualizar();
         tabla.visualizarParcial(etiquetafl, etiquetacl);
         tabla.visualizarAleatorio(50);
-
+        tabla.head(4);
+        tabla.tail(3);
     }
 }
