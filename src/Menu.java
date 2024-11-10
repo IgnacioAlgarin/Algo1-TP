@@ -47,30 +47,31 @@ public class Menu {
             switch (opcion) {
                 case 1:
                     TestColumnaNumerica.ejecutarPrueba(tabla);
+
                     break;
                 case 2:
                     TestColumnaString.ejecutarPrueba(tabla);    
                     break;
                 case 3:
-                    TestColumnaBoolConEtiqueta.ejecutarPrueba(tabla);
+                    TestColumnaBoolConEtiqueta.ejecutarPrueba(tabla);    
                     break;
                 case 4:
-                    TestAgregarColumnaRepetida.ejecutarPrueba(tabla);
+                    TestAgregarColumnaRepetida.ejecutarPrueba(tabla);    
                     break;
                 case 5:
-                    TestCompletarNA.ejecutarPrueba(tabla);
+                    TestCompletarNA.ejecutarPrueba(tabla);    
                     break;
                 case 6:
-                    TestOrdenarTabla.ejecutarPrueba(tabla);
+                    TestOrdenarTabla.ejecutarPrueba(tabla);    
                     break;
                 case 7:
                     TestAccesoIndexado.ejecutarPrueba(tabla);
                     break;
                 case 8:
-                    TestEliminarFila.ejecutarPrueba(tabla);
+                    TestEliminarFila.ejecutarPrueba(tabla);    
                     break;
                 case 9:
-                    TestEliminarColumna.ejecutarPrueba(tabla);
+                    TestEliminarColumna.ejecutarPrueba(tabla);    
                     break;
                 case 10:
                     TestArchivo.main(args);

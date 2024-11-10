@@ -1,28 +1,20 @@
 package Test;
 
 import Tabla.Tabla;
-import excepciones.EtiquetaEnUsoException;
 import java.util.Arrays;
 import java.util.List;
 
 public class TestColumnaString {
 
     public static void ejecutarPrueba(Tabla tabla) {
-        System.out.println("Probando agregar columna de tipo String con etiqueta específica:");
+        System.out.println("Probando agregar columna de tipo string adicional:");
 
-        // Datos de prueba: columna de tipo String
-        List<String> datosNombres = Arrays.asList("Juan", "Ana", "Luis", null);
+        // Agregar una columna de tipo string con algunos valores nulos
+        List<String> nuevaColumnaString = Arrays.asList("A", "B", null, "D");
+        tabla.agregarColumna(nuevaColumnaString, "Letras");
 
-        // Intento de agregar la columna con etiqueta "Nombre"
-        try {
-            tabla.agregarColumna(datosNombres, "Nombre");
-            System.out.println("Columna de tipo String 'Nombre' agregada correctamente.");
-        } catch (EtiquetaEnUsoException e) {
-            System.out.println("Error: La etiqueta 'Nombre' ya está en uso. Detalles: " + e.getMessage());
-        }
-
-        // Visualizar la tabla para verificar que la columna se agregó correctamente
-        System.out.println("Estado de la tabla después de agregar la columna de tipo String:");
+        // Visualizar la tabla después de agregar la columna
+        System.out.println("Columna string adicional agregada:");
         tabla.visualizar();
     }
 }

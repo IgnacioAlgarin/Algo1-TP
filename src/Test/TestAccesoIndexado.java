@@ -6,33 +6,21 @@ import java.util.List;
 public class TestAccesoIndexado {
 
     public static void ejecutarPrueba(Tabla tabla) {
-        System.out.println("Probando acceso indexado:");
+        System.out.println("Probando acceso indexado a filas, columnas y celdas:");
 
-        // Acceder a una fila completa
-        System.out.print("Accediendo a la fila con etiqueta 'mundo': ");
-        try {
-            List<Object> datosFila = tabla.obtenerFilaPorEtiqueta("mundo");
-            System.out.println(datosFila);
-        } catch (Exception e) {
-            System.out.println("Error al acceder a la fila: " + e.getMessage());
-        }
+        // Acceso a una fila completa
+        System.out.println("\nAcceso a la fila con etiqueta 'mundo':");
+        List<Object> datosFila = tabla.obtenerFilaPorEtiqueta("mundo");
+        System.out.println("Fila 'mundo': " + datosFila);
 
-        // Acceder a una columna completa
-        System.out.print("Accediendo a la columna 'Edad': ");
-        try {
-            List<?> datosColumna = tabla.obtenerColumnaPorEtiquetaIndex("Edad");
-            System.out.println(datosColumna);
-        } catch (Exception e) {
-            System.out.println("Error al acceder a la columna: " + e.getMessage());
-        }
+        // Acceso a una columna completa
+        System.out.println("\nAcceso a la columna con etiqueta 'Edad':");
+        List<?> datosColumna = tabla.obtenerColumnaPorEtiquetaIndex("Edad");
+        System.out.println("Columna 'Edad': " + datosColumna);
 
-        // Acceder a una celda específica
-        System.out.print("Accediendo a la celda ('mundo', 'Edad'): ");
-        try {
-            Object datoCelda = tabla.obtenerCelda("mundo", "Edad");
-            System.out.println(datoCelda);
-        } catch (Exception e) {
-            System.out.println("Error al acceder a la celda: " + e.getMessage());
-        }
+        // Acceso a una celda específica
+        System.out.println("\nAcceso a la celda en la intersección de 'mundo' y 'Edad':");
+        Object datoCelda = tabla.obtenerCelda("mundo", "Edad");
+        System.out.println("Celda ('mundo', 'Edad'): " + datoCelda);
     }
 }
