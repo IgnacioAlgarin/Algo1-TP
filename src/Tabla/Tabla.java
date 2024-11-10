@@ -483,6 +483,11 @@ public class Tabla  implements Filtro{
         }
     }
 
+    /**
+     * Muestra un resumen de la tabla en la consola, incluyendo información estadística
+     * de cada columna como el tipo de datos, la cantidad de valores no nulos, nulos,
+     * el valor mínimo y el valor máximo.
+     */
     public void visualizarResumen() {
         StringBuilder resumen = new StringBuilder();
         resumen.append(String.format("%-15s %-10s %-10s %-10s %-10s %-10s\n",
@@ -532,6 +537,14 @@ public class Tabla  implements Filtro{
     }
 
     
+    /**
+     * Obtiene una columna de tipo numérico según la etiqueta proporcionada.
+     *
+     * @param etiquetaColumna La etiqueta de la columna que se desea obtener.
+     * @return La columna numérica correspondiente a la etiqueta dada.
+     * @throws IllegalArgumentException si la columna con la etiqueta especificada
+     *         no es numérica o no existe en la tabla.
+     */
     public Columna<Number, ?> obtenerColumnaNumerica(String etiquetaColumna) {
         for (Columna<?, ?> columna : tabla) {
             if (columna.getetiqueta().equals(etiquetaColumna) && columna instanceof Columna_num) {
@@ -542,19 +555,30 @@ public class Tabla  implements Filtro{
         throw new IllegalArgumentException("Columna numérica con etiqueta " + etiquetaColumna + " no encontrada.");
     }
 
+    /**
+     * Muestra un resumen de operaciones estadísticas para una columna numérica específica.
+     *
+     * @param etiquetaColumna La etiqueta de la columna para la cual se desea obtener el resumen de operaciones.
+     * @throws IllegalArgumentException si la columna especificada no es numérica o no existe.
+     */
     public void mostrarResumenOperaciones(String etiquetaColumna) {
-        Columna<Number, ?> columna = obtenerColumnaNumerica(etiquetaColumna);
-        OperacionesColumna operaciones = new OperacionesColumna(columna.getDatos());
+        try {
+            Columna<Number, ?> columna = obtenerColumnaNumerica(etiquetaColumna);
+            OperacionesColumna operaciones = new OperacionesColumna(columna.getDatos());
 
-        System.out.println("Resumen de operaciones para la columna: " + etiquetaColumna);
-        System.out.println("Suma: " + operaciones.sumar());
-        System.out.println("Conteo: " + operaciones.contar());
-        System.out.println("Promedio: " + operaciones.promediar());
-        System.out.println("Máximo: " + operaciones.maximo());
-        System.out.println("Mínimo: " + operaciones.minimo());
-        System.out.println("Varianza: " + operaciones.varianza());
-        System.out.println("Desvío: " + operaciones.desvio());
+            System.out.println("Resumen de operaciones para la columna: " + etiquetaColumna);
+            System.out.println("Suma: " + operaciones.sumar());
+            System.out.println("Conteo: " + operaciones.contar());
+            System.out.println("Promedio: " + operaciones.promediar());
+            System.out.println("Máximo: " + operaciones.maximo());
+            System.out.println("Mínimo: " + operaciones.minimo());
+            System.out.println("Varianza: " + operaciones.varianza());
+            System.out.println("Desvío: " + operaciones.desvio());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
+
 
     //getters y setter
     public List<Columna<?, ?>> getColumnas() {
