@@ -12,7 +12,7 @@ public class TestArchivo {
     public static void main(String[] args) throws Exception {
         
         // Test lectura archivo
-        System.out.println("inicio test archivo");
+        System.out.println("inicio test archivo\n");
         
         
         // List<Object[]> datos = archivo.parseCSV(",", false);
@@ -24,12 +24,27 @@ public class TestArchivo {
 
         Tabla tablaArchivo = new Tabla();
         tablaArchivo = Archivo.importar("src/datos_prueba.csv",",", false);
-        System.out.println("tabla importada");
+        System.out.println("tabla importada\n");
         tablaArchivo.visualizar();
 
        //Test exportar archivo
-       System.out.println("Test exportar archivo");
+       System.out.println("Test exportar archivo\n");
         Archivo.exportar(tablaArchivo, "src/prueba_exportar.csv");
 
+        //Test con archivo de 1000 filas generado aleatoriamente
+
+        System.out.println("Generamos un df de 1000 filas y nueve columnas \n");
+        Tabla tablaPrueba1 = Archivo.importar("src/df_1000filas.csv", ",", true) ;
+        // tablaPrueba1.visualizar();
+        tablaPrueba1.mostrarCuadroInformacion();
+
+        //Test errores
+        System.out.println("Test importar con nombre incorrecto");
+
+        Tabla tablaPrueba2 = Archivo.importar("src/df_000filas.csv", ",", true);
+        tablaPrueba2.visualizarResumen();
+
+        tablaPrueba2 = Archivo.importar("src/df_1000filas.csv", ";", false);
+        tablaPrueba2.visualizarResumen();
     }
 }
