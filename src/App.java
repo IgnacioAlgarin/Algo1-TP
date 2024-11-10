@@ -11,8 +11,6 @@ public class App {
     public static void main(String[] args) throws Exception {
         Tabla tabla = new Tabla();
 
-        
-
         //test columna numerica *************************
         List<Number> datos1 = new ArrayList<>();
         datos1.add(1);
@@ -206,6 +204,13 @@ public class App {
         System.out.print("Accediendo a una celda ('mundo' y 'Edad') específica: ");
         Object datoCelda = tabla.obtenerCelda("mundo", "Edad");
         System.out.println(datoCelda);
+
+        List<String> etiquetafl = Arrays.asList ("mi","mundo");
+        List<String> etiquetacl = Arrays.asList ("Edad");
+
+        //tabla.visualizar();
+        //tabla.visualizarParcial(etiquetafl, etiquetacl);
+        //tabla.visualizarAleatorio(50);
 
     }
 }
