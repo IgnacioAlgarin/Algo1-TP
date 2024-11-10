@@ -928,23 +928,25 @@ public class Tabla  implements Filtro{
             throw new IllegalArgumentException("La cantidad de columnas y de órdenes deben coincidir.");
         }
     
+        // Configurar el comparador para ordenar filas según las columnas especificadas
         Comparator<Fila> comparadorFinal = (fila1, fila2) -> 0;
     
         for (int i = 0; i < etiquetasColumnas.size(); i++) {
             String etiquetaColumna = etiquetasColumnas.get(i);
             boolean ascendente = ordenAscendente.get(i);
     
+            // Obtener la columna correspondiente
             Columna<?, ?> columna = obtenerColumnaPorEtiqueta(etiquetaColumna);
             if (columna == null) {
                 throw new IllegalArgumentException("Columna no encontrada: " + etiquetaColumna);
             }
     
             Comparator<Fila> comparadorColumna = (fila1, fila2) -> {
-                int indexFila1 = fila1.getIndice();
-                int indexFila2 = fila2.getIndice();
-                
-                Object dato1 = (indexFila1 < columna.getDatos().size()) ? columna.getdato(indexFila1) : null;
-                Object dato2 = (indexFila2 < columna.getDatos().size()) ? columna.getdato(indexFila2) : null;
+                int indexFila1 = filas.indexOf(fila1);
+                int indexFila2 = filas.indexOf(fila2);
+    
+                Object dato1 = columna.getdato(indexFila1);
+                Object dato2 = columna.getdato(indexFila2);
     
                 if (dato1 == null || dato1 instanceof NA) return ascendente ? 1 : -1;
                 if (dato2 == null || dato2 instanceof NA) return ascendente ? -1 : 1;
@@ -959,22 +961,19 @@ public class Tabla  implements Filtro{
             comparadorFinal = comparadorFinal.thenComparing(comparadorColumna);
         }
     
-        Collections.sort(filas, comparadorFinal);
+        // Realizar una copia temporal de las filas y ordenar esa lista
+        List<Fila> filasOrdenadas = new ArrayList<>(filas);
+        Collections.sort(filasOrdenadas, comparadorFinal);
     
-        // Reorganizar los datos de cada columna en base al nuevo orden de `filas`
-        for (Columna<?, ?> columna : tabla) {
-            List<?> datos = columna.getDatos(); // Obtener los datos actuales
-            List<Object> nuevosDatos = new ArrayList<>(filas.size());
+        // Actualizar las filas en la tabla con el nuevo orden
+        filas.clear();
+        filas.addAll(filasOrdenadas);
     
-            // Reorganizar los datos de la columna en el orden de las filas ordenadas
-            for (Fila fila : filas) {
-                nuevosDatos.add(datos.get(fila.getIndice()));
-            }
-    
-            // Actualizar la columna con el nuevo orden de datos
-            columna.setDatos(nuevosDatos);
-        }
+        System.out.println("Ordenamiento completado. Tabla actualizada:");
+        this.visualizar();  // Muestra la tabla para verificar el resultado
     }
+    
+    
 
     public List<Object> obtenerFilaPorEtiqueta(Object etiquetaFila) {
         for (Fila fila : filas) {

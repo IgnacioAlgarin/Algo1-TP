@@ -46,31 +46,31 @@ public class Menu {
             // Lógica de selección basada en el índice
             switch (opcion) {
                 case 1:
-                    testColumnaNumerica(tabla);
+                    TestColumnaNumerica.ejecutarPrueba(tabla);
                     break;
                 case 2:
-                    testColumnaString(tabla);
+                    TestColumnaString.ejecutarPrueba(tabla);    
                     break;
                 case 3:
-                    testColumnaBoolConEtiqueta(tabla);
+                    TestColumnaBoolConEtiqueta.ejecutarPrueba(tabla);
                     break;
                 case 4:
-                    testAgregarColumnaConEtiquetaRepetida(tabla);
+                    TestAgregarColumnaRepetida.ejecutarPrueba(tabla);
                     break;
                 case 5:
-                    testCompletarNA(tabla);
+                    TestCompletarNA.ejecutarPrueba(tabla);
                     break;
                 case 6:
-                    testOrdenarTabla(tabla);
+                    TestOrdenarTabla.ejecutarPrueba(tabla);
                     break;
                 case 7:
-                    testAccesoIndexado(tabla);
+                    TestAccesoIndexado.ejecutarPrueba(tabla);
                     break;
                 case 8:
-                    testEliminarFila(tabla);
+                    TestEliminarFila.ejecutarPrueba(tabla);
                     break;
                 case 9:
-                    testEliminarColumna(tabla);
+                    TestEliminarColumna.ejecutarPrueba(tabla);
                     break;
                 case 10:
                     TestArchivo.main(args);
@@ -121,81 +121,81 @@ public class Menu {
         tabla.visualizar();
     }
 
-    // Prueba 1: Agregar columna numérica adicional
-    public static void testColumnaNumerica(Tabla tabla) {
-        List<Number> nuevaColumnaNumerica = Arrays.asList(10, 20, 30, 40);
-        tabla.agregarColumna(nuevaColumnaNumerica, "Puntaje");
-        System.out.println("Columna numérica adicional agregada:");
-        tabla.visualizar();
-    }
+    // // Prueba 1: Agregar columna numérica adicional
+    // public static void testColumnaNumerica(Tabla tabla) {
+    //     List<Number> nuevaColumnaNumerica = Arrays.asList(10, 20, 30, 40);
+    //     tabla.agregarColumna(nuevaColumnaNumerica, "Puntaje");
+    //     System.out.println("Columna numérica adicional agregada:");
+    //     tabla.visualizar();
+    // }
 
-    // Prueba 2: Agregar columna de tipo string adicional
-    public static void testColumnaString(Tabla tabla) {
-        List<String> nuevaColumnaString = Arrays.asList("A", "B", null, "D");
-        tabla.agregarColumna(nuevaColumnaString, "Letras");
-        System.out.println("Columna string adicional agregada:");
-        tabla.visualizar();
-    }
+    // // Prueba 2: Agregar columna de tipo string adicional
+    // public static void testColumnaString(Tabla tabla) {
+    //     List<String> nuevaColumnaString = Arrays.asList("A", "B", null, "D");
+    //     tabla.agregarColumna(nuevaColumnaString, "Letras");
+    //     System.out.println("Columna string adicional agregada:");
+    //     tabla.visualizar();
+    // }
 
-    // Prueba 3: Agregar columna de tipo booleano adicional
-    public static void testColumnaBoolConEtiqueta(Tabla tabla) {
-        List<Boolean> nuevaColumnaBool = Arrays.asList(false, true, null, true);
-        tabla.agregarColumna(nuevaColumnaBool, "Booleans");
-        System.out.println("Columna booleana adicional agregada:");
-        tabla.visualizar();
-    }
+    // // Prueba 3: Agregar columna de tipo booleano adicional
+    // public static void testColumnaBoolConEtiqueta(Tabla tabla) {
+    //     List<Boolean> nuevaColumnaBool = Arrays.asList(false, true, null, true);
+    //     tabla.agregarColumna(nuevaColumnaBool, "Booleans");
+    //     System.out.println("Columna booleana adicional agregada:");
+    //     tabla.visualizar();
+    // }
 
-    public static void testAgregarColumnaConEtiquetaRepetida(Tabla tabla) {
-        List<String> datos4 = Arrays.asList("X", "Y", "Z", "W");
-        try {
-            tabla.agregarColumna(datos4, "Perro");  // Intento de agregar una columna con etiqueta repetida
-        } catch (EtiquetaEnUsoException e) {
-            System.out.println(e.getMessage());
-        }
-        tabla.visualizar();
-    }
+    // public static void testAgregarColumnaConEtiquetaRepetida(Tabla tabla) {
+    //     List<String> datos4 = Arrays.asList("X", "Y", "Z", "W");
+    //     try {
+    //         tabla.agregarColumna(datos4, "Perro");  // Intento de agregar una columna con etiqueta repetida
+    //     } catch (EtiquetaEnUsoException e) {
+    //         System.out.println(e.getMessage());
+    //     }
+    //     tabla.visualizar();
+    // }
 
-    public static void testCompletarNA(Tabla tabla) {
-        System.out.println("Probando completar NA y rellenar datos faltantes:");
-        tabla.reemplazarNullConNA();
-        tabla.visualizar();
-    }
+    // public static void testCompletarNA(Tabla tabla) {
+    //     System.out.println("Probando completar NA y rellenar datos faltantes:");
+    //     tabla.reemplazarNullConNA();
+    //     tabla.visualizar();
+    // }
 
-    public static void testEliminarFila(Tabla tabla) {
-        System.out.println("Probando eliminar fila:");
-        tabla.eliminarFila(0);
-        tabla.visualizar();
-    }
+    // public static void testEliminarFila(Tabla tabla) {
+    //     System.out.println("Probando eliminar fila:");
+    //     tabla.eliminarFila(0);
+    //     tabla.visualizar();
+    // }
 
-    public static void testEliminarColumna(Tabla tabla) {
-        System.out.println("Probando eliminar columna:");
-        tabla.eliminarColumna("Nombre");
-        tabla.visualizar();
-    }
+    // public static void testEliminarColumna(Tabla tabla) {
+    //     System.out.println("Probando eliminar columna:");
+    //     tabla.eliminarColumna("Nombre");
+    //     tabla.visualizar();
+    // }
 
-    public static void testOrdenarTabla(Tabla tabla) {
-        System.out.println("Probando ordenar tabla por 'Edad' ascendente y 'Nombre' descendente:");
-        List<String> etiquetas = Arrays.asList("Edad", "Nombre");
-        List<Boolean> orden = Arrays.asList(true, false);  // Edad ascendente, Nombre descendente
-        tabla.ordenarTabla(etiquetas, orden);
-        tabla.visualizar();
-    }
+    // public static void testOrdenarTabla(Tabla tabla) {
+    //     System.out.println("Probando ordenar tabla por 'Edad' ascendente y 'Nombre' descendente:");
+    //     List<String> etiquetas = Arrays.asList("Edad", "Nombre");
+    //     List<Boolean> orden = Arrays.asList(true, false);  // Edad ascendente, Nombre descendente
+    //     tabla.ordenarTabla(etiquetas, orden);
+    //     tabla.visualizar();
+    // }
 
-    public static void testAccesoIndexado(Tabla tabla) {
-        System.out.println("Probando acceso indexado:");
-        // Acceder a una fila completa
-        System.out.print("Accediendo a la fila con etiqueta 'mundo': ");
-        List<Object> datosFila = tabla.obtenerFilaPorEtiqueta("mundo");
-        System.out.println(datosFila);
+    // public static void testAccesoIndexado(Tabla tabla) {
+    //     System.out.println("Probando acceso indexado:");
+    //     // Acceder a una fila completa
+    //     System.out.print("Accediendo a la fila con etiqueta 'mundo': ");
+    //     List<Object> datosFila = tabla.obtenerFilaPorEtiqueta("mundo");
+    //     System.out.println(datosFila);
 
-        // Acceder a una columna completa
-        System.out.print("Accediendo a la columna 'Edad': ");
-        List<?> datosColumna = tabla.obtenerColumnaPorEtiquetaIndex("Edad");
-        System.out.println(datosColumna);
+    //     // Acceder a una columna completa
+    //     System.out.print("Accediendo a la columna 'Edad': ");
+    //     List<?> datosColumna = tabla.obtenerColumnaPorEtiquetaIndex("Edad");
+    //     System.out.println(datosColumna);
 
-        // Acceder a una celda específica
-        System.out.print("Accediendo a la celda ('mundo', 'Edad'): ");
-        Object datoCelda = tabla.obtenerCelda("mundo", "Edad");
-        System.out.println(datoCelda);
-    }
+    //     // Acceder a una celda específica
+    //     System.out.print("Accediendo a la celda ('mundo', 'Edad'): ");
+    //     Object datoCelda = tabla.obtenerCelda("mundo", "Edad");
+    //     System.out.println(datoCelda);
+    // }
 }
