@@ -5,6 +5,8 @@ import Filtro.Filtro;
 import NA.NA;
 import Operaciones.OperacionesColumna;
 import excepciones.*;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,6 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+
+import Archivo.Archivo;
 
 
 public class Tabla  implements Filtro{
@@ -32,22 +36,41 @@ public class Tabla  implements Filtro{
         filas = new ArrayList<>();
     }
 
+
     public Tabla(Tabla otraTabla){
         this.tabla = new ArrayList<>();
         for (Columna<?, ?> columna : otraTabla.tabla) {
             this.tabla.add(columna.copiaProfunda());
+           
         }
-
+        
         this.filas = new ArrayList<>();
         for (Fila fila : otraTabla.filas) {
             this.filas.add(new Fila(fila.getetiqueta(), fila.getposicion()));
         }
+        this.visualizar();
         
         this.contadorEtiquetac = otraTabla.contadorEtiquetac;
         this.contadorEtiquetaf = otraTabla.contadorEtiquetaf;
         this.etiquetasUsadasc = new HashSet<>(otraTabla.etiquetasUsadasc);
         this.etiquetasUsadasf = new HashSet<>(otraTabla.etiquetasUsadasf);
     }
+
+    public Tabla (String path, String sep, Boolean header){
+        try {
+            Tabla tablaImportada = new Tabla(Archivo.importar(path, sep, header));
+            this.tabla = tablaImportada.tabla;
+            this.filas = tablaImportada.filas;
+            this.contadorEtiquetac = tablaImportada.contadorEtiquetac;
+            this.contadorEtiquetaf = tablaImportada.contadorEtiquetaf;
+            this.etiquetasUsadasc = tablaImportada.etiquetasUsadasc;
+            this.etiquetasUsadasf = tablaImportada.etiquetasUsadasf;
+
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
 
     //Metodos privados
     private Integer generarEtiquetac(){
@@ -97,6 +120,7 @@ public class Tabla  implements Filtro{
         }
         
     }
+
     private boolean comprobarstring(List<?> etiquetaf) {
         for (Object etiqueta: etiquetaf){
             if (!(etiqueta instanceof String)){
@@ -308,22 +332,40 @@ public class Tabla  implements Filtro{
     public void visualizar() {
         StringBuilder filastring = new StringBuilder();
         filastring.append("+-------+----------+");
+        int cont = 0;
         for (Columna<?, ?> columna : tabla) {
-            filastring.append("----------+");
+            if (cont < 8){
+                filastring.append("----------+");
+                cont++;
+            } else {
+                break;
+            }
         }
         filastring.append("\n");
         filastring.append(String.format("| %-5s | %-8s |", "ID", "Etiqueta"));
+        cont = 0;
         for (Columna<?, ?> columna : tabla) {
-            String etiqueta = String.format("%-8s", columna.getetiqueta());
-            if (etiqueta.length() > 8) {
-                etiqueta = etiqueta.substring(0, 6) + "..";
+            if (cont < 8){
+                String etiqueta = String.format("%-8s", columna.getetiqueta());
+                if (etiqueta.length() > 8) {
+                    etiqueta = etiqueta.substring(0, 6) + "..";
+                }
+                filastring.append(String.format(" %-8s |", etiqueta));
+                cont++;
+            } else {
+                break;
             }
-            filastring.append(String.format(" %-8s |", etiqueta));
         }
         filastring.append("\n");
         filastring.append("+-------+----------+");
+        cont = 0;
         for (Columna<?, ?> columna : tabla) {
-            filastring.append("----------+");
+            if (cont < 8){
+                filastring.append("----------+");
+                cont++;
+            } else{
+                break;
+            }
         }
         filastring.append("\n");
         for (int f = 0; f < filas.size(); f++) {
@@ -336,17 +378,27 @@ public class Tabla  implements Filtro{
                 etiquetaLimitada = etiquetaLimitada.substring(0, 6) + "..";
             }
             filastring.append(String.format("| %-5s | %-8s |", posicionLimitada, etiquetaLimitada));
+            cont = 0;
             for (Columna<?, ?> columna : tabla) {
-                String dato = String.format("%-8s",columna.getdato(f));
-                if (dato.length() > 8) {
-                    dato = dato.substring(0, 6) + "..";
+                if (cont < 8){
+                    String dato = String.format("%-8s",columna.getdato(f));
+                    if (dato.length() > 8) {
+                        dato = dato.substring(0, 6) + "..";
+                    }
+                    filastring.append(String.format(" %-8s |", dato));
+                    cont++;
+                }else {
+                    break;
                 }
-                filastring.append(String.format(" %-8s |", dato));
             }
             filastring.append("\n");
             filastring.append("+-------+----------+");
+            cont = 0;
             for (Columna<?, ?> columna : tabla) {
+                if (cont < 8){
                 filastring.append("----------+");
+                cont++;
+                }
             }
             filastring.append("\n");
         }
