@@ -559,7 +559,12 @@ public class Tabla  implements Filtro{
         return seleccion;
     }
 
-    //Buscar Datos
+    /**
+     * Busca en la tabla un valor.
+     * @param dato a buscar
+     * @return boolean muestra por consola si el dato fue encontrado o no con los datos de la fila y columna.
+     * @throws ColumnaNoValidaException si la columna con la etiqueta dada no existe.
+     */
 
     public boolean buscarDato(Object dato) {
         for (Columna<?, ?> columna : tabla) {
@@ -584,7 +589,13 @@ public class Tabla  implements Filtro{
         return false; 
     }
 
-    //Buscar datos por columna y muestra si hay repetidos  
+    /**
+     * Busca un dato en una columna específica, muestra lo encontrado incluido los repetidos.
+     * @param dato
+     * @param etiquetaColumna
+     * @return boolean muestra por consola si el dato fue encontrado o no con los datos de la fila y columna.
+     * @throws ColumnaNoValidaException si la columna con la etiqueta dada no existe. 
+     */
     public boolean buscarDatosPorColumna(Object dato, Object etiquetaColumna) {
         boolean encontrado = false;
         try {
@@ -611,7 +622,15 @@ public class Tabla  implements Filtro{
         }      
         return encontrado;
     }
-    //Modificar datos recibe la etiqueta de la columna y fila y el nuevo dato
+    /**
+     * Busca un dato en una columna y fila específica, muestra lo encontrado incluido los repetidos.
+     * @param etiquetaColumna
+     * @param etiquetaFila
+     * @param nuevoDato
+     * @throws TipoinconsistenteException si el tipo de nuevoDato no coincide con el tipo de la columna.
+     * @throws EtiquetasfilaException si la fila con la etiqueta dada no existe.
+     * @throws ColumnaNoValidaException si la columna con la etiqueta dada no existe.
+     */
     public void modificarDato(Object etiquetaColumna, Object etiquetaFila, Object nuevoDato) {
         boolean columnaEncontrada = false;
         boolean filaEncontrada = false;
@@ -661,8 +680,11 @@ public class Tabla  implements Filtro{
         }
     }
 
-    //Reemplazar null con NA (para simular datos faltantes)
-
+    /**
+     * Remplaza los valores nulos en todas las columnas por NA. 
+     * @param recibe un objeto Tabla 
+     * @return void   
+     */
     public void reemplazarNullConNA() {
         for (Columna<?, ?> columna : tabla) {
             List<Object> valores = (List<Object>) columna.getDatos(); 
@@ -719,7 +741,7 @@ public class Tabla  implements Filtro{
     public List<String> getEtiquetasFilas() {
         List<String> etiquetas = new ArrayList<>();
         for (Fila fila : filas) {
-            etiquetas.add(fila.getetiqueta()); 
+            etiquetas.add(filas.get(fila.getposicion()).getetiqueta()); 
         }
         return etiquetas;
     }
