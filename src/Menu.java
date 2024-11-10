@@ -28,6 +28,7 @@ public class Menu {
             "Equals Columnas y Tablas",
             "Filtro",
             "Información de la tabla",
+            "GroupBy",
             "Salir"
         };
 
@@ -81,9 +82,12 @@ public class Menu {
                     TestFiltro.main(args);
                     break;
                 case 13:
-                    TestInfo.testInfoTabla(tabla);;
-                    break;    
-                case 14:  // Salir
+                    TestInfo.testInfoTabla(tabla);
+                    break;
+                case 14:
+                    TestGroupBy.main(args);
+                    break;        
+                case 15:  // Salir
                     System.out.println("Saliendo del programa.");
                     continuar = false;
                     break;
