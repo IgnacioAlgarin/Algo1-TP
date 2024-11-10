@@ -358,8 +358,9 @@ public class Tabla  implements Filtro{
             if (!(etiquetasUsadasf.containsAll(etiquetasFilas)) || !(etiquetasUsadasc.containsAll(etiquetasColumnas))){
                 throw new EtiquetasnombreException("Una de las listas de etiquetas no coincide con las que estas presentes en la tabla.");
             }
+            Tabla tablaaux = this.copia_p();
             Tabla tablaparcial = new Tabla();
-            for (Columna<?, ?> columna : tabla) {
+            for (Columna<?, ?> columna : tablaaux.tabla) {
                 if (etiquetasColumnas == null || etiquetasColumnas.isEmpty() || etiquetasColumnas.contains(columna.getetiqueta())) {
                     tablaparcial.tabla.add(columna);
                 }
@@ -367,7 +368,7 @@ public class Tabla  implements Filtro{
             tablaparcial.etiquetasUsadasf = new HashSet<>(etiquetasFilas);
             List<Integer> posicionelim = new ArrayList<>();
             int posicionaux = 0;
-            for (Fila fila : filas) {
+            for (Fila fila : tablaaux.filas) {
                 if (etiquetasFilas == null || etiquetasFilas.isEmpty() || etiquetasFilas.contains(fila.getetiqueta())) {
                     tablaparcial.filas.add(new Fila(fila.getetiqueta(), fila.getposicion()));
                     tablaparcial.etiquetasUsadasf.add( fila.getposicion());
@@ -376,14 +377,13 @@ public class Tabla  implements Filtro{
                     }
                 } else {
                     tablaparcial.filas.add(new Fila(fila.getetiqueta(), fila.getposicion()));
-                    tablaparcial.etiquetasUsadasf.add( fila.getposicion());
-                    posicionelim.add( fila.getposicion());
+                    posicionelim.add( tablaaux.filas.indexOf(fila));
                 }
             }
-            for (int pos : posicionelim){
-                tablaparcial.eliminarFila(pos, false);
+    
+            for ( int i=posicionelim.size()-1; i>-1 ; i-- ){
+                tablaparcial.eliminarFila(posicionelim.get(i), false);
             }
-
             tablaparcial.contadorEtiquetac = this.contadorEtiquetac;
             tablaparcial.contadorEtiquetaf = posicionaux;
             tablaparcial.etiquetasUsadasc = new HashSet<>(etiquetasColumnas);
@@ -396,57 +396,54 @@ public class Tabla  implements Filtro{
         return null;
     }
 
-     public Tabla visualizarAleatorio(double porcentaje) {
+    public Tabla visualizarAleatorio(double porcentaje) {
         try {
             if (porcentaje < 0 || porcentaje > 100) {
                 throw new ValorNoEsperadoException("El porcentaje debe estar entre 0 y 100.");
             }
-
+    
             int numFilasSeleccionadas = (int) Math.round((porcentaje / 100) * filas.size());
             Random random = new Random();
-
+            Tabla tablaaux = this.copia_p();
             Tabla tablaAleatoria = new Tabla();
             List<Integer> posicionelim = new ArrayList<>();
             List<Integer> posicionaux = new ArrayList<>();
-            for (Columna<?, ?> columna : this.tabla) {
+            for (Columna<?, ?> columna : tablaaux.tabla) {
                 tablaAleatoria.tabla.add(columna.copiaProfunda());
             }
-            for (Fila fila : this.filas) {
+            for (Fila fila : tablaaux.filas) {
                 tablaAleatoria.filas.add(new Fila(fila.getetiqueta(), fila.getposicion()));
-                posicionelim.add(fila.getposicion());
+                posicionelim.add(tablaaux.filas.indexOf(fila));
                 tablaAleatoria.etiquetasUsadasf.add(fila.getposicion());
                 tablaAleatoria.etiquetasUsadasf.add(fila.getetiqueta());
             }
             int maxpos = 0;
             while (posicionaux.size() < numFilasSeleccionadas) {
-                int indiceAleatorio = random.nextInt(filas.size());
-                int posicionelegida = filas.get(indiceAleatorio).getposicion();
-
-                if (!posicionaux.contains(posicionelegida)) {
-                    posicionaux.add(posicionelegida);
+                int indiceAleatorio = random.nextInt(tablaaux.filas.size());
+                int posicionelegida = tablaaux.filas.get(indiceAleatorio).getposicion();
+    
+                if (!posicionaux.contains(indiceAleatorio)) {
+                    posicionaux.add(indiceAleatorio);
                     if (posicionelegida > maxpos){
                         maxpos = posicionelegida;
                     }
                 }
             }
             posicionelim.removeAll(posicionaux);
-            System.out.println(posicionelim);
-            tablaAleatoria.visualizar();
-            for (int pos : posicionelim){
-                System.out.println(pos);
-                tablaAleatoria.eliminarFila(pos, false);
+    
+            for ( int i=posicionelim.size()-1; i>-1 ; i-- ){
+                tablaAleatoria.eliminarFila(posicionelim.get(i), false);
             }
             tablaAleatoria.etiquetasUsadasc = this.etiquetasUsadasc;
             tablaAleatoria.contadorEtiquetac = this.contadorEtiquetac;
             tablaAleatoria.contadorEtiquetaf = maxpos;
-
+    
             tablaAleatoria.visualizar();
             return tablaAleatoria;
         } catch (ValorNoEsperadoException e){
             System.out.println("Error: " + e.getMessage());
         }
         return null;
-         
      }
 
     public void visualizarResumen() {
@@ -883,25 +880,20 @@ public class Tabla  implements Filtro{
     }
 
     public void eliminarFila(int indiceFila, Boolean mostrarMensaje) {
-        if (!etiquetasUsadasf.contains(indiceFila)) {
-            throw new TipoDeEtiquetaInvalidoException("Índice de fila no contenido en la tabla");
+        if (indiceFila < 0 || indiceFila >= filas.size()) {
+            throw new IndexOutOfBoundsException("Índice de fila fuera de rango.");
         }
-        int indice = 0;
-        for (Fila fila : filas){
-            if (fila.getposicion() == indiceFila){
-                indice = filas.indexOf(fila);
-                etiquetasUsadasf.remove(fila.getetiqueta());
-                break;
-            }
-        }
-        filas.remove(indice);
-        for (Columna<?, ?> columna : tabla) {
-            columna.getDatos().remove(indice);  // Elimina el dato de esa fila en cada columna
-        }
-        etiquetasUsadasf.remove(indiceFila);
-        if(mostrarMensaje) {
-            System.out.println("Fila en el índice " + indiceFila + " eliminada.");
-        }
+       
+   
+       etiquetasUsadasf.remove(filas.get(indiceFila).getetiqueta());
+       etiquetasUsadasf.remove(filas.get(indiceFila).getposicion());
+       filas.remove(indiceFila);
+       for (Columna<?, ?> columna : tabla) {
+           columna.getDatos().remove(indiceFila);  // Elimina el dato de esa fila en cada columna
+       }
+       if(mostrarMensaje) {
+           System.out.println("Fila en el índice " + indiceFila + " eliminada.");
+       }
     }
     
     public void eliminarFila(String etiquetaFila) {

@@ -208,9 +208,9 @@ public class App {
         List<String> etiquetafl = Arrays.asList ("mi","mundo");
         List<String> etiquetacl = Arrays.asList ("Edad");
 
-        //tabla.visualizar();
-        //tabla.visualizarParcial(etiquetafl, etiquetacl);
-        //tabla.visualizarAleatorio(50);
+        tabla.visualizar();
+        tabla.visualizarParcial(etiquetafl, etiquetacl);
+        tabla.visualizarAleatorio(50);
 
     }
 }
