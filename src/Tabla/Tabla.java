@@ -1,4 +1,5 @@
 package Tabla;
+import Archivo.Archivo;
 import Columna.*;
 import Fila.Fila;
 import Filtro.Filtro;
@@ -13,8 +14,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import Archivo.Archivo;
 
+/**
+ * Clase que representa una tabla de datos, compuesta por columnas y filas.
+ * Cada columna puede contener datos de un tipo específico, como String, Number o Boolean.
+ * Cada fila puede contener una etiqueta y una posición.
+ */
 
 public class Tabla  implements Filtro{
 
@@ -27,6 +32,10 @@ public class Tabla  implements Filtro{
 
 
     // Constructores
+    
+    /**
+     * Crea una tabla vacía.
+     */
     public Tabla() {
         tabla = new ArrayList<>();
         etiquetasUsadasc = new HashSet<>();
@@ -34,7 +43,10 @@ public class Tabla  implements Filtro{
         filas = new ArrayList<>();
     }
 
-
+    /**
+     * Crea una tabla desde otra tabla
+     * @param otraTabla
+     */
     public Tabla(Tabla otraTabla){
         this.tabla = new ArrayList<>();
         for (Columna<?, ?> columna : otraTabla.tabla) {
@@ -53,6 +65,12 @@ public class Tabla  implements Filtro{
         this.etiquetasUsadasf = new HashSet<>(otraTabla.etiquetasUsadasf);
     }
 
+    /**
+     * Crea una tabla a partir de un archivo CSV.
+     * @param path Ruta del archivo CSV.
+     * @param sep Separador de columnas.
+     * @param header Indica si la primera fila contiene los nombres de las columnas.
+     */
     public Tabla (String path, String sep, Boolean header){
         try {
             Tabla tablaImportada = new Tabla(Archivo.importar(path, sep, header));
@@ -70,6 +88,11 @@ public class Tabla  implements Filtro{
 
 
     //Metodos privados
+
+    /**
+     * Genera una etiqueta de columna
+     * @return nueva etiqueta
+     */
     private Integer generarEtiquetac(){
         int nuevaetiqueta;
         do{
@@ -77,6 +100,10 @@ public class Tabla  implements Filtro{
         } while (etiquetasUsadasc.contains(nuevaetiqueta));
         return nuevaetiqueta;
     }
+    /**
+     * Genera una etiqueta de fila
+     * @return nueva etiqueta
+     */
     private Integer generarEtiquetaf() {
         int nuevaetiqueta;
         do{
@@ -86,6 +113,14 @@ public class Tabla  implements Filtro{
         return nuevaetiqueta;
     }
     
+    /**
+     * Inicializa las filas de la tabla
+     * @param tamaño size de filas
+     * @param etiquetaf lista de etiquetas de fila
+     * @throws EtiquetasfilaException si el tamaño de la lista de etiquetas de fila no coincide con el tamaño de la columna
+     * @throws EtiquetasfilaException si el tamaño de la columna no coincide con la cantidad de filas
+     * @throws EtiquetasfilaException si la lista de etiquetas de fila proporcionada no coincide con la presente en la tabla
+     */
     private void iniciarfilasI(int tamaño, List<String> etiquetaf) {
 
         if (filas.isEmpty()&& !(etiquetaf.isEmpty()) ){
@@ -117,7 +152,12 @@ public class Tabla  implements Filtro{
         }
         
     }
-
+    
+    /**
+     * Comparar si los elementos de la lista son de tipo String
+     * @param etiquetaf
+     * @return
+     */
     private boolean comprobarstring(List<?> etiquetaf) {
         for (Object etiqueta: etiquetaf){
             if (!(etiqueta instanceof String)){
@@ -126,7 +166,11 @@ public class Tabla  implements Filtro{
         }
         return true;
     }
-
+    /**
+     * Comprueba si las columnas de dos tablas tienen el mismo orden
+     * @param tabla2
+     * @return boolean
+     */
     private Boolean comprobarOrden (Tabla tabla2){
         Boolean ordenado = true;
         for (int i = 0; i < tabla.size(); i++){
@@ -139,7 +183,18 @@ public class Tabla  implements Filtro{
     }
     // Metodos publicos
 
-    // Agrega una nueva columna
+    /**
+     * Agrega una nueva columna a la tabla.
+     * @param columna Lista de datos de la columna.
+     * @param etiqueta Etiqueta de la columna.
+     * @param etiquetaf  Lista de etiquetas de fila. 
+     * @throws ListaDatosVaciaException si la lista de datos de la columna está vacía.
+     * @throws TipoDeEtiquetaInvalidoException si la etiqueta no es de tipo entero o string. 
+     * @throws EtiquetaEnUsoException si la etiqueta ya se encuentra en uso.
+     * @throws TipoinconsistenteException si la columna contiene tipos de datos distintos.
+     * @throws TipoNoSoportadoException si el tipo de dato no es soportado.
+     * @throws EtiquetasfilaException si hay elementos de distinto tipo en la lista de etiquetas de fila.
+     */     
     public <E> void agregarColumna(List<?> columna, E etiqueta, List<String> etiquetaf) {
         try {
             if (columna == null || columna.isEmpty()) {
@@ -232,21 +287,38 @@ public class Tabla  implements Filtro{
         }
     }
 
+    /**
+     * Agrega una nueva columna a la tabla con etiqueta de tipo entero.
+     * @param columna Lista de datos de la columna.
+     * @param etiquetaColumna  Etiqueta de la columna int.   
+     */
     public void agregarColumna(List<?> columna, int etiquetaColumna) {
         List <String> listaf= new ArrayList<>();
         agregarColumna(columna, etiquetaColumna, listaf);                
     }
-    
+
+    /**
+     * Agrega una nueva columna a la tabla con etiqueta de tipo string.
+     * @param etiqueta lista de datos de la columna.
+     * @param etiquetaColumna Etiqueta de la columna string.
+     */
     public void agregarColumna(List<?> columna, String etiqueta) {
         List <String> listaf= new ArrayList<>();
         agregarColumna(columna, etiqueta, listaf);                
     }
-
+    /**
+     * Agrega una nueva columna sin especificar tipo de etiqueta.
+     * @param columna lista de datos de la columna.
+     */
     public void agregarColumna(List<?> columna) {
         List <String> listaf= new ArrayList<>();
         agregarColumna(columna, generarEtiquetac(), listaf);                
     }
-    //Agrega una nueva fila vacia
+    /**
+     * Agrega una nueva fila a la tabla.
+     * @param etiqueta etiqueta de la fila de tipo String.
+     * @throws EtiquetaEnUsoException si la etiqueta ya se encuentra en uso.
+     */
     public void agregarfila(String etiqueta) {
         try {
             if (etiquetasUsadasf.contains(etiqueta)) {
@@ -264,12 +336,22 @@ public class Tabla  implements Filtro{
             System.out.println("Error" + e.getMessage());
         }
     }
-
+    /**
+     * Agrega una nueva fila sin especificar etiqueta.
+     */
     public void agregarfila(){
         String etiqueta = null;
         agregarfila(etiqueta);   
     }
-    //Agrega una nueva fila, con datos proporcionados por el usuario
+    /**
+     * Agrega una nueva fila a la tabla con datos y etiqueta de fila de tipo String.
+     * @param etiqueta etiqueta de la fila de tipo String.
+     * @param datos lista de datos de la fila.
+     * @throws EtiquetaEnUsoException si la etiqueta ya se encuentra en uso.
+     * @throws DiferentetamañoException si la cantidad de datos a insertar no coincide con la cantidad de columnas.
+     * @throws TipoinconsistenteException si no coinciden los tipos de datos con los ya establecidos en las columnas.
+     * @throws EtiquetaEnUsoException si la etiqueta ya se encuentra en uso.
+     */
     public void agregarfila(String etiqueta, List<?> datos) {
         try {
             if (etiquetasUsadasf.contains(etiqueta) && etiqueta != null) {
@@ -319,13 +401,19 @@ public class Tabla  implements Filtro{
             System.out.println("Error: " + e.getMessage());
         }
     }
-
+    
+    /**
+     * Agrega una nueva fila a la tabla con datos y sin etiqueta de fila
+     * @param datos lista de datos de la fila.
+     */
     public void agregarfila(List<?> datos) {
         String etiqueta = null;
         agregarfila(etiqueta, datos);
 
     }
-    //Imprime la tabla en pantalla mostrando hasta 8 columnas 
+    /**
+     * Imprime en pantalla la tabla hasta un limite de 8 columnas
+     */
     public void visualizar() {
         StringBuilder filastring = new StringBuilder();
         filastring.append("+-------+----------+");
@@ -401,7 +489,14 @@ public class Tabla  implements Filtro{
         }
         System.out.println(filastring);
     }
-    //Imprime la tabla en pantalla mostrando las filas y columnas seleccionadas por el usuario
+
+    /**
+     * Muestra la tabla en pantalla con las filas y columnas seleccionadas por el usuario
+     * @param etiquetasFilas
+     * @param etiquetasColumnas
+     * @return tabla con las filas y columnas seleccionadas
+     * @throws EtiquetasnombreException si una de las listas de etiquetas no coincide con las que estas presentes en la tabla.
+     */
     public Tabla visualizarParcial(List<String> etiquetasFilas, List<String> etiquetasColumnas) {
         try {
             if (!(etiquetasUsadasf.containsAll(etiquetasFilas)) || !(etiquetasUsadasc.containsAll(etiquetasColumnas))){
@@ -444,7 +539,13 @@ public class Tabla  implements Filtro{
         }
         return new Tabla();
     }
-    // Imprime en pantalla una tabla con un porcentaje de filas elegidas al azar definida por el usuario
+   
+    /**
+     * Muestra una tabla con un porcentaje de filas seleccionadas al azar.
+     * @param porcentaje de filas a seleccionar
+     * @return tabla con el porcentaje de filas seleccionadas
+     * @throws ValorNoEsperadoException si el porcentaje no esta entre 0 y 100
+     */
     public Tabla visualizarAleatorio(double porcentaje) {
         try {
             if (porcentaje < 0 || porcentaje > 100) {
@@ -494,7 +595,12 @@ public class Tabla  implements Filtro{
         }
         return new Tabla();
     }
-    // Imprime en pantalla las primeras x cantidad de filas solicitadas por el usuario 
+
+    /**
+     * Muestra las primeras x cantidad de filas solicitadas por el usuario
+     * @param cant cantidad de filas a mostrar desde el inicio
+     * @throws ValorNoEsperadoException si la cantidad de filas es menor o igual a 0
+     */ 
     public void head(int cant){
         try {
             if (cant <= 0){
@@ -512,7 +618,12 @@ public class Tabla  implements Filtro{
             System.out.println("Error: " + e.getMessage());
         }
     }
-    // Imprime en pantalla las ultimas x cantidad de filas solicitadas por el usuario 
+   
+    /**
+     * Muestra las ultimas x cantidad de filas solicitadas por el usuario
+     * @param cant cantidad de filas a mostrar desde el final
+     * @throws ValorNoEsperadoException si la cantidad de filas es menor o igual a 0
+     */
     public void tail(int cant){
         try {
             if (cant <= 0){
@@ -630,14 +741,25 @@ public class Tabla  implements Filtro{
 
 
     //getters y setter
+
+    /**
+     * Obtiene la lista de columnas de la tabla.
+     * @return lista de columnas
+     */
     public List<Columna<?, ?>> getColumnas() {
         return tabla;
     }
-
+    /**
+     * Obtiene la lista de filas de la tabla.
+     * @return
+     */
     public List<Fila> getFilas() {
         return filas;
     }
-
+    /**
+     * Realiza una copia de la tabla
+     * @return copia de la tabla
+     */
     public Tabla copia_p() {
         Tabla copia = new Tabla();
 
@@ -656,7 +778,12 @@ public class Tabla  implements Filtro{
 
         return copia;
     }
-
+    /**
+     * Concatena dos tablas
+     * @param tabla2
+     * @return tabla concatenada
+     * @throws Tablanovalidaexception si las tablas no son validas para concatenarse
+     */
     public Tabla concatenar(Tabla tabla2) {
         try{
             if ( tabla2.tabla.size()  != tabla.size() || !comprobarOrden(tabla2)){
@@ -686,6 +813,13 @@ public class Tabla  implements Filtro{
         return null; 
     }
 
+    /**
+     * Seleccion de la tabla
+     * @param etiquetaFila las etiquetas de la fila a seleccionar
+     * @param etiquetaColumna las etiquetas de la columna a seleccionar
+     * @return tabla con la fila seleccionada
+     * @throws EtiquetasfilaException si la fila con la etiqueta dada no existe.
+     */
     public <E,T> Tabla seleccionar(List<E> etiquetaFila, List<T> etiquetaColumna) {
         Tabla seleccion = new Tabla();
         return seleccion;
@@ -697,7 +831,6 @@ public class Tabla  implements Filtro{
      * @return boolean muestra por consola si el dato fue encontrado o no con los datos de la fila y columna.
      * @throws ColumnaNoValidaException si la columna con la etiqueta dada no existe.
      */
-
     public boolean buscarDato(Object dato) {
         for (Columna<?, ?> columna : tabla) {
             if (dato instanceof String && columna instanceof Columna_string) {
@@ -834,7 +967,6 @@ public class Tabla  implements Filtro{
      * @param nuevoValor
      * @throws TipoinconsistenteException si el tipo de nuevoValor no coincide con el tipo de la columna.
      */
-
     public void rellenarDatosFaltantes(String etiquetaColumna, Object nuevoValor) {
         for (Columna<?, ?> columna : tabla) {
             if (columna.getetiqueta().equals(etiquetaColumna)) {
@@ -860,12 +992,17 @@ public class Tabla  implements Filtro{
             }
         }
     }
-    // cantidad filas
+    /**
+     * Cuenta la cantidad de filas
+     * @return cantidad de filas
+     */
     public int getCantidadFilas() {
         return filas.size();
     }
-
-    // cantidad columnas
+    /**
+     * Cuenta la cantidad de columnas
+     * @return cantidad de columnas
+     */
     public int getCantidadColumnas() {
         return tabla.size();
     }
@@ -1018,7 +1155,11 @@ public class Tabla  implements Filtro{
         System.out.println("Columna eliminada en el índice " + indiceColumna + " con etiqueta: " + columnaEliminada.getetiqueta());
     }
 
-    
+    /**
+     * Elimina una fila de la tabla en función de su índice.
+     * La fila y sus datos en todas las columnas serán eliminados.
+     * @param indiceFila El índice de la fila que se desea eliminar.
+     */
     public void eliminarFila(int indiceFila) {
         eliminarFila(indiceFila, true);
     }
