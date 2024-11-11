@@ -5,7 +5,6 @@ import Filtro.Filtro;
 import NA.NA;
 import Operaciones.OperacionesColumna;
 import excepciones.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
 import Archivo.Archivo;
 
 
@@ -48,8 +46,7 @@ public class Tabla  implements Filtro{
         for (Fila fila : otraTabla.filas) {
             this.filas.add(new Fila(fila.getetiqueta(), fila.getposicion()));
         }
-        this.visualizar();
-        
+       
         this.contadorEtiquetac = otraTabla.contadorEtiquetac;
         this.contadorEtiquetaf = otraTabla.contadorEtiquetaf;
         this.etiquetasUsadasc = new HashSet<>(otraTabla.etiquetasUsadasc);
@@ -145,7 +142,7 @@ public class Tabla  implements Filtro{
     // Agrega una nueva columna
     public <E> void agregarColumna(List<?> columna, E etiqueta, List<String> etiquetaf) {
         try {
-            if (columna.isEmpty()) {
+            if (columna == null || columna.isEmpty()) {
                 throw new ListaDatosVaciaException("No se puede agregar una columna sin elementos");
             }
             if (!(etiqueta instanceof String) && !(etiqueta instanceof Integer)) {
@@ -445,7 +442,7 @@ public class Tabla  implements Filtro{
         } catch (EtiquetasnombreException e){
             System.out.println("Error: " + e.getMessage());
         }
-        return null;
+        return new Tabla();
     }
     // Imprime en pantalla una tabla con un porcentaje de filas elegidas al azar definida por el usuario
     public Tabla visualizarAleatorio(double porcentaje) {
@@ -495,7 +492,7 @@ public class Tabla  implements Filtro{
         } catch (ValorNoEsperadoException e){
             System.out.println("Error: " + e.getMessage());
         }
-        return null;
+        return new Tabla();
     }
     // Imprime en pantalla las primeras x cantidad de filas solicitadas por el usuario 
     public void head(int cant){
