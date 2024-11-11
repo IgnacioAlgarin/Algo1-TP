@@ -218,7 +218,7 @@ public class Tabla  implements Filtro{
                         } else {
                             tipoPrimero = dato.getClass();
                         }
-                    } else if (tipoPrimero != Number.class && !tipoPrimero.isAssignableFrom(dato.getClass())) {
+                    } else if ((tipoPrimero != Number.class && !tipoPrimero.isAssignableFrom(dato.getClass())) || (tipoPrimero == Number.class && !tipoPrimero.isAssignableFrom(dato.getClass()))) {
                         throw new TipoinconsistenteException("La columna contiene tipos de datos distintos");
                     }
                 }

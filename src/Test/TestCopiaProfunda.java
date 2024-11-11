@@ -28,6 +28,7 @@ public class TestCopiaProfunda {
         tabla_copia.visualizar();
 
         //Comprobamos con equals
+        System.out.flush(tabla_copia.equals(tabla));
 
 
 
