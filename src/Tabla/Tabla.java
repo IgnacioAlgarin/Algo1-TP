@@ -38,9 +38,53 @@ public class Tabla  implements Filtro{
      */
     public Tabla() {
         tabla = new ArrayList<>();
+        filas = new ArrayList<>();
         etiquetasUsadasc = new HashSet<>();
         etiquetasUsadasf = new HashSet<>();
+        
+    }
+
+    public Tabla(List<?> datos){
+
+        tabla = new ArrayList<>();
         filas = new ArrayList<>();
+        etiquetasUsadasc = new HashSet<>();
+        etiquetasUsadasf = new HashSet<>();
+        agregarColumna(datos);
+
+
+    }
+
+    //Constructor a partir de una estructura nativa de 2 dimensiones
+    public Tabla(Object[][] datos){
+
+        try{
+            if (datos == null || datos.length == 0 || datos[0].length == 0) {
+                throw new ListaDatosVaciaException("El arreglo de datos no puede estar vacío");
+            }
+            
+            this.tabla = new ArrayList<>();
+            this.filas = new ArrayList<>();
+            this.etiquetasUsadasc = new HashSet<>();
+            this.etiquetasUsadasf = new HashSet<>();
+
+            int numFilas = datos.length; 
+            int numColumnas = datos[0].length; 
+
+            for (int j = 0; j < numColumnas; j++) {
+                List<Object> datosColumna = new ArrayList<>();
+                for (int i = 0; i < numFilas; i++) {
+                    if (j < datos[i].length) {
+                        datosColumna.add(datos[i][j]);
+                    } else {
+                        datosColumna.add(null);
+                    }
+                }
+                agregarColumna(datosColumna);
+            }
+        } catch (ListaDatosVaciaException e){
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     /**

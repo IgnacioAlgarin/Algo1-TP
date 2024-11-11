@@ -209,11 +209,18 @@ public class App {
         List<String> etiquetafl = Arrays.asList ("mi","mundo");
         List<String> etiquetacl = Arrays.asList ("Edad");
 
-        tabla.visualizar();
-        tabla.visualizarParcial(etiquetafl, etiquetacl);
-        tabla.visualizarAleatorio(50);
-        Tabla tablatest1 = new Tabla();
-        Tabla tablatest2 = new Tabla();
-        TestConcatenar.ejecutarPrueba(tablatest1, tablatest2);
+        Object[][] matriz = {
+            {1, "prueba1", true},
+            {4, "prueba2", false},
+            {7, "prueba3", null}
+        };
+
+        List<Object> listanum = Arrays.asList (1,2,3,4);
+
+        Tabla tablaprueba1 = new Tabla(matriz);
+        tablaprueba1.visualizar();
+        Tabla tablaprueba2 = new Tabla(listanum);
+        tablaprueba2.visualizar();
+
     }
 }
