@@ -135,7 +135,7 @@ public class Tabla  implements Filtro{
             }
         } else if(filas.isEmpty() && etiquetaf.isEmpty()){
             for (int i =0; i<tamaño; i++){
-                Fila nuevafila = new Fila(i);
+                Fila nuevafila = new Fila(generarEtiquetaf());
                 filas.add(nuevafila); 
             }
 
