@@ -28,9 +28,12 @@ public class TestCopiaProfunda {
         tabla_copia.visualizar();
 
         //Comprobamos con equals
-        System.out.flush(tabla_copia.equals(tabla));
+        System.out.print("Comprobamos por referencia: ");
+        System.out.println((tabla_copia == tabla));
 
-
+        //Comprobamos con equals
+        System.out.print("Comprobamos por equals: ");
+        System.out.println(tabla_copia.equals(tabla));
 
 
 
