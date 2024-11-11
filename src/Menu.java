@@ -29,6 +29,7 @@ public class Menu {
             "Información de la tabla",
             "GroupBy",
             "Buscar Dato",
+            "Modificar Dato",
             "Salir"
         };
 
@@ -90,8 +91,11 @@ public class Menu {
                     break;
                 case 15:
                     TestBuscarDato.testBuscarDato(tabla);
-                    break;                
-                case 16:  // Salir
+                    break; 
+                case 16:
+                    TestModificarDato.testModificarDato(tabla);
+                    break;                 
+                case 17:  // Salir
                     System.out.println("Saliendo del programa.");
                     continuar = false;
                     break;
