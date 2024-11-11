@@ -30,6 +30,10 @@ public class Menu {
             "GroupBy",
             "Buscar Dato",
             "Modificar Dato",
+            "Agregar fila",
+            "Concatenar",
+            "Copia profunda",
+            "Visualizar",
             "Salir"
         };
 
@@ -95,7 +99,19 @@ public class Menu {
                 case 16:
                     TestModificarDato.testModificarDato(tabla);
                     break;                 
-                case 17:  // Salir
+                case 17:  
+                    TestAgregarFila.ejecutarPrueba(new Tabla());
+                    break;
+                case 18:  
+                    TestConcatenar.ejecutarPrueba(new Tabla(), new Tabla());
+                    break;
+                case 19:  
+                    TestCopiaProfunda.ejecutarPrueba(new Tabla());
+                    break;
+                case 20:  
+                    TestParcialAleatorio.ejecutarPrueba(new Tabla());
+                    break;            
+                case 21:  // Salir
                     System.out.println("Saliendo del programa.");
                     continuar = false;
                     break;
