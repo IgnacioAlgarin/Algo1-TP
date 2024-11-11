@@ -1396,16 +1396,12 @@ public class Tabla  implements Filtro{
         return columnaEncontrada.getdato(filaEncontrada.getIndice());
     }
 
-        @Override
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((tabla == null) ? 0 : tabla.hashCode());
         result = prime * result + ((filas == null) ? 0 : filas.hashCode());
-        result = prime * result + contadorEtiquetac;
-        result = prime * result + contadorEtiquetaf;
-        result = prime * result + ((etiquetasUsadasc == null) ? 0 : etiquetasUsadasc.hashCode());
-        result = prime * result + ((etiquetasUsadasf == null) ? 0 : etiquetasUsadasf.hashCode());
         return result;
     }
 
