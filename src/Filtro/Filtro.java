@@ -57,7 +57,7 @@ public interface Filtro {
             // Imprimir detalles del error
             System.err.println("Error en el filtro: " + e.getMessage());
             e.printStackTrace();
-            return null;
+            return tabla;
         }
     }
 
