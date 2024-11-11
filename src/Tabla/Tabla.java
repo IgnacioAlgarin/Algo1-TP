@@ -415,11 +415,13 @@ public class Tabla  implements Filtro{
      * Imprime en pantalla la tabla hasta un limite de 8 columnas
      */
     public void visualizar() {
+        int limitf = 30;
+        int limitc = 8;
         StringBuilder filastring = new StringBuilder();
         filastring.append("+-------+----------+");
         int cont = 0;
         for (Columna<?, ?> columna : tabla) {
-            if (cont < 8){
+            if (cont < limitc) {
                 filastring.append("----------+");
                 cont++;
             } else {
@@ -430,7 +432,7 @@ public class Tabla  implements Filtro{
         filastring.append(String.format("| %-5s | %-8s |", "ID", "Etiqueta"));
         cont = 0;
         for (Columna<?, ?> columna : tabla) {
-            if (cont < 8){
+            if (cont < limitc) {
                 String etiqueta = String.format("%-8s", columna.getetiqueta());
                 if (etiqueta.length() > 8) {
                     etiqueta = etiqueta.substring(0, 6) + "..";
@@ -445,34 +447,34 @@ public class Tabla  implements Filtro{
         filastring.append("+-------+----------+");
         cont = 0;
         for (Columna<?, ?> columna : tabla) {
-            if (cont < 8){
+            if (cont < limitc) {
                 filastring.append("----------+");
                 cont++;
-            } else{
+            } else {
                 break;
             }
         }
         filastring.append("\n");
-        for (int f = 0; f < filas.size(); f++) {
-            String posicionLimitada = String.format("%-5s",filas.get(f).getposicion());
+        for (int f = 0; f < filas.size() && f < limitf; f++) {
+            String posicionLimitada = String.format("%-5s", filas.get(f).getposicion());
             if (posicionLimitada.length() > 5) {
                 posicionLimitada = posicionLimitada.substring(0, 3) + "..";
             }
-            String etiquetaLimitada = String.format("%-8s",filas.get(f).getetiqueta());
+            String etiquetaLimitada = String.format("%-8s", filas.get(f).getetiqueta());
             if (etiquetaLimitada.length() > 8) {
                 etiquetaLimitada = etiquetaLimitada.substring(0, 6) + "..";
             }
             filastring.append(String.format("| %-5s | %-8s |", posicionLimitada, etiquetaLimitada));
             cont = 0;
             for (Columna<?, ?> columna : tabla) {
-                if (cont < 8){
-                    String dato = String.format("%-8s",columna.getdato(f));
+                if (cont < limitc) {
+                    String dato = String.format("%-8s", columna.getdato(f));
                     if (dato.length() > 8) {
                         dato = dato.substring(0, 6) + "..";
                     }
                     filastring.append(String.format(" %-8s |", dato));
                     cont++;
-                }else {
+                } else {
                     break;
                 }
             }
@@ -480,9 +482,11 @@ public class Tabla  implements Filtro{
             filastring.append("+-------+----------+");
             cont = 0;
             for (Columna<?, ?> columna : tabla) {
-                if (cont < 8){
-                filastring.append("----------+");
-                cont++;
+                if (cont < limitc) {
+                    filastring.append("----------+");
+                    cont++;
+                } else {
+                    break;
                 }
             }
             filastring.append("\n");
