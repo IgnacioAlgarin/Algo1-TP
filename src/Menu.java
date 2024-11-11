@@ -1,6 +1,5 @@
 import Tabla.Tabla;
 import Test.*;
-import excepciones.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -29,6 +28,7 @@ public class Menu {
             "Filtro",
             "Información de la tabla",
             "GroupBy",
+            "Buscar Dato",
             "Salir"
         };
 
@@ -87,8 +87,11 @@ public class Menu {
                     break;
                 case 14:
                     TestGroupBy.main(args);
-                    break;        
-                case 15:  // Salir
+                    break;
+                case 15:
+                    TestBuscarDato.testBuscarDato(tabla);
+                    break;                
+                case 16:  // Salir
                     System.out.println("Saliendo del programa.");
                     continuar = false;
                     break;
