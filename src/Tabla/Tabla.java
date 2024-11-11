@@ -40,19 +40,16 @@ public class Tabla  implements Filtro{
         tabla = new ArrayList<>();
         filas = new ArrayList<>();
         etiquetasUsadasc = new HashSet<>();
-        etiquetasUsadasf = new HashSet<>();
-        
+        etiquetasUsadasf = new HashSet<>(); 
     }
 
+    //Constructor a partir de una estructura lineal
     public Tabla(List<?> datos){
-
         tabla = new ArrayList<>();
         filas = new ArrayList<>();
         etiquetasUsadasc = new HashSet<>();
         etiquetasUsadasf = new HashSet<>();
         agregarColumna(datos);
-
-
     }
 
     //Constructor a partir de una estructura nativa de 2 dimensiones
