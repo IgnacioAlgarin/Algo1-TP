@@ -34,6 +34,7 @@ public class TestFiltro {
         System.out.println(query2);
         tablaAFiltrar = Archivo.importar("src/datos_prueba.csv",",", false);
         tablaAFiltrar = tablaAFiltrar.filtrar(tablaAFiltrar,query2);
+        System.out.println(tablaAFiltrar == null);
         tablaAFiltrar.visualizar();
 
         System.out.println("Fin de test");

@@ -330,64 +330,33 @@ public class Tabla  implements Filtro{
     }
     //Imprime la tabla en pantalla mostrando hasta 8 columnas 
     public void visualizar() {
-        StringBuilder filastring = new StringBuilder();
-        filastring.append("+-------+----------+");
-        int cont = 0;
-        for (Columna<?, ?> columna : tabla) {
-            if (cont < 8){
-                filastring.append("----------+");
-                cont++;
-            } else {
-                break;
+        try {
+            if (tabla == null) {
+                throw new NullPointerException ("No se puede visualizar una tabla null");
             }
-        }
-        filastring.append("\n");
-        filastring.append(String.format("| %-5s | %-8s |", "ID", "Etiqueta"));
-        cont = 0;
-        for (Columna<?, ?> columna : tabla) {
-            if (cont < 8){
-                String etiqueta = String.format("%-8s", columna.getetiqueta());
-                if (etiqueta.length() > 8) {
-                    etiqueta = etiqueta.substring(0, 6) + "..";
+            StringBuilder filastring = new StringBuilder();
+            filastring.append("+-------+----------+");
+            int cont = 0;
+            for (Columna<?, ?> columna : tabla) {
+                if (cont < 8){
+                    filastring.append("----------+");
+                    cont++;
+                } else {
+                    break;
                 }
-                filastring.append(String.format(" %-8s |", etiqueta));
-                cont++;
-            } else {
-                break;
             }
-        }
-        filastring.append("\n");
-        filastring.append("+-------+----------+");
-        cont = 0;
-        for (Columna<?, ?> columna : tabla) {
-            if (cont < 8){
-                filastring.append("----------+");
-                cont++;
-            } else{
-                break;
-            }
-        }
-        filastring.append("\n");
-        for (int f = 0; f < filas.size(); f++) {
-            String posicionLimitada = String.format("%-5s",filas.get(f).getposicion());
-            if (posicionLimitada.length() > 5) {
-                posicionLimitada = posicionLimitada.substring(0, 3) + "..";
-            }
-            String etiquetaLimitada = String.format("%-8s",filas.get(f).getetiqueta());
-            if (etiquetaLimitada.length() > 8) {
-                etiquetaLimitada = etiquetaLimitada.substring(0, 6) + "..";
-            }
-            filastring.append(String.format("| %-5s | %-8s |", posicionLimitada, etiquetaLimitada));
+            filastring.append("\n");
+            filastring.append(String.format("| %-5s | %-8s |", "ID", "Etiqueta"));
             cont = 0;
             for (Columna<?, ?> columna : tabla) {
                 if (cont < 8){
-                    String dato = String.format("%-8s",columna.getdato(f));
-                    if (dato.length() > 8) {
-                        dato = dato.substring(0, 6) + "..";
+                    String etiqueta = String.format("%-8s", columna.getetiqueta());
+                    if (etiqueta.length() > 8) {
+                        etiqueta = etiqueta.substring(0, 6) + "..";
                     }
-                    filastring.append(String.format(" %-8s |", dato));
+                    filastring.append(String.format(" %-8s |", etiqueta));
                     cont++;
-                }else {
+                } else {
                     break;
                 }
             }
@@ -396,13 +365,52 @@ public class Tabla  implements Filtro{
             cont = 0;
             for (Columna<?, ?> columna : tabla) {
                 if (cont < 8){
-                filastring.append("----------+");
-                cont++;
+                    filastring.append("----------+");
+                    cont++;
+                } else{
+                    break;
                 }
             }
             filastring.append("\n");
+            for (int f = 0; f < filas.size(); f++) {
+                String posicionLimitada = String.format("%-5s",filas.get(f).getposicion());
+                if (posicionLimitada.length() > 5) {
+                    posicionLimitada = posicionLimitada.substring(0, 3) + "..";
+                }
+                String etiquetaLimitada = String.format("%-8s",filas.get(f).getetiqueta());
+                if (etiquetaLimitada.length() > 8) {
+                    etiquetaLimitada = etiquetaLimitada.substring(0, 6) + "..";
+                }
+                filastring.append(String.format("| %-5s | %-8s |", posicionLimitada, etiquetaLimitada));
+                cont = 0;
+                for (Columna<?, ?> columna : tabla) {
+                    if (cont < 8){
+                        String dato = String.format("%-8s",columna.getdato(f));
+                        if (dato.length() > 8) {
+                            dato = dato.substring(0, 6) + "..";
+                        }
+                        filastring.append(String.format(" %-8s |", dato));
+                        cont++;
+                    }else {
+                        break;
+                    }
+                }
+                filastring.append("\n");
+                filastring.append("+-------+----------+");
+                cont = 0;
+                for (Columna<?, ?> columna : tabla) {
+                    if (cont < 8){
+                    filastring.append("----------+");
+                    cont++;
+                    }
+                }
+                filastring.append("\n");
+            }
+            System.out.println(filastring);
+        } catch (NullPointerException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
         }
-        System.out.println(filastring);
     }
     //Imprime la tabla en pantalla mostrando las filas y columnas seleccionadas por el usuario
     public Tabla visualizarParcial(List<String> etiquetasFilas, List<String> etiquetasColumnas) {
