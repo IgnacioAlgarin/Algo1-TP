@@ -1,6 +1,8 @@
 package Operaciones;
 import java.util.List;
 
+import NA.NA;
+
 /**
  * Clase que realiza operaciones estadísticas sobre una lista de valores numéricos.
  * Extiende la clase abstracta Operaciones para proporcionar implementaciones de suma, conteo,
@@ -19,31 +21,37 @@ public class OperacionesColumna extends Operaciones<Double> {
     }
 
     /**
-     * Calcula la suma de todos los elementos en la lista de datos.
+     * Calcula la suma de todos los elementos en la lista de datos, excluyendo NA.
      * @return La suma total como un valor de tipo Double.
      */
     @Override
     public Double sumar() {
         double suma = 0;
-        for (Number dato : datos) {
-            if (dato != null) {
-                suma += dato.doubleValue();
+        for (Object dato : datos) {
+            if (dato instanceof Number && !dato.equals(NA.getInstance())) {
+                suma += ((Number) dato).doubleValue();
             }
         }
         return suma;
     }
 
     /**
-     * Cuenta el número de elementos en la lista de datos.
+     * Cuenta el número de elementos en la lista de datos, excluyendo NA.
      * @return El número de elementos como un valor de tipo Double.
      */
     @Override
     public Double contar() {
-        return (double) datos.size();
+        int count = 0;
+        for (Object dato : datos) {
+            if (dato instanceof Number && !dato.equals(NA.getInstance())) {
+                count++;
+            }
+        }
+        return (double) count;
     }
 
     /**
-     * Calcula el promedio de los elementos en la lista de datos.
+     * Calcula el promedio de los elementos en la lista de datos, excluyendo NA.
      * @return El promedio de los elementos como un valor de tipo Double.
      */
     @Override
@@ -52,51 +60,60 @@ public class OperacionesColumna extends Operaciones<Double> {
     }
 
     /**
-     * Encuentra el valor máximo en la lista de datos.
+     * Encuentra el valor máximo en la lista de datos, excluyendo NA.
      * @return El valor máximo como un valor de tipo Double.
      */
     @Override
     public Double maximo() {
         double max = Double.NEGATIVE_INFINITY;
-        for (Number dato : datos) {
-            if (dato != null && dato.doubleValue() > max) {
-                max = dato.doubleValue();
+        for (Object dato : datos) {
+            if (dato instanceof Number && !dato.equals(NA.getInstance())) {
+                double valor = ((Number) dato).doubleValue();
+                if (valor > max) {
+                    max = valor;
+                }
             }
         }
         return max;
     }
 
     /**
-     * Encuentra el valor mínimo en la lista de datos.
+     * Encuentra el valor mínimo en la lista de datos, excluyendo NA.
      * @return El valor mínimo como un valor de tipo Double.
      */
     @Override
     public Double minimo() {
         double min = Double.POSITIVE_INFINITY;
-        for (Number dato : datos) {
-            if (dato != null && dato.doubleValue() < min) {
-                min = dato.doubleValue();
+        for (Object dato : datos) {
+            if (dato instanceof Number && !dato.equals(NA.getInstance())) {
+                double valor = ((Number) dato).doubleValue();
+                if (valor < min) {
+                    min = valor;
+                }
             }
         }
         return min;
     }
 
     /**
-     * Calcula la varianza de los elementos en la lista de datos.
+     * Calcula la varianza de los elementos en la lista de datos, excluyendo NA.
      * @return La varianza como un valor de tipo Double.
      */
     @Override
     public Double varianza() {
         double promedio = promediar();
         double sumaCuadrados = 0;
-        for (Number dato : datos) {
-            if (dato != null) {
-                double diferencia = dato.doubleValue() - promedio;
+        int count = 0;
+        for (Object dato : datos) {
+            if (dato instanceof Number && !dato.equals(NA.getInstance())) {
+                double diferencia = ((Number) dato).doubleValue() - promedio;
                 sumaCuadrados += diferencia * diferencia;
+                count++;
             }
         }
-        return sumaCuadrados / contar();
+        return sumaCuadrados / count;
     }
+
 
     /**
      * Calcula el desvío estándar de los elementos en la lista de datos.

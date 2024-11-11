@@ -4,6 +4,8 @@ import Operaciones.OperacionesColumna;
 import Tabla.Tabla;
 import java.util.Set;
 import Columna.Columna;
+import NA.NA;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ public class GroupBy {
 
         // Crear conjunto de valores únicos en la columna
         Set<T> conjunto = new HashSet<>((List<T>) datosColumna.getDatos());
+        conjunto.remove(null);  // Excluye null de los valores únicos
+        conjunto.remove(NA.getInstance());
         List<T> listaUnica = new ArrayList<>(conjunto);
 
         // Generar una lista de tablas filtradas según los valores únicos de la columna.
