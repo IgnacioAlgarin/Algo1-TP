@@ -337,12 +337,20 @@ public class Tabla  implements Filtro{
         }
     }
     /**
-     * Agrega una nueva fila sin especificar etiqueta.
+     * Agrega una nueva fila a la tabla sin especificar una etiqueta.
+     * <p>
+     * Este método crea una fila en la tabla con una etiqueta nula. Utiliza el método 
+     * sobrecargado {@link #agregarfila(String)} para llevar a cabo la adición sin asignar
+     * una etiqueta específica.
+     * </p>
+     * 
+     * @see #agregarfila(String)
      */
     public void agregarfila(){
         String etiqueta = null;
         agregarfila(etiqueta);   
     }
+
     /**
      * Agrega una nueva fila a la tabla con datos y etiqueta de fila de tipo String.
      * @param etiqueta etiqueta de la fila de tipo String.
@@ -412,7 +420,12 @@ public class Tabla  implements Filtro{
 
     }
     /**
-     * Imprime en pantalla la tabla hasta un limite de 8 columnas
+     * Agrega una nueva fila a la tabla con etiqueta de fila de tipo entero.
+     * @param etiqueta etiqueta de la fila de tipo entero.
+     * @param datos lista de datos de la fila.
+     * @throws EtiquetaEnUsoException si la etiqueta ya se encuentra en uso.
+     * @throws DiferentetamañoException si la cantidad de datos a insertar no coincide con la cantidad de columnas.
+     * @throws TipoinconsistenteException si no coinciden los tipos de datos con los ya establecidos en las columnas.
      */
     public void visualizar() {
         int limitf = 30;
@@ -1037,7 +1050,11 @@ public class Tabla  implements Filtro{
         return posicionf;
     }
 
-    // cuenta nulls
+    /**
+     * Obtiene una lista con las etiquetas de todas las columnas.
+     *
+     * @return Lista de etiquetas de las columnas en la tabla.
+     */
     private int contarValoresNulos(int indiceColumna) {
         int contador = 0;
         Columna<?, ?> columna = tabla.get(indiceColumna);
@@ -1049,7 +1066,12 @@ public class Tabla  implements Filtro{
         return contador;
     }
 
-    // cuenta "NA"s
+    /**
+     * Cuenta el número de valores de tipo `NA` en una columna específica de la tabla.
+     *
+     * @param indiceColumna el índice de la columna en la cual contar los valores de tipo `NA`.
+     * @return el número de valores `NA` encontrados en la columna especificada.
+     */
     private int contarValoresNA(int indiceColumna) {
         int contador = 0;
         Columna<?, ?> columna = tabla.get(indiceColumna);
@@ -1400,6 +1422,11 @@ public class Tabla  implements Filtro{
         return columnaEncontrada.getdato(filaEncontrada.getIndice());
     }
 
+    /**
+     * Calcula el código hash para la instancia de la tabla, basándose en las listas de columnas (`tabla`) y filas (`filas`).
+     * 
+     * @return un entero que representa el código hash de la tabla, calculado utilizando un valor primo para minimizar colisiones.
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -1409,6 +1436,12 @@ public class Tabla  implements Filtro{
         return result;
     }
 
+    /**
+     * Compara si dos tablas son iguales, basándose en sus listas de columnas y filas.
+     * 
+     * @param obj el objeto con el que comparar la tabla actual.
+     * @return `true` si las tablas son iguales, `false` en caso contrario.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
