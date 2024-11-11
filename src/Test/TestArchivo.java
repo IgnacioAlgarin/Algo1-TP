@@ -44,7 +44,9 @@ public class TestArchivo {
         Tabla tablaPrueba2 = Archivo.importar("src/df_000filas.csv", ",", true);
         tablaPrueba2.visualizarResumen();
 
-        tablaPrueba2 = Archivo.importar("src/df_1000filas.csv", ";", false);
+        System.out.println("Test importar tabla grande visualizar");
+        tablaPrueba2 = Archivo.importar("src/df_1000filas.csv", ",", true);
+        tablaPrueba2.visualizar();
         tablaPrueba2.visualizarResumen();
     }
 }
