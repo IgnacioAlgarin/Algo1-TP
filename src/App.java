@@ -5,6 +5,7 @@ import java.util.List;
 import Archivo.Archivo;
 import Columna.Columna;
 import Tabla.Tabla;
+import Test.TestConcatenar;
 import excepciones.*;
 
 public class App {
@@ -211,7 +212,8 @@ public class App {
         tabla.visualizar();
         tabla.visualizarParcial(etiquetafl, etiquetacl);
         tabla.visualizarAleatorio(50);
-        tabla.head(4);
-        tabla.tail(3);
+        Tabla tablatest1 = new Tabla();
+        Tabla tablatest2 = new Tabla();
+        TestConcatenar.ejecutarPrueba(tablatest1, tablatest2);
     }
 }
