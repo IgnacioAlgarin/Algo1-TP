@@ -26,10 +26,10 @@ public static void main(String[] args) throws Exception {
     System.out.println("Test equal columnas string");
     System.out.println("Columna de tabla 1" + tabla1.obtenerColumnaPorEtiquetaIndex(0));
     System.out.println("Columna de tabla 2" + tabla2.obtenerColumnaPorEtiquetaIndex(0));
-    System.out.println("=");
+    System.out.println("Probando = por referencia");
     System.out.println(tabla1.obtenerColumnaPorEtiquetaIndex(0) == 
                         tabla2.obtenerColumnaPorEtiquetaIndex(0));
-    System.out.println("equals");
+    System.out.println("Probando equals");
     System.out.println(tabla1.obtenerColumnaPorEtiquetaIndex(0).equals(tabla2.obtenerColumnaPorEtiquetaIndex(0)));
 
     //TEST COLUMNA NUMERICA
@@ -40,10 +40,10 @@ public static void main(String[] args) throws Exception {
     System.out.println("Test equal columnas numericas");
     System.out.println("Columna de tabla 1" + tabla1.obtenerColumnaPorEtiquetaIndex(1));
     System.out.println("Columna de tabla 2" + tabla2.obtenerColumnaPorEtiquetaIndex(1));
-    System.out.println("=");
+    System.out.println("Probando = por referencia");
     System.out.println(tabla1.obtenerColumnaPorEtiquetaIndex(1) == 
                         tabla2.obtenerColumnaPorEtiquetaIndex(1));
-    System.out.println("equals");
+    System.out.println("Probando equals");
     System.out.println(tabla1.obtenerColumnaPorEtiquetaIndex(1).equals(tabla2.obtenerColumnaPorEtiquetaIndex(1)));
 
     //TEST COLUMNA BOOLEANA
@@ -54,11 +54,21 @@ public static void main(String[] args) throws Exception {
     System.out.println("Test equal columnas numericas");
     System.out.println("Columna de tabla 1" + tabla1.obtenerColumnaPorEtiquetaIndex(2));
     System.out.println("Columna de tabla 2" + tabla2.obtenerColumnaPorEtiquetaIndex(2));
-    System.out.println("=");
+    System.out.println("Probando = por referencia");
     System.out.println(tabla1.obtenerColumnaPorEtiquetaIndex(2) == 
                         tabla2.obtenerColumnaPorEtiquetaIndex(2));
-    System.out.println("equals");
+    System.out.println("Probando equals");
     System.out.println(tabla1.obtenerColumnaPorEtiquetaIndex(2).equals(tabla2.obtenerColumnaPorEtiquetaIndex(2)));
 
+    System.out.println("Test equal Tablas");
+    System.out.println("Tabla 1");
+    tabla1.visualizar();
+    System.out.println("Tabla 2");
+    tabla2.visualizar();
+
+    System.out.println("Probando = por referencia");
+    System.out.println(tabla1 == tabla2);
+    System.out.println("Probando equals");
+    System.out.println(tabla1.equals(tabla2));
  }
 }

@@ -1396,5 +1396,43 @@ public class Tabla  implements Filtro{
         return columnaEncontrada.getdato(filaEncontrada.getIndice());
     }
 
+        @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((tabla == null) ? 0 : tabla.hashCode());
+        result = prime * result + ((filas == null) ? 0 : filas.hashCode());
+        result = prime * result + contadorEtiquetac;
+        result = prime * result + contadorEtiquetaf;
+        result = prime * result + ((etiquetasUsadasc == null) ? 0 : etiquetasUsadasc.hashCode());
+        result = prime * result + ((etiquetasUsadasf == null) ? 0 : etiquetasUsadasf.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Tabla other = (Tabla) obj;
+
+        // Comparar el número de columnas y filas
+        if (this.getColumnas().size() != other.getColumnas().size() ||
+            this.filas.size() != other.filas.size())
+            return false;
+
+        // Comparar cada columna
+        for (int i = 0; i < this.getColumnas().size(); i++) {
+            Columna<?, ?> thisColumna = this.getColumnas().get(i);
+            Columna<?, ?> otherColumna = other.getColumnas().get(i);
+            if (!thisColumna.equals(otherColumna)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     
 }
