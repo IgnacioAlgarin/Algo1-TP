@@ -24,34 +24,41 @@ public interface Filtro {
      * @return Una nueva tabla que contiene las filas que cumplen con las condiciones especificadas en la query.
      */
     default Tabla filtrar(Tabla tabla, String query) {
-        List<String[]> condiciones = interpretarQuery(query);
-        Tabla tablaFiltrada = tabla.copia_p();
-        List<Tabla> tablasFiltradas = new ArrayList<>();
-        String logico = "";
+        try {
+            List<String[]> condiciones = interpretarQuery(query);
+            Tabla tablaFiltrada = tabla.copia_p();
+            List<Tabla> tablasFiltradas = new ArrayList<>();
+            String logico = "";
 
-        for (String[] condicion : condiciones) {
-            String columna = condicion[0];
-            char operador = condicion[1].charAt(0);
-            String valor = condicion[2];
+            for (String[] condicion : condiciones) {
+                String columna = condicion[0];
+                char operador = condicion[1].charAt(0);
+                String valor = condicion[2];
 
-            Tabla resultadoCondicion = filtrarPorCondicion(tablaFiltrada, columna, operador, valor);
-            tablasFiltradas.add(resultadoCondicion);
+                Tabla resultadoCondicion = filtrarPorCondicion(tablaFiltrada, columna, operador, valor);
+                tablasFiltradas.add(resultadoCondicion);
+            }
+
+            if (condiciones.get(0).length > 3) {
+                logico = condiciones.get(0)[3].toLowerCase();
+            }
+            if ("and".equals(logico)) {
+                tablaFiltrada = interseccion(tablasFiltradas.get(0), tablasFiltradas.get(1));
+            } else if ("or".equals(logico)) {
+                tablaFiltrada = union(tablasFiltradas.get(0), tablasFiltradas.get(1));
+            } else if ("not".equals(logico)) {
+                tablaFiltrada = diferencia(tablasFiltradas.get(0), tablasFiltradas.get(1));
+            } else {
+                tablaFiltrada = tablasFiltradas.get(0);
+            }
+
+            return tablaFiltrada;
+        } catch (IllegalArgumentException e) {
+            // Imprimir detalles del error
+            System.err.println("Error en el filtro: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
-
-        if (condiciones.get(0).length > 3) {
-            logico = condiciones.get(0)[3].toLowerCase();
-        }
-        if ("and".equals(logico)) {
-            tablaFiltrada = interseccion(tablasFiltradas.get(0), tablasFiltradas.get(1));
-        } else if ("or".equals(logico)) {
-            tablaFiltrada = union(tablasFiltradas.get(0), tablasFiltradas.get(1));
-        } else if ("not".equals(logico)) {
-            tablaFiltrada = diferencia(tablasFiltradas.get(0), tablasFiltradas.get(1));
-        } else {
-            tablaFiltrada = tablasFiltradas.get(0);
-        }
-
-        return tablaFiltrada;
     }
 
     /**
@@ -74,6 +81,8 @@ public interface Filtro {
         }
 
         return condiciones;
+        
+        
     }
 
     /**

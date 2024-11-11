@@ -18,8 +18,12 @@ public class TestGroupBy {
         Tabla tabla = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaAgrupar, "Columna_1"), "Columna_0", "Contar");
         tabla.visualizar();
 
-        System.out.println("Test con columna booleana");
+        System.out.println("Test con columna booleana, contar");
         tabla = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaAgrupar, "Columna_2"), "Columna_0", "Contar");
+        tabla.visualizar();
+
+        System.out.println("Test con columna string, promedio");
+        tabla = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaAgrupar, "Columna_1"), "Columna_0", "promediar");
         tabla.visualizar();
 
         System.out.println("Test de operaciones pero en columna NO numerica");
