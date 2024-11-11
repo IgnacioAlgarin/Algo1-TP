@@ -122,7 +122,7 @@ public class Menu {
         List<String> nombres = Arrays.asList("Ana", "Luis", "Marta", "Juan");
         tabla.agregarColumna(nombres, "Nombre");
 
-        List<Number> edades = Arrays.asList(25, 30, 45, 50);
+        List<Number> edades = Arrays.asList(25, 30, 5, 30);
         tabla.agregarColumna(edades, "Edad");
 
         System.out.println("Datos iniciales cargados.");

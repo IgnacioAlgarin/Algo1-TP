@@ -9,11 +9,6 @@ public class TestAgregarColumnaRepetida {
     public static void ejecutarPrueba(Tabla tabla) {
         System.out.println("Probando agregar columna con etiqueta repetida:");
 
-        // Datos iniciales para la primera columna
-        List<Number> datosEdad = Arrays.asList(25, 30, 35, 40);
-        tabla.agregarColumna(datosEdad, "Edad");
-        System.out.println("Columna 'Edad' agregada.");
-
         // Intento de agregar una columna con la misma etiqueta "Edad"
         List<Number> datosRepetidos = Arrays.asList(50, 60, 70, 80);
         tabla.agregarColumna(datosRepetidos, "Edad");

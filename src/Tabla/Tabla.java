@@ -1260,51 +1260,46 @@ public class Tabla  implements Filtro{
         if (etiquetasColumnas.size() != ordenAscendente.size()) {
             throw new IllegalArgumentException("La cantidad de columnas y de órdenes deben coincidir.");
         }
-
-        // Configurar el comparador para ordenar filas según las columnas especificadas
+    
+        // Crear comparador compuesto de columnas y órdenes
         Comparator<Fila> comparadorFinal = (fila1, fila2) -> 0;
-
+        
         for (int i = 0; i < etiquetasColumnas.size(); i++) {
             String etiquetaColumna = etiquetasColumnas.get(i);
             boolean ascendente = ordenAscendente.get(i);
-
-            try {
-                // Obtener la columna correspondiente
-                Columna<?, ?> columna = obtenerColumnaPorEtiqueta(etiquetaColumna);
-
-                Comparator<Fila> comparadorColumna = (fila1, fila2) -> {
-                    int indexFila1 = filas.indexOf(fila1);
-                    int indexFila2 = filas.indexOf(fila2);
-
-                    Object dato1 = columna.getdato(indexFila1);
-                    Object dato2 = columna.getdato(indexFila2);
-
-                    if (dato1 == null || dato1 instanceof NA) return ascendente ? 1 : -1;
-                    if (dato2 == null || dato2 instanceof NA) return ascendente ? -1 : 1;
-
-                    if (dato1 instanceof Comparable && dato2 instanceof Comparable) {
-                        return ascendente ? ((Comparable) dato1).compareTo(dato2) : ((Comparable) dato2).compareTo(dato1);
-                    } else {
-                        throw new ClassCastException("Datos no comparables en la columna: " + etiquetaColumna);
-                    }
-                };
-
-                comparadorFinal = comparadorFinal.thenComparing(comparadorColumna);
-            } catch (ColumnaNoValidaException e) {
-                System.out.println("Error: " + e.getMessage());
-            }
+    
+            // Obtener la columna correspondiente
+            Columna<?, ?> columna = obtenerColumnaPorEtiqueta(etiquetaColumna);
+            Comparator<Fila> comparadorColumna = (fila1, fila2) -> {
+                Object dato1 = columna.getdato(fila1.getposicion());
+                Object dato2 = columna.getdato(fila2.getposicion());
+    
+                if (dato1 == null || dato1 instanceof NA) return ascendente ? 1 : -1;
+                if (dato2 == null || dato2 instanceof NA) return ascendente ? -1 : 1;
+    
+                if (dato1 instanceof Comparable && dato2 instanceof Comparable) {
+                    return ascendente ? ((Comparable) dato1).compareTo(dato2) : ((Comparable) dato2).compareTo(dato1);
+                } else {
+                    throw new ClassCastException("Datos no comparables en la columna: " + etiquetaColumna);
+                }
+            };
+    
+            comparadorFinal = comparadorFinal.thenComparing(comparadorColumna);
         }
-
-        // Realizar una copia temporal de las filas y ordenar esa lista
-        List<Fila> filasOrdenadas = new ArrayList<>(filas);
-        Collections.sort(filasOrdenadas, comparadorFinal);
-
-        // Actualizar las filas en la tabla con el nuevo orden
-        filas.clear();
-        filas.addAll(filasOrdenadas);
-
-        System.out.println("Ordenamiento completado. Tabla actualizada:");
-        this.visualizar();  // Muestra la tabla para verificar el resultado
+    
+        // Ordenar filas usando el comparador compuesto
+        filas.sort(comparadorFinal);
+    
+        // Actualizar las columnas con el nuevo orden de las filas
+        for (Columna<?, ?> columna : tabla) {
+            List<Object> datosOrdenados = new ArrayList<>();
+            for (Fila fila : filas) {
+                datosOrdenados.add(columna.getdato(fila.getposicion()));
+            }
+            columna.setDatos(datosOrdenados); // Asegúrate de tener un método setDatos en la clase Columna
+        }
+        
+        System.out.println("Tabla ordenada correctamente por " + etiquetasColumnas);
     }
 
     /**
@@ -1320,7 +1315,7 @@ public class Tabla  implements Filtro{
             if (fila.getetiqueta() != null && fila.getetiqueta().equals(etiquetaFila)) {
                 List<Object> datosFila = new ArrayList<>();
                 for (Columna<?, ?> columna : tabla) {
-                    datosFila.add(columna.getdato(fila.getIndice()));
+                    datosFila.add(columna.getdato(fila.getposicion()));
                 }
                 return datosFila;
             }
