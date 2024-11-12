@@ -1234,42 +1234,49 @@ public class Tabla  implements Filtro{
      * La fila y sus datos en todas las columnas serán eliminados.
      * @param indiceFila El índice de la fila que se desea eliminar.
      */
-    public void eliminarFila(int indiceFila) {
-        eliminarFila(indiceFila, true);
+    public void eliminarFila(int idFila) {
+        eliminarFilaPorID(idFila, true);
     }
 
-    /**
-     * Elimina una fila de la tabla en función de su índice.
-     * La fila y sus datos en todas las columnas serán eliminados.
-     *
-     * @param indiceFila El índice de la fila que se desea eliminar.
-     * @param mostrarMensaje Indica si se debe mostrar un mensaje de confirmación tras la eliminación.
-     * @throws IndexOutOfBoundsException si el índice está fuera del rango de las filas existentes.
-     */
-    public void eliminarFila(int indiceFila, Boolean mostrarMensaje) {
+/**
+ * Elimina una fila de la tabla en función de su ID.
+ * La fila y sus datos en todas las columnas serán eliminados.
+ *
+ * @param idFila El ID de la fila que se desea eliminar.
+ * @param mostrarMensaje Indica si se debe mostrar un mensaje de confirmación tras la eliminación.
+ * @throws FilaNoValidaException si la fila con el ID especificado no existe.
+ */
+    public void eliminarFilaPorID(int idFila, Boolean mostrarMensaje) {
         try {
-            if (indiceFila < 0 || indiceFila >= filas.size()) {
-                throw new IndexOutOfBoundsException("Índice de fila fuera de rango.");
+            boolean encontrada = false;
+            for (int i = 0; i < filas.size(); i++) {
+                if (filas.get(i).getposicion() == idFila) { // Compara con el ID de la fila
+                    // Remueve la etiqueta asociada a la fila eliminada
+                    etiquetasUsadasf.remove(filas.get(i).getetiqueta());
+                    etiquetasUsadasf.remove(filas.get(i).getposicion());
+                    
+                    filas.remove(i);  // Elimina la fila encontrada
+    
+                    // Elimina los datos de esa fila en cada columna
+                    for (Columna<?, ?> columna : tabla) {
+                        columna.getDatos().remove(i);
+                    }
+    
+                    if (mostrarMensaje) {
+                        System.out.println("Fila con ID " + idFila + " eliminada.");
+                    }
+                    encontrada = true;
+                    break;
+                }
             }
-
-            // Remueve la etiqueta asociada a la fila eliminada
-            etiquetasUsadasf.remove(filas.get(indiceFila).getetiqueta());
-            etiquetasUsadasf.remove(filas.get(indiceFila).getposicion());
-            filas.remove(indiceFila);
-
-            // Elimina los datos de esa fila en cada columna
-            for (Columna<?, ?> columna : tabla) {
-                columna.getDatos().remove(indiceFila);
+            if (!encontrada) {
+                throw new FilaNoValidaException("La fila con ID '" + idFila + "' no fue encontrada.");
             }
-
-            // Mostrar mensaje de confirmación si se indica
-            if (mostrarMensaje) {
-                System.out.println("Fila en el índice " + indiceFila + " eliminada.");
-            }
-        } catch (IndexOutOfBoundsException e) {
+        } catch (FilaNoValidaException e) {
             System.err.println("Error: " + e.getMessage());
         }
     }
+    
     
     /**
      * Elimina una fila de la tabla basada en su etiqueta. 
