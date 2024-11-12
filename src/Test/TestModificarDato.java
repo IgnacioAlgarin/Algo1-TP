@@ -15,7 +15,7 @@ public class TestModificarDato {
         tabla.modificarDato("Nombre", 0,"Analia");
         tabla.modificarDato(331, 3,"chauNA");
         tabla.modificarDato("Columna_2", 3,true);
-
+        System.out.println();
         tabla.visualizar();
 
 
