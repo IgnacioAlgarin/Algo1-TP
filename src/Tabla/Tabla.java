@@ -1463,7 +1463,7 @@ public class Tabla  implements Filtro{
         }
 
         // Retorna el dato en la celda especificada
-        return columnaEncontrada.getdato(filaEncontrada.getIndice());
+        return columnaEncontrada.getdato(filaEncontrada.getposicion());
     }
 
     /**
