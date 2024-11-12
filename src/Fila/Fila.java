@@ -53,11 +53,11 @@ public class Fila {
         return etiqueta;
     }
 
-    /**
-     * Obtiene el índice de la fila en base a su posición, ajustado en -1.
-     * @return El índice de la fila (posición - 1).
-     */
-    public int getIndice(){
-        return posicion-1 ;
-    }
+    // /**
+    //  * Obtiene el índice de la fila en base a su posición, ajustado en -1.
+    //  * @return El índice de la fila (posición - 1).
+    //  */
+    // public int getIndice(){
+    //     return posicion-1 ;
+    // }
 }

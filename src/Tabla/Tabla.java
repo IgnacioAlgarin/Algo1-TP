@@ -4,7 +4,7 @@ import Columna.*;
 import Fila.Fila;
 import Filtro.Filtro;
 import NA.NA;
-import Operaciones.OperacionesColumna;
+import Operaciones.Operaciones;
 import excepciones.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -783,7 +783,7 @@ public class Tabla  implements Filtro{
     public void mostrarResumenOperaciones(String etiquetaColumna) {
         try {
             Columna<Number, ?> columna = obtenerColumnaNumerica(etiquetaColumna);
-            OperacionesColumna operaciones = new OperacionesColumna(columna.getDatos());
+            Operaciones operaciones = new Operaciones(columna.getDatos());
 
             System.out.println("Resumen de operaciones para la columna: " + etiquetaColumna);
             System.out.println("Suma: " + operaciones.sumar());

@@ -1,6 +1,6 @@
 package groupby;
 
-import Operaciones.OperacionesColumna;
+import Operaciones.Operaciones;
 import Tabla.Tabla;
 import java.util.Set;
 import Columna.Columna;
@@ -58,14 +58,14 @@ public class GroupBy {
         List<T> valoresUnicos = tablasAgrupadas.getValoresUnicos();
         List<Double> valoresOperacion = new ArrayList<>();
         Columna datosColumna;
-        OperacionesColumna resultado;
+        Operaciones resultado;
 
         // Agrega la columna de valores únicos a la nueva tabla
         tablaAgrupada.agregarColumna(valoresUnicos);
 
         for (int i = 0; i < valoresUnicos.size(); i++) {
             datosColumna = tablas.get(i).obtenerColumnaPorEtiqueta(columna);
-            resultado = new OperacionesColumna(datosColumna.getDatos());
+            resultado = new Operaciones(datosColumna.getDatos());
             switch (operacion.toLowerCase()) {
                 case "sumar":
                     valoresOperacion.add(resultado.sumar());
