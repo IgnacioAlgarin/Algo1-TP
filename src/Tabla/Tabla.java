@@ -459,12 +459,19 @@ public class Tabla  implements Filtro{
         agregarfila(etiqueta, datos);
 
     }
+    
     /**
      * Muestra la tabla en pantalla con un limite de 8 columnas y 30 filas.
      */
     public void visualizar() {
-        int limitf = 30;
-        int limitc = 8;
+        visualizar(30, 8);
+    }
+    
+    
+    /**
+     * Muestra la tabla en pantalla con un limite establecido por el usuario de x filas y x columnas.
+     */
+    public void visualizar(int limitf, int limitc) {
         StringBuilder filastring = new StringBuilder();
         filastring.append("+-------+----------+");
         int cont = 0;
