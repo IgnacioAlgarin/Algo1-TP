@@ -12,32 +12,32 @@ import groupby.GroupBy;
 public class TestGroupBy {
     public static void main(String[] args) throws Exception  {
         System.out.println("Inicio test groupBy\n");
-        Tabla tablaAgrupar = new Tabla();
-        tablaAgrupar = Archivo.importar("src/datos_GroupBy.csv",",", false);
+        Tabla tablaAgrupar = new Tabla("src/datos_GroupBy.csv",",", true);
 
         System.out.println("Tabla base");
         tablaAgrupar.visualizar();
 
-        Tabla tabla = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaAgrupar, "Columna_1"), "Columna_0", "Contar");
+        System.out.println("Agrupo segun columna 'Cadena' y aplico contar");
+        Tabla tabla = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaAgrupar, "Cadena"), "Valores", "Contar");
         tabla.visualizar();
 
-        System.out.println("Test con columna booleana, contar");
-        tabla = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaAgrupar, "Columna_2"), "Columna_0", "Contar");
+        System.out.println("Agrupo segun columna 'Bool' y aplico contar");
+        tabla = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaAgrupar, "Bool"), "Valores", "Contar");
         tabla.visualizar();
 
-        System.out.println("Test con columna string, promedio");
-        tabla = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaAgrupar, "Columna_1"), "Columna_0", "promediar");
+        System.out.println("Agrupo segun columna 'Cadena' y aplico promedio");
+        tabla = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaAgrupar, "Cadena"), "Valores", "promediar");
         tabla.visualizar();
-
-        // System.out.println("Test de operaciones pero en columna NO numerica");
-        // tabla = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaAgrupar, "Columna_1"), "Columna_2", "sumar");
-        // tabla.visualizar();
         
         System.out.println("Test con muchos datos");
         Tabla tablaG = Archivo.importar("src/df_1000filas.csv",",", true);
         tablaG.reemplazarNullConNA();
         tablaG = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaG, "String_A"), "Num_0_100" , "desvio");
         tablaG.visualizar();
+
+        // System.out.println("Test de operaciones pero en columna NO numerica");
+        // tabla = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaAgrupar, "Columna_1"), "Columna_2", "sumar");
+        // tabla.visualizar();
 
         System.out.println("Fin de test\n");
 
