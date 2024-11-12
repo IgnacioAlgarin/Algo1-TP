@@ -8,7 +8,6 @@ import Operaciones.OperacionesColumna;
 import excepciones.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -461,12 +460,7 @@ public class Tabla  implements Filtro{
 
     }
     /**
-     * Agrega una nueva fila a la tabla con etiqueta de fila de tipo entero.
-     * @param etiqueta etiqueta de la fila de tipo entero.
-     * @param datos lista de datos de la fila.
-     * @throws EtiquetaEnUsoException si la etiqueta ya se encuentra en uso.
-     * @throws DiferentetamañoException si la cantidad de datos a insertar no coincide con la cantidad de columnas.
-     * @throws TipoinconsistenteException si no coinciden los tipos de datos con los ya establecidos en las columnas.
+     * Muestra la tabla en pantalla con un limite de 8 columnas y 30 filas.
      */
     public void visualizar() {
         int limitf = 30;
@@ -935,7 +929,7 @@ public class Tabla  implements Filtro{
                 }
             }
             if (!columnaExiste) {
-                throw new ColumnaNoValidaException("La columna '" + etiquetaColumna + "' no existe.");
+                throw new ColumnaNoValidaException("Error: La columna '" + etiquetaColumna + "' no existe.");
             }
             if (!encontrado) {
                 System.out.println("Dato no encontrado en columna '" + etiquetaColumna + "': " + dato);
@@ -1184,42 +1178,48 @@ public class Tabla  implements Filtro{
 
     /**
      * Elimina una columna de la tabla en función de su etiqueta.
-     *
      * @param etiquetaColumna La etiqueta de la columna que se desea eliminar.
      * @throws IllegalArgumentException si no se encuentra una columna con la etiqueta especificada.
      */
     public void eliminarColumna(String etiquetaColumna) {
-        boolean encontrada = false;
+        try {
+            boolean encontrada = false;
 
-        for (int i = 0; i < tabla.size(); i++) {
-            if (tabla.get(i).getetiqueta().equals(etiquetaColumna)) {
-                tabla.remove(i);  // Elimina la columna del índice encontrado
-                etiquetasUsadasc.remove(etiquetaColumna);  // Actualiza el conjunto de etiquetas usadas
-                encontrada = true;
-                System.out.println("Columna con etiqueta '" + etiquetaColumna + "' eliminada.");
-                break;
+            for (int i = 0; i < tabla.size(); i++) {
+                if (tabla.get(i).getetiqueta().equals(etiquetaColumna)) {
+                    tabla.remove(i);  // Elimina la columna del índice encontrado
+                    etiquetasUsadasc.remove(etiquetaColumna);  // Actualiza el conjunto de etiquetas usadas
+                    encontrada = true;
+                    System.out.println("Columna con etiqueta '" + etiquetaColumna + "' eliminada.");
+                    break;
+                }
             }
-        }
 
-        if (!encontrada) {
-            throw new IllegalArgumentException("La columna con etiqueta '" + etiquetaColumna + "' no fue encontrada.");
+            if (!encontrada) {
+                throw new IllegalArgumentException("La columna con etiqueta '" + etiquetaColumna + "' no fue encontrada.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: " + e.getMessage());
         }
     }
 
     /**
      * Elimina una columna de la tabla en función de su índice.
-     *
      * @param indiceColumna El índice de la columna que se desea eliminar.
      * @throws IndexOutOfBoundsException si el índice de la columna está fuera del rango de columnas existentes.
      */
     public void eliminarColumna(int indiceColumna) {
-        if (indiceColumna < 0 || indiceColumna >= tabla.size()) {
-            throw new IndexOutOfBoundsException("Índice de columna fuera de rango.");
-        }
+        try {
+            if (indiceColumna < 0 || indiceColumna >= tabla.size()) {
+                throw new IndexOutOfBoundsException("Índice de columna fuera de rango.");
+            }
         
-        // Elimina la columna en el índice especificado
-        Columna<?, ?> columnaEliminada = tabla.remove(indiceColumna);
-        System.out.println("Columna eliminada en el índice " + indiceColumna + " con etiqueta: " + columnaEliminada.getetiqueta());
+            // Elimina la columna en el índice especificado
+            Columna<?, ?> columnaEliminada = tabla.remove(indiceColumna);
+            System.out.println("Columna eliminada en el índice " + indiceColumna + " con etiqueta: " + columnaEliminada.getetiqueta());
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 
     /**
@@ -1240,23 +1240,27 @@ public class Tabla  implements Filtro{
      * @throws IndexOutOfBoundsException si el índice está fuera del rango de las filas existentes.
      */
     public void eliminarFila(int indiceFila, Boolean mostrarMensaje) {
-        if (indiceFila < 0 || indiceFila >= filas.size()) {
-            throw new IndexOutOfBoundsException("Índice de fila fuera de rango.");
-        }
+        try {
+            if (indiceFila < 0 || indiceFila >= filas.size()) {
+                throw new IndexOutOfBoundsException("Índice de fila fuera de rango.");
+            }
 
-        // Remueve la etiqueta asociada a la fila eliminada
-        etiquetasUsadasf.remove(filas.get(indiceFila).getetiqueta());
-        etiquetasUsadasf.remove(filas.get(indiceFila).getposicion());
-        filas.remove(indiceFila);
+            // Remueve la etiqueta asociada a la fila eliminada
+            etiquetasUsadasf.remove(filas.get(indiceFila).getetiqueta());
+            etiquetasUsadasf.remove(filas.get(indiceFila).getposicion());
+            filas.remove(indiceFila);
 
-        // Elimina los datos de esa fila en cada columna
-        for (Columna<?, ?> columna : tabla) {
-            columna.getDatos().remove(indiceFila);
-        }
+            // Elimina los datos de esa fila en cada columna
+            for (Columna<?, ?> columna : tabla) {
+                columna.getDatos().remove(indiceFila);
+            }
 
-        // Mostrar mensaje de confirmación si se indica
-        if (mostrarMensaje) {
-            System.out.println("Fila en el índice " + indiceFila + " eliminada.");
+            // Mostrar mensaje de confirmación si se indica
+            if (mostrarMensaje) {
+                System.out.println("Fila en el índice " + indiceFila + " eliminada.");
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("Error: " + e.getMessage());
         }
     }
     
@@ -1268,23 +1272,27 @@ public class Tabla  implements Filtro{
      * @throws FilaNoValidaException si la fila con la etiqueta especificada no existe.
      */
     public void eliminarFila(String etiquetaFila) {
-        boolean encontrada = false;
-        for (int i = 0; i < filas.size(); i++) {
-            if (filas.get(i).getetiqueta().equals(etiquetaFila)) {
-                filas.remove(i);
-                etiquetasUsadasf.remove(etiquetaFila);
-                for (Columna<?, ?> columna : tabla) {
-                    columna.getDatos().remove(i);  // Elimina el dato de esa fila en cada columna
+        try {
+            boolean encontrada = false;
+            for (int i = 0; i < filas.size(); i++) {
+                if (filas.get(i).getetiqueta().equals(etiquetaFila)) {
+                    filas.remove(i);
+                    etiquetasUsadasf.remove(etiquetaFila);
+                    for (Columna<?, ?> columna : tabla) {
+                        columna.getDatos().remove(i);  // Elimina el dato de esa fila en cada columna
+                    }
+                    encontrada = true;
+                    System.out.println("Fila con etiqueta '" + etiquetaFila + "' eliminada.");
+                    break;
                 }
-                encontrada = true;
-                System.out.println("Fila con etiqueta '" + etiquetaFila + "' eliminada.");
-                break;
             }
-        }
-        
-        // Lanzar excepción si la fila no se encontró
-        if (!encontrada) {
-            throw new FilaNoValidaException("La fila con etiqueta '" + etiquetaFila + "' no fue encontrada.");
+            
+            // Lanzar excepción si la fila no se encontró
+            if (!encontrada) {
+                throw new FilaNoValidaException("La fila con etiqueta '" + etiquetaFila + "' no fue encontrada.");
+            }
+        } catch (FilaNoValidaException e) {
+            System.err.println("Error: " + e.getMessage());
         }
     }
 
