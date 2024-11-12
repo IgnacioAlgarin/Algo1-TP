@@ -56,7 +56,6 @@ public interface Filtro {
         } catch (IllegalArgumentException e) {
             // Imprimir detalles del error
             System.err.println("Error en el filtro: " + e.getMessage());
-            e.printStackTrace();
             return tabla;
         }
     }
