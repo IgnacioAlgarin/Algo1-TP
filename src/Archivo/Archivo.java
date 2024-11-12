@@ -184,7 +184,7 @@ public class Archivo {
                 datos.add(valoresConvertidos);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e);
         }
         return datos;
     }
