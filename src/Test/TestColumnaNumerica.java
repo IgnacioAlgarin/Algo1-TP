@@ -8,6 +8,8 @@ public class TestColumnaNumerica {
 
     public static void ejecutarPrueba(Tabla tabla) {
         System.out.println("Probando agregar columna de tipo Numérica con etiqueta específica:");
+        System.out.println("Tabla inicial:\n");
+        tabla.visualizar();
 
         // Datos de prueba: columna de tipo numérico
         List<Number> datosPuntajes = Arrays.asList(85, 90, 78, 88);

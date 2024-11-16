@@ -5,7 +5,7 @@ import java.util.List;
 
 public class TestCopiaProfunda {
     public static void ejecutarPrueba(Tabla tabla) {
-        System.out.println("Probando copiar de manera profunda otra tabla.");
+        System.out.println("\nProbando copiar de manera profunda otra tabla.");
 
         //Datos de prueba
         List<Number> datosNumeros = Arrays.asList(2, 4, 6, 8);
@@ -17,14 +17,14 @@ public class TestCopiaProfunda {
         tabla.agregarColumna(datosStrings, "Strings");
         tabla.agregarColumna(datosBooleans, "Booleanos");
 
-        System.out.println("Visualizamos nuestra tabla original");
+        System.out.println("\nVisualizamos nuestra tabla original");
         tabla.visualizar();
 
         //Copia profunda en una nueva tabla
 
         Tabla tabla_copia = tabla.copia_p();
 
-        System.out.println("Visualizamos la copia profunda de nuestra tabla original");
+        System.out.println("\nVisualizamos la copia profunda de nuestra tabla original");
         tabla_copia.visualizar();
 
         //Comprobamos con equals
@@ -32,7 +32,7 @@ public class TestCopiaProfunda {
         System.out.println((tabla_copia == tabla));
 
         //Comprobamos con equals
-        System.out.print("Comprobamos por equals: ");
+        System.out.print("\nComprobamos por equals: ");
         System.out.println(tabla_copia.equals(tabla));
 
 

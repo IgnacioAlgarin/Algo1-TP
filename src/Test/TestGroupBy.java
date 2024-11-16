@@ -33,6 +33,8 @@ public class TestGroupBy {
                             "Agrupo segun 'String_A y aplica a 'Num_0_100' desvio estandar");
         Tabla tablaG = Archivo.importar("src/df_1000filas.csv",",", true);
         tablaG.reemplazarNullConNA();
+
+        tablaG.mostrarCuadroInformacion();
         tablaG = GroupBy.aplicarAColumna(GroupBy.groupBy(tablaG, "String_A"), "Num_0_100" , "desvio");
         tablaG.visualizar();
 

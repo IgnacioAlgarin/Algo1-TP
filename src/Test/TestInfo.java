@@ -7,7 +7,7 @@ public class TestInfo {
         
     }
     public static void testInfoTabla(Tabla tabla) {
-        System.out.println("Inicia test Info tabla");
+        System.out.println("\nInicia test Info tabla\n");
         tabla.visualizar();
         System.out.println("\nInfo tabla");   
         tabla.mostrarCuadroInformacion();

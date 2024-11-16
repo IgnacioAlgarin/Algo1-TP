@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class TestParcialAleatorio {
     public static void ejecutarPrueba(Tabla tabla) {
 
-        System.out.println("Probando visualizar tabla.");
+        System.out.println("\nProbando visualizar tabla.");
         // Datos de prueba
         List<Number> datosNumeros1 = Arrays.asList(null, 3, 5, 7, 9, 11, 13, 15);
         List<String> datosStrings1 = Arrays.asList("Prueba1", null, "Prueba3", "Prueba4", "Prueba5", "Prueba6",
@@ -28,7 +28,7 @@ public class TestParcialAleatorio {
         tabla.agregarColumna(datosStrings2, "Strings2");
         tabla.agregarColumna(datosBooleans2, "Bool2");
 
-        System.out.println("Visualizamos tabla completa.");
+        System.out.println("\nVisualizamos tabla completa.");
         tabla.visualizar();
 
         System.out.println("Visualizamos tabla de manera parcial.");

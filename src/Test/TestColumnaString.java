@@ -8,6 +8,8 @@ public class TestColumnaString {
 
     public static void ejecutarPrueba(Tabla tabla) {
         System.out.println("Probando agregar columna de tipo string adicional:");
+        System.out.println("Tabla inicial:\n");
+        tabla.visualizar();
 
         // Agregar una columna de tipo string con algunos valores nulos
         List<String> nuevaColumnaString = Arrays.asList("A", "B", null, "D");

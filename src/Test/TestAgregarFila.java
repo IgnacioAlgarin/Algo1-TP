@@ -7,6 +7,8 @@ import java.util.Arrays;
 public class TestAgregarFila {
     public static void ejecutarPrueba(Tabla tabla) {
         System.out.println("Probando agregar nuevas filas.");
+        // System.out.println("Tabla inicial:\n");
+        // tabla.visualizar();
 
         // Datos de prueba
         List<Number> datosNumeros = Arrays.asList(1, 3, 5);
@@ -20,7 +22,7 @@ public class TestAgregarFila {
         tabla.agregarColumna(datosStrings, "Strings");
         tabla.agregarColumna(datosBooleans, "Booleanos");
 
-        System.out.println("Visualizamos tabla");
+        System.out.println("\nVisualizamos tabla inicial:");
         tabla.visualizar();
 
         // Agregamos filas

@@ -8,9 +8,7 @@ public class Menu {
 
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        Tabla tabla = new Tabla();
-        cargarDatosIniciales(tabla);  // Tabla cargada con datos básicos
-
+        
         boolean continuar = true;
 
         String[] opciones = {
@@ -38,6 +36,7 @@ public class Menu {
         };
 
         while (continuar) {
+            
             System.out.println("\n--- MENÚ DE TESTING ---");
 
             // Mostrar las opciones del menú de forma dinámica
@@ -47,6 +46,10 @@ public class Menu {
 
             System.out.print("Seleccione una opción: ");
             int opcion = scanner.nextInt();
+
+            Tabla tabla = new Tabla();
+            cargarDatosIniciales(tabla);  // Tabla cargada con datos básicos
+
 
             // Lógica de selección basada en el índice
             switch (opcion) {
@@ -118,6 +121,12 @@ public class Menu {
                 default:
                     System.out.println("Opción no válida. Intente nuevamente.");
             }
+            // Pausa antes de volver al menú
+            if (continuar) {
+                System.out.println("\nPresione Enter para continuar...");
+                scanner.nextLine();
+                scanner.nextLine();
+            }
         }
         scanner.close();
     }
@@ -142,7 +151,7 @@ public class Menu {
         tabla.agregarColumna(edades, "Edad");
 
         System.out.println("Datos iniciales cargados.");
-        tabla.visualizar();
+        // tabla.visualizar();
     }
 
     // // Prueba 1: Agregar columna numérica adicional

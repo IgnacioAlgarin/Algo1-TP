@@ -23,13 +23,14 @@ public class TestConcatenar {
         tabla2.agregarColumna(datosStrings2, "Strings");
         tabla2.agregarColumna(datosBooleans2, "Booleanos");
 
-        System.out.println("Visualizamos tabla1");
+        System.out.println("\nVisualizamos tabla1:");
         tabla1.visualizar();
 
-        System.out.println("Visualizamos tabla2");
+        System.out.println("\nVisualizamos tabla2:");
         tabla2.visualizar();
 
         Tabla tabla_concatenada = tabla1.concatenar(tabla2);
+        System.out.println("\nTabla concatenada:");
         tabla_concatenada.visualizar();
 
     }

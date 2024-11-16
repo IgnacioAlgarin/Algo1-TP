@@ -8,6 +8,8 @@ public class TestColumnaBoolConEtiqueta {
 
     public static void ejecutarPrueba(Tabla tabla) {
         System.out.println("Probando agregar columna booleana con etiqueta específica:");
+        System.out.println("Tabla inicial:\n");
+        tabla.visualizar();
 
         // Datos de prueba: columna booleana
         List<Boolean> datosBooleanos = Arrays.asList(true, false, true, null);
