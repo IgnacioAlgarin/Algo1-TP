@@ -45,14 +45,6 @@ Mis aportes principales incluyeron:
 
 ---
 
-## 🚀 Cómo ejecutar
-
-```bash
-javac src/Main.java
-java src/Main
-
----
-
 ## 📂 Estructura del proyecto
 
 src/
